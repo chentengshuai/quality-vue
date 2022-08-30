@@ -13,11 +13,16 @@
                 </el-input>
                 </el-form-item>
             </el-col>
-            <el-col :span="12" >
+            <el-col :span="12" v-if="!dataForm.id">
                 <el-form-item  label="产品编码"   prop="materialCode" >
                     <el-input    v-model="dataForm.materialCode" placeholder="请输入"  clearable  :style='{"width":"100%"}'>
-
-                </el-input>
+                    </el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12" v-if="dataForm.id">
+                <el-form-item  label="产品编码"   prop="materialCode" >
+                    <el-input    v-model="dataForm.materialCode" placeholder="请输入"  clearable  :style='{"width":"100%"}' readonly >
+                    </el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
