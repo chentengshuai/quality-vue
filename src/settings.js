@@ -1,5 +1,5 @@
 module.exports = {
-  title: '铜博科技',
+  title: '质量管理',
 
   /**
    * @type {boolean} true | false

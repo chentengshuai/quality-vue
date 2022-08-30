@@ -65,10 +65,10 @@
           <img src="@/assets/images/jnpf.png" class="about-logo" />
         </div>
         <div>
-          <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">铜博生产系统</a></p>
+          <p class="title"><a href="https://www.jnpfsoft.com" target="_blank">质量管理</a></p>
           <p>版本：{{define.version}}</p>
-          <p>作者：铜博科技</p>
-          <p>铜博科技出品</p>
+          <p>作者：质量管理</p>
+          <p>质量管理</p>
         </div>
       </div>
       <p class="about-dialog-main-tip">专注高性能电子级铜箔</p>

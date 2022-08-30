@@ -132,7 +132,7 @@
 <!--        </div>-->
 <!--      </el-col>-->
 <!--    </el-row>-->
-    <p class="componey">Copyright © 2021 铜博科技出品</p>
+    <p class="componey">Copyright © 2021 质量管理</p>
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 {
   "name": "jnpf-web",
   "version": "3.2.0",
-  "description": "铜博科技",
-  "author": "铜博科技",
+  "description": "质量管理",
+  "author": "质量管理",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve --open",
