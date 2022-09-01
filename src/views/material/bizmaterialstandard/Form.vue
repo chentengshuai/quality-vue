@@ -20,31 +20,39 @@
         <template v-if="!loading">
           <el-col :span="24">
             <el-card class="mb-20" shadow="always">
-              <el-col :span="12">
-                <el-form-item label="基准书名称" prop="materialName">
-                  <el-input
-                    v-model="dataForm.materialName"
-                    placeholder="请输入"
-                    :maxlength="150"
-                    clearable
-                    :style="{ width: '100%' }"
-                    readonly
-                  >
-                  </el-input>
+              <el-col :span="24">
+                <el-form-item label="检验类型" prop="standardType">
+                  <el-select v-model="dataForm.standardType" placeholder="请选择检验类型" @change="clearStandard()">
+                    <el-option v-for="(item, index) in standardTypeDataList" :key="index" :label="item.fullName"
+                               :value="item.enCode" :disabled="item.disabled"/>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="物料编码" prop="materialName">
+                <el-form-item label="基准编码" prop="materialName">
                   <el-input
                     v-model="dataForm.materialCode"
+                    prefix-icon="el-icon-search"
                     placeholder="请选择"
                     :maxlength="150"
                     clearable
                     readonly
                     :style="{ width: '100%' }"
-                    @click.native="materialProduct()"
+                    @click.native="selectStandard()"
                   >
                   </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="基准名称" prop="materialName">
+                  <el-input
+                    v-model="dataForm.materialName"
+                    placeholder="请选择"
+                    :maxlength="150"
+                    clearable
+                    :style="{ width: '100%' }"
+                    readonly
+                  >
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -61,7 +69,8 @@
               </el-col>
               <el-col :span="12" style="padding-bottom: 20px">
                 <el-button type="primary" @click="chooseProduct"
-                  >查看历史版本</el-button
+                >查看历史版本
+                </el-button
                 >
               </el-col>
               <el-col :span="12">
@@ -243,7 +252,8 @@
                       type="text"
                       class="JNPF-table-delBtn"
                       @click="delbizmaterialstandardlistList(scope.$index)"
-                      >删除</el-button
+                    >删除
+                    </el-button
                     >
                   </template>
                 </el-table-column>
@@ -272,22 +282,20 @@
               ></product-choose>
             </el-dialog>
           </div>
-          <div>
-            <el-dialog
-              title="物资列表"
-              :close-on-click-modal="false"
-              append-to-body
-              :visible.sync="materialChooseShow"
-              class="JNPF-dialog JNPF-dialog_center"
-              lock-scroll
-              width="1000px"
-            >
-              <material-choose
-                ref="MaterialChoose"
-                @onChange="dialogMaterialChange"
-              ></material-choose>
-            </el-dialog>
-          </div>
+          <el-dialog
+            title="原料半成品"
+            :close-on-click-modal="false"
+            append-to-body
+            :visible.sync="materialVisible"
+            class="JNPF-dialog JNPF-dialog_center"
+            lock-scroll
+            width="1000px"
+          >
+            <material-dialog
+              ref="materialDialog"
+              @onChange="materialDialogChange"
+            ></material-dialog>
+          </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -301,19 +309,21 @@
 </template>
 <script>
 import request from "@/utils/request";
-import { previewDataInterface } from "@/api/systemData/dataInterface";
-import { getDictionaryDataSelector } from "@/api/systemData/dictionary";
+import {previewDataInterface} from "@/api/systemData/dataInterface";
+import {getDictionaryDataByTypeCode} from "@/api/systemData/dictionary";
 import ProductChoose from "./productChoose";
-import MaterialChoose from "./materialChoose";
+import materialDialog from "./materialDialog";
+
 export default {
-  components: { ProductChoose,MaterialChoose },
+  components: {ProductChoose,materialDialog},
   props: [],
   data() {
     return {
       visible: false,
       loading: false,
       isDetail: false,
-      materialFlag:false,
+      materialFlag: false,
+      standardTypeDataList: [],
       rowNum: 0,
       dataForm: {
         materialName: "",
@@ -335,20 +345,30 @@ export default {
         materialName: [
           {
             required: true,
-            message: "请输入",
+            message: "请选择",
+            trigger: "blur",
+          },
+        ],
+        standardType: [
+          {
+            required: true,
+            message: "请选择",
             trigger: "blur",
           },
         ],
       },
       enableFlagOptions: [
-        { fullName: "是", id: "1" },
-        { fullName: "否", id: "0" },
+        {fullName: "是", id: "1"},
+        {fullName: "否", id: "0"},
       ],
       currentUserOptions: [],
       examineUserIdOptions: [],
       approvalUserIdOptions: [],
       productChooseShow: false,
-      materialChooseShow: false,
+      materialVisible:false,
+      courseVisible:false,
+      finishedVisible:false,
+      equipmentVisible:false,
     };
   },
   computed: {},
@@ -356,7 +376,8 @@ export default {
   created() {
     //this.getgetCurrentUserOptions();
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     getgetCurrentUserOptions() {
       //  request({
@@ -370,6 +391,7 @@ export default {
       this.dataForm.id = id || 0;
       this.visible = true;
       this.isDetail = isDetail || false;
+      this.getStandardTypeDataList()
       this.$nextTick(() => {
         this.$refs["elForm"].resetFields();
         if (this.dataForm.id) {
@@ -386,9 +408,14 @@ export default {
         }
       });
     },
+    getStandardTypeDataList() {
+      getDictionaryDataByTypeCode("standardType").then((res) => {
+        this.standardTypeDataList = res.data
+      })
+    },
     // 表单提交
     dataFormSubmit() {
-       this.dataForm.enableFlag = '0';
+      this.dataForm.enableFlag = '0';
       this.$refs["elForm"].validate((valid) => {
         if (valid) {
           this.request();
@@ -473,7 +500,7 @@ export default {
         this.productChooseShow = true;
         this.$nextTick(() => {
           this.$refs.ProductChoose.query.materialCode = _materialCode;
-          this.$refs.ProductChoose.initData();
+          this.$refs.ProductChoose.initData(this.dataForm.standardType);
         });
       }
     },
@@ -481,7 +508,7 @@ export default {
     dialogProductChange(product) {
       this.dataForm.materialName = product.materialName;
       this.dataForm.materialCode = product.materialCode;
-    //  this.dataForm.versionNum = product.versionNum;
+      //  this.dataForm.versionNum = product.versionNum;
       // this.dataForm.makeTime = product.makeTime;
       this.dataForm.enableFlag = product.enableFlag;
       this.dataForm.makeUserId = product.makeUserId;
@@ -503,38 +530,56 @@ export default {
         method: "get",
       }).then((res) => {
         var versionNum = res.data.versionNum;
-        if(versionNum == null || versionNum == ''){
-            this.dataForm.versionNum = '1';
-        }else{
-            try{
-               this.dataForm.versionNum = versionNum/1 + 0.1;
-            }catch(e){
-               this.dataForm.versionNum = versionNum;
-            }
+        if (versionNum == null || versionNum == '') {
+          this.dataForm.versionNum = '1';
+        } else {
+          try {
+            this.dataForm.versionNum = versionNum / 1 + 0.1;
+          } catch (e) {
+            this.dataForm.versionNum = versionNum;
+          }
         }
       });
       this.productChooseShow = false;
     },
-    materialProduct(){
-          this.materialChooseShow = true;
+    selectStandard() {
+      if (this.dataForm.standardType) {
+        if (this.dataForm.standardType == "materialCheck") { // 物料/半成品检验
+          this.materialVisible = true;
           this.$nextTick(() => {
-            this.$refs.MaterialChoose.initData();
+            this.$refs.materialDialog.initData();
           });
+        } else if (this.dataForm.standardType == "courseCheck") { // 过程工序检验
+
+        } else if (this.dataForm.standardType == "finishedCheck") { // 成品检验
+
+        } else if (this.dataForm.standardType == "equipmentCheck") { // 设备检验
+
+        }
+      } else {
+        this.$message.error("请选择检验类型");
+      }
     },
-    dialogMaterialChange(product) {
-      this.dataForm.materialName = product.productName;
-      this.dataForm.materialCode = product.productCode;
-      this.dataForm.specification = product.specification;
-      this.setMaterialFlag();
-      this.materialChooseShow = false;
+    // 物料/半导体
+    materialDialogChange(dataRow){
+      this.dataForm.materialCode = dataRow.materialCode
+      this.dataForm.materialName = dataRow.materialName
+      this.dataForm.specification = dataRow.materialSpec
+      this.materialVisible = false;
     },
-    setMaterialFlag(){
-         //如果物资是 包含铜线或者盐酸 则显示 样本大小，否则显示 检测频率
-         if(this.dataForm.materialName.indexOf('铜线') >=0 || this.dataForm.materialName.indexOf('盐酸') >=0 ){
-             this.materialFlag = true;
-         }else{
-             this.materialFlag = false;
-         }
+    clearStandard() {
+      this.dataForm.materialName = ""
+      this.dataForm.materialCode = ""
+      this.dataForm.specification = ""
+      this.dataForm.specification = ""
+    },
+    setMaterialFlag() {
+      //如果物资是 包含铜线或者盐酸 则显示 样本大小，否则显示 检测频率
+      if (this.dataForm.materialName.indexOf('铜线') >= 0 || this.dataForm.materialName.indexOf('盐酸') >= 0) {
+        this.materialFlag = true;
+      } else {
+        this.materialFlag = false;
+      }
     },
     handleAvatarSuccess(res) {
       if (res.code === 200 && res.data && res.data.url) {
