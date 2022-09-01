@@ -132,6 +132,7 @@ export default {
     getOrganizeList() {
       this.treeLoading = true
       getDepartmentSelector().then(res => {
+        console.log(res.data.list);
         this.treeData = res.data.list
         this.$nextTick(() => {
           if (!this.treeData.length) {

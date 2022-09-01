@@ -60,6 +60,26 @@
               </el-select>
             </el-form-item>
           </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="所属产线" prop="productLinesId">
+              <el-select
+                v-model="dataForm.productLinesId"
+                placeholder="请选择"
+                :style="{ width: '100%' }"
+                :multiple="false"
+              >
+                <el-option
+                  v-for="(item, index) in productLinesIdOptions"
+                  :key="index"
+                  :label="item.produceUnitName"
+                  :value="item.id"
+                  :disabled="item.disabled"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </template>
       </el-form>
     </el-row>
@@ -88,6 +108,7 @@ export default {
         equipmentCode: "",
         equipmentName: "",
         productionProcessId: "",
+        productLinesId:""
       },
       rules: {
         equipmentCode: [
@@ -110,9 +131,16 @@ export default {
             message: "请选择",
             trigger: "change",
           },
+        ], productLinesId: [
+          {
+            required: true,
+            message: "请选择",
+            trigger: "change",
+          },
         ],
       },
       productionProcessIdOptions: [],
+      productLinesIdOptions:[],
     };
   },
   computed: {},
@@ -144,6 +172,13 @@ export default {
           this.productionProcessIdOptions = res.data;
         })
         .catch(() => {});
+        //获取产线下拉列表
+        request({
+          url: `/api/project/BdFactoryUnit/getBdFactoryUnitListByType?produceUnitType=4`,
+            method: "get",
+          }).then((res) => {
+            this.productLinesIdOptions = res.data;
+          });
     },
     // 表单提交
     dataFormSubmit() {
