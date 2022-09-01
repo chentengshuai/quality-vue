@@ -4,7 +4,7 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item label="物料名称">
+            <el-form-item label="基准名称">
               <el-input
                 v-model="query.materialName"
                 placeholder="请输入"
@@ -14,7 +14,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="物料编码">
+            <el-form-item label="基准编码">
               <el-input
                 v-model="query.materialCode"
                 placeholder="请输入"
@@ -24,13 +24,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="规格型号">
-              <el-input
-                v-model="query.specification"
-                placeholder="请输入"
-                clearable
-              >
-              </el-input>
+            <el-form-item label="检验类型">
+              <el-select v-model="query.standardType" placeholder="请选择检验类型" clearable>
+                <el-option v-for="(item, index) in standardTypeDataList" :key="index" :label="item.fullName"
+                           :value="item.enCode" :disabled="item.disabled"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -107,14 +105,20 @@
           @sort-change="sortChange"
         >
           <el-table-column
+            prop="standardTypeName"
+            label="基准类型"
+            width="0"
+            align="left"
+          />
+          <el-table-column
             prop="materialName"
-            label="物料名称"
+            label="基准名称"
             width="0"
             align="left"
           />
           <el-table-column
             prop="materialCode"
-            label="物料编码"
+            label="基准编码"
             width="0"
             align="left"
           />
@@ -261,7 +265,7 @@
 
 <script>
 import request from "@/utils/request";
-import { getDictionaryDataSelector } from "@/api/systemData/dictionary";
+import {getDictionaryDataByTypeCode, getDictionaryDataSelector} from "@/api/systemData/dictionary";
 import JNPFForm from "./Form";
 import ExportBox from "./ExportBox";
 import { previewDataInterface } from "@/api/systemData/dataInterface";
@@ -283,6 +287,7 @@ export default {
         label: "fullName",
         value: "id",
       },
+      standardTypeDataList: [],
       list: [],
       listLoading: true,
       total: 0,
@@ -295,8 +300,8 @@ export default {
       formVisible: false,
       exportBoxVisible: false,
       columnList: [
-        { prop: "materialName", label: "基准书名称" },
-        { prop: "materialName", label: "物料编码" },
+        { prop: "materialName", label: "基准名称" },
+        { prop: "materialName", label: "基准编码" },
         { prop: "specification", label: "规格型号" },
         { prop: "versionNum", label: "版   本" },
         { prop: "enableFlag", label: "是否启用" },
@@ -354,6 +359,12 @@ export default {
         this.total = res.data.pagination.total;
         this.listLoading = false;
       });
+      this.getStandardTypeDataList()
+    },
+    getStandardTypeDataList() {
+      getDictionaryDataByTypeCode("standardType").then((res) => {
+        this.standardTypeDataList = res.data
+      })
     },
     handleDel(id) {
       this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {

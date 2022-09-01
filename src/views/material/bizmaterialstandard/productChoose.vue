@@ -159,20 +159,21 @@ export default {
   },
   computed: {},
   created() {},
-  mounted() {
+/*  mounted() {
     this.initData();
-  },
+  },*/
   methods: {
     sortChange({ column, prop, order }) {
       this.listQuery.sort = order == "ascending" ? "asc" : "desc";
       this.listQuery.sidx = !order ? "" : prop;
       this.initData();
     },
-    initData() {
+    initData(standardType) {
       this.listLoading = true;
       let _query = {
         ...this.listQuery,
         ...this.query,
+        standardType:standardType
       };
       request({
         url: `/api/project/BizMaterialStandard/materialStandardList`,
