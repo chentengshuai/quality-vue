@@ -1,6 +1,5 @@
 <template>
   <div class="JNPF-common-layout">
-
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
@@ -18,8 +17,7 @@
         </el-form>
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
-        <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange' has-c
-                    @row-click="rowClick">
+        <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange' @row-click="rowClick">
           <el-table-column prop="equipmentCategoryCode" label="设备类别编号" width="0" align="left"/>
           <el-table-column prop="equipmentCategoryName" label="设备类别名称" width="0" align="left"/>
         </JNPF-table>
