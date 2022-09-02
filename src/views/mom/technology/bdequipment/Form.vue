@@ -80,6 +80,26 @@
               </el-select>
             </el-form-item>
           </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="设备类别" prop="equipmentCategoryId">
+              <el-select
+                v-model="dataForm.equipmentCategoryId"
+                placeholder="请选择"
+                :style="{ width: '100%' }"
+                :multiple="false"
+              >
+                <el-option
+                  v-for="(item, index) in equipmentCategoryIdOptions"
+                  :key="index"
+                  :label="item.equipmentCategoryName"
+                  :value="item.id"
+                  :disabled="item.disabled"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </template>
       </el-form>
     </el-row>
@@ -108,7 +128,8 @@ export default {
         equipmentCode: "",
         equipmentName: "",
         productionProcessId: "",
-        productLinesId:""
+        productLinesId:"",
+        equipmentCategoryId:""
       },
       rules: {
         equipmentCode: [
@@ -136,11 +157,18 @@ export default {
             required: true,
             message: "请选择",
             trigger: "change",
+          }],
+          equipmentCategoryId:[
+          {
+            required: true,
+            message: "请选择",
+            trigger: "change",
           },
         ],
       },
       productionProcessIdOptions: [],
       productLinesIdOptions:[],
+      equipmentCategoryIdOptions:[],
     };
   },
   computed: {},
@@ -178,6 +206,14 @@ export default {
             method: "get",
           }).then((res) => {
             this.productLinesIdOptions = res.data;
+          });
+
+        //获取所属设备类别下拉列表
+        request({
+          url: `/api/project/BdEquipmentCategory/getEquipmentCategoryList`,
+            method: "get",
+          }).then((res) => {
+            this.equipmentCategoryIdOptions = res.data;
           });
     },
     // 表单提交
