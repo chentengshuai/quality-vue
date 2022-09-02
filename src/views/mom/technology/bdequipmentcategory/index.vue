@@ -24,8 +24,8 @@
                                     </el-button>
                                     <el-button type="text" icon="el-icon-download" @click="exportData()" >导出
                                     </el-button>
-                                    <el-button type="text" icon="el-icon-delete" @click="handleBatchRemoveDel()" >批量删除
-                                    </el-button>
+                                    <!-- <el-button type="text" icon="el-icon-delete" @click="handleBatchRemoveDel()" >批量删除
+                                    </el-button> -->
                     </div>
                     <div class="JNPF-common-head-right">
                         <el-tooltip effect="dark" content="刷新" placement="top">
@@ -36,11 +36,12 @@
                     </div>
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange'  has-c @selection-change="handleSelectionChange">
-                        <el-table-column prop="equipmentCategoryName" label="设备类别名称" width="0" align="left"/>
-                       <el-table-column prop="enabledMark" label="是否启用" width="0" align="left">
+                    <el-table-column prop="equipmentCategoryCode" label="设备类别编码" width="0" align="left"/>    
+                    <el-table-column prop="equipmentCategoryName" label="设备类别名称" width="0" align="left"/>
+                    <el-table-column prop="enabledMark" label="是否启用" width="0" align="left">
                                 <template slot-scope="scope">
                                     <el-switch
-                                        v-model="scope.row.enabledMark"
+                                        v-model="scope.row.equipmentCategoryName"
                                         :active-value="1"
                                         :inactive-value="0"
                                         @change="handleUpdateEnabledMark(scope.row)">
@@ -53,8 +54,8 @@
                                         <el-button type="text"
                                                    @click="addOrUpdateHandle(scope.row.id)" >编辑
                                         </el-button>
-                                        <el-button type="text" class="JNPF-table-delBtn"  @click="handleDel(scope.row.id)">删除
-                                        </el-button>
+                                        <!-- <el-button type="text" class="JNPF-table-delBtn"  @click="handleDel(scope.row.id)">删除
+                                        </el-button> -->
                             </template>
                         </el-table-column>
                 </JNPF-table>
@@ -79,7 +80,7 @@
             return {
                 query: {
                                 equipmentCategoryName:undefined,
-                                enabledmark:undefined,
+                                enabledMark:undefined,
                 },
                 treeProps: {
                     children: 'children',
@@ -99,7 +100,7 @@
                 exportBoxVisible: false,
                 columnList: [
                     {prop: 'equipmentCategoryName', label: '设备类别名称'},
-                    {prop: 'enabledmark', label: '有效标志(1:有效 0:无效)'},
+                    {prop: 'enabledMark', label: '有效标志(1:有效 0:无效)'},
                 ],
             }
         },
@@ -133,7 +134,7 @@
                         this.total = res.data.pagination.total
 
                     this.listLoading = false
-                })
+                });
             },
             handleDel(id) {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
