@@ -29,6 +29,28 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
+                <el-form-item label="检验编码" prop="standardCode">
+                  <el-input
+                    v-model="dataForm.standardCode"
+                    placeholder="请输入"
+                    readonly
+                    :style="{ width: '100%' }"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="检验名称" prop="standardName">
+                  <el-input
+                    v-model="dataForm.standardName"
+                    placeholder="请输入"
+                    clearable
+                    :style="{ width: '100%' }"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="基准编码" prop="materialName">
                   <el-input
                     v-model="dataForm.materialCode"
@@ -67,7 +89,7 @@
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12" style="padding-bottom: 20px">
+<!--              <el-col :span="12" style="padding-bottom: 20px">
                 <el-button type="primary" @click="chooseProduct"
                 >查看历史版本
                 </el-button
@@ -83,7 +105,7 @@
                   >
                   </el-input>
                 </el-form-item>
-              </el-col>
+              </el-col>-->
               <el-col :span="12">
                 <el-form-item label="制作日期" prop="makeTime">
                   <el-date-picker
@@ -296,6 +318,19 @@
               @onChange="materialDialogChange"
             ></material-dialog>
           </el-dialog>
+
+          <el-dialog
+            title="设备大类"
+            :close-on-click-modal="false"
+            append-to-body
+            :visible.sync="equipmentVisible"
+            class="JNPF-dialog JNPF-dialog_center"
+            lock-scroll
+            width="1000px">
+            <equipment-dialog
+              ref="equipmentDialog"
+              @onChange="equipmentDialogChange"></equipment-dialog>
+          </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -313,9 +348,10 @@ import {previewDataInterface} from "@/api/systemData/dataInterface";
 import {getDictionaryDataByTypeCode} from "@/api/systemData/dictionary";
 import ProductChoose from "./productChoose";
 import materialDialog from "./materialDialog";
+import equipmentDialog from "./equipmentDialog";
 
 export default {
-  components: {ProductChoose,materialDialog},
+  components: {ProductChoose,materialDialog,equipmentDialog},
   props: [],
   data() {
     return {
@@ -353,6 +389,13 @@ export default {
           {
             required: true,
             message: "请选择",
+            trigger: "blur",
+          },
+        ],
+        standardName: [
+          {
+            required: true,
+            message: "请输入",
             trigger: "blur",
           },
         ],
@@ -405,6 +448,7 @@ export default {
           });
         } else {
           this.dataForm = this.$options.data().dataForm;
+          this.dataForm.standardCode = "Y"+new Date().getTime()
         }
       });
     },
@@ -554,7 +598,10 @@ export default {
         } else if (this.dataForm.standardType == "finishedCheck") { // 成品检验
 
         } else if (this.dataForm.standardType == "equipmentCheck") { // 设备检验
-
+          this.equipmentVisible = true;
+          this.$nextTick(() => {
+            this.$refs.equipmentDialog.initData();
+          });
         }
       } else {
         this.$message.error("请选择检验类型");
@@ -566,6 +613,12 @@ export default {
       this.dataForm.materialName = dataRow.materialName
       this.dataForm.specification = dataRow.materialSpec
       this.materialVisible = false;
+    },
+    // 设备大类
+    equipmentDialogChange(dataRow){
+      this.dataForm.materialCode = dataRow.equipmentCategoryCode
+      this.dataForm.materialName = dataRow.equipmentCategoryName
+      this.equipmentVisible = false;
     },
     clearStandard() {
       this.dataForm.materialName = ""

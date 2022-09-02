@@ -106,21 +106,20 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="型号" prop="model">
-              <el-input v-model="dataForm.model" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
+              <el-input v-model="dataForm.model" placeholder="请输入" :style='{"width":"70px"}'>
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="体积" prop="volume">
-              <el-input v-model="dataForm.volume" placeholder="请输入" clearable :style='{"width":"100%"}'>
+              <el-input v-model="dataForm.volume" placeholder="请输入" :style='{"width":"70px"}'>
 
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="重量" prop="weight">
-              <el-input v-model="dataForm.weight" placeholder="请输入" clearable :style='{"width":"100%"}'>
+              <el-input v-model="dataForm.weight" placeholder="请输入" :style='{"width":"70px"}'>
 
               </el-input>
             </el-form-item>
