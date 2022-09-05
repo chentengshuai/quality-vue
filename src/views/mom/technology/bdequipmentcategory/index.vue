@@ -39,15 +39,15 @@
                     <el-table-column prop="equipmentCategoryCode" label="设备类别编码" width="0" align="left"/>
                     <el-table-column prop="equipmentCategoryName" label="设备类别名称" width="0" align="left"/>
                     <el-table-column prop="enabledMark" label="是否启用" width="0" align="left">
-                                <template slot-scope="scope">
-                                    <el-switch
-                                        v-model="scope.row.equipmentCategoryName"
-                                        :active-value="1"
-                                        :inactive-value="0"
-                                        @change="handleUpdateEnabledMark(scope.row)">
-                                    </el-switch>
-                                </template>
-                        </el-table-column>
+                        <template slot-scope="scope">
+                                <el-switch
+                                    v-model="scope.row.enabledMark"
+                                    active-value="1"
+                                    inactive-value="0"
+                                    @change="handleUpdateEnabledMark(scope.row)">
+                                </el-switch>
+                        </template>
+                    </el-table-column>
                         <el-table-column label="操作" fixed="right"
                                          width="100" >
                             <template slot-scope="scope">
@@ -73,14 +73,14 @@
     import JNPFForm from './Form'
     import ExportBox from './ExportBox'
     import {previewDataInterface} from '@/api/systemData/dataInterface'
+    
 
     export default {
         components: {JNPFForm, ExportBox},
         data() {
             return {
                 query: {
-                                equipmentCategoryName:undefined,
-                                enabledMark:undefined,
+                    equipmentCategoryName:undefined,
                 },
                 treeProps: {
                     children: 'children',
@@ -100,7 +100,6 @@
                 exportBoxVisible: false,
                 columnList: [
                     {prop: 'equipmentCategoryName', label: '设备类别名称'},
-                    {prop: 'enabledMark', label: '有效标志(1:有效 0:无效)'},
                 ],
             }
         },
