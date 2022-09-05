@@ -2,32 +2,20 @@
   <el-dialog :title="!dataForm.id ? '新建' :  isDetail ? '详情':'编辑'"
              :close-on-click-modal="false" append-to-body
              :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-             width="600px">
+             width="700px">
     <el-row :gutter="15" class="">
-      <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right">
+      <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="120px" label-position="right">
         <template v-if="!loading">
           <el-col :span="24">
-            <el-form-item label="产品模板名称" prop="productTemplateName">
-              <el-input v-model="dataForm.productTemplateName" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
             <el-form-item label="产品模板编码" prop="productTemplateCode">
-              <el-input v-model="dataForm.productTemplateCode" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
+              <el-input prefix-icon="el-icon-search" readonly v-model="dataForm.productTemplateCode" placeholder="请选择" @click.native="materialShow()" clearable :style='{"width":"100%"}'>
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="产品分类" prop="productCategory">
-              <el-select v-model="dataForm.productCategory" placeholder="请选择" clearable :style='{"width":"100%"}'
-                         :multiple="false">
-                <el-option v-for="(item, index) in productCategoryOptions" :key="index" :label="item.fullName"
-                           :value="item.id" :disabled="item.disabled"></el-option>
-
-              </el-select>
+            <el-form-item label="产品模板名称" prop="productTemplateName">
+              <el-input v-model="dataForm.productTemplateName" readonly placeholder="请选择" clearable :style='{"width":"100%"}'>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -40,7 +28,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+<!--          <el-col :span="12">
             <el-form-item label="服务类型" prop="serviceType">
               <el-select v-model="dataForm.serviceType" placeholder="请选择" clearable :style='{"width":"100%"}'
                          :multiple="false">
@@ -89,7 +77,7 @@
 
               </el-input>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="销售价格" prop="purchasePrice">
               <el-input v-model="dataForm.purchasePrice" placeholder="请输入" clearable :style='{"width":"100%"}'>
@@ -104,24 +92,28 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="型号" prop="model">
-              <el-input v-model="dataForm.model" placeholder="请输入" :style='{"width":"70px"}'>
-              </el-input>
+<!--              <el-input v-model="dataForm.model" placeholder="请输入" :style='{"width":"70px"}'>
+              </el-input>-->
+              <el-input-number v-model="dataForm.model" placeholder="型号" :style='{"width":"100%"}' :step="1">
+              </el-input-number>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="体积" prop="volume">
-              <el-input v-model="dataForm.volume" placeholder="请输入" :style='{"width":"70px"}'>
-
-              </el-input>
+<!--              <el-input v-model="dataForm.volume" placeholder="请输入" :style='{"width":"70px"}'>
+              </el-input>-->
+              <el-input-number v-model="dataForm.volume" placeholder="体积" :style='{"width":"100%"}' :step="0.01">
+              </el-input-number>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="重量" prop="weight">
-              <el-input v-model="dataForm.weight" placeholder="请输入" :style='{"width":"70px"}'>
-
-              </el-input>
+<!--              <el-input v-model="dataForm.weight" placeholder="请输入" :style='{"width":"70px"}'>
+              </el-input>-->
+              <el-input-number v-model="dataForm.weight" placeholder="重量" :style='{"width":"100%"}' :step="0.01">
+              </el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -146,6 +138,78 @@
               </el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <el-form-item label-width="0">
+              <div class="JNPF-common-title">
+                <h2>工序明细</h2>
+                <el-button type="primary"  icon="el-icon-plus"
+                           @click="processShow">选择工序
+                </el-button>
+              </div>
+              <el-table :data="dataForm.productTemplateProcessList" size="mini">
+                <el-table-column  type="index" width="50" label="序号"  align="center"/>
+                <el-table-column prop="materialCode" label="生产工序编码">
+                  <template slot-scope="scope">
+                    <el-input  v-model="scope.row.productionProcessCode" readonly :style="{ width: '100%' }">
+                    </el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="materialName" label="生产工序名称">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.productionProcessName" readonly :style="{ width: '100%' }">
+                    </el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="typeName" label="描述">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.remark" readonly :style="{ width: '100%' }">
+                    </el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="materialSpec" label="排序">
+                  <template slot-scope="scope">
+                    <el-input-number v-model="scope.row.seq" placeholder="排序"
+                                     :style='{"width":"100%"}'>
+                    </el-input-number>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="50">
+                  <template slot-scope="scope">
+                    <el-button size="mini" type="text" class="JNPF-table-delBtn"
+                               @click="delProcessList(scope.$index)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-form-item>
+          </el-col>
+
+          <el-dialog
+            title="半成品成品"
+            :close-on-click-modal="false"
+            append-to-body
+            :visible.sync="materialVisible"
+            class="JNPF-dialog JNPF-dialog_center"
+            lock-scroll
+            width="1000px">
+            <material-dialog
+              ref="materialDialog"
+              @onChange="materialDialogChange"></material-dialog>
+          </el-dialog>
+
+          <el-dialog
+            title="工序"
+            :close-on-click-modal="false"
+            append-to-body
+            :visible.sync="processVisible"
+            class="JNPF-dialog JNPF-dialog_center"
+            lock-scroll
+            width="1000px">
+            <process-dialog
+              ref="processDialog"
+              @onChange="processDialogChange"></process-dialog>
+          </el-dialog>
+
         </template>
       </el-form>
     </el-row>
@@ -159,15 +223,19 @@
   import request from '@/utils/request'
   import {previewDataInterface} from '@/api/systemData/dataInterface'
   import {getDictionaryDataSelector} from '@/api/systemData/dictionary'
+  import materialDialog from "./materialDialog";
+  import processDialog from "./processDialog";
 
   export default {
-    components: {},
+    components: { materialDialog , processDialog},
     props: [],
     data() {
       return {
         visible: false,
         loading: false,
         isDetail: false,
+        materialVisible: false,
+        processVisible: false,
         dataForm: {
           productTemplateName: '',
           productTemplateCode: '',
@@ -187,20 +255,21 @@
           uomId: '',
           uomPoId: '',
           description: '',
+          productTemplateProcessList:[],
         },
         rules:
           {
             productTemplateName: [
               {
                 required: true,
-                message: '请输入',
+                message: '请选择',
                 trigger: 'blur'
               },
             ],
             productTemplateCode: [
               {
                 required: true,
-                message: '请输入',
+                message: '请选择',
                 trigger: 'blur'
               },
             ],
@@ -212,7 +281,7 @@
               },
             ],
           },
-        productCategoryOptions: [{"fullName": "物料", "id": "0"}, {"fullName": "半成品", "id": "1"}, {
+        productCategoryOptions: [{"fullName": "半成品", "id": "1"}, {
           "fullName": "成品",
           "id": "2"
         }],
@@ -253,9 +322,41 @@
               this.dataInfo(res.data)
               this.loading = false
             })
+          }else {
+            this.dataForm = this.$options.data().dataForm
           }
-
         })
+      },
+      selectMaterialList(){
+
+      },
+      materialShow(){
+        this.materialVisible = true;
+        this.$nextTick(() => {
+          this.$refs.materialDialog.initData();
+        });
+      },
+      // 物料/半成品/ 成品
+      materialDialogChange(dataRow){
+        this.dataForm.productTemplateCode = dataRow.materialCode
+        this.dataForm.productTemplateName = dataRow.materialName
+        this.dataForm.productCategory = dataRow.type
+        this.dataForm.specification = dataRow.materialSpec
+        this.dataForm.uomId = dataRow.materialUnit
+        this.materialVisible = false;
+      },
+      processShow(){
+        this.processVisible = true
+        this.$nextTick(() => {
+          this.$refs.processDialog.initData();
+        });
+      },
+      processDialogChange(dataRow){
+        this.dataForm.productTemplateProcessList = dataRow
+        this.processVisible = false;
+      },
+      delProcessList(index) {
+        this.dataForm.productTemplateProcessList.splice(index, 1);
       },
       // 表单提交
       dataFormSubmit() {

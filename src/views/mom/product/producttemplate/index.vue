@@ -25,7 +25,7 @@
             </el-form-item>
           </el-col>
           <template v-if="showAll">
-            <el-col :span="6">
+<!--            <el-col :span="6">
               <el-form-item label="服务类型">
                 <el-select v-model="query.serviceType" placeholder="请选择"
                            clearable>
@@ -44,7 +44,7 @@
                              :disabled="item.disabled"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
             <el-col :span="6">
               <el-form-item label="产品类型">
                 <el-select v-model="query.productType" placeholder="请选择"
@@ -96,7 +96,7 @@
           </el-table-column>
           <el-table-column prop="productType" label="产品类型" width="0" align="left"
           />
-          <el-table-column prop="serviceType" label="服务类型" width="0" align="left">
+<!--          <el-table-column prop="serviceType" label="服务类型" width="0" align="left">
             <template slot-scope="scope">
               {{ scope.row.serviceType | dynamicText(serviceTypeOptions) }}
             </template>
@@ -113,7 +113,7 @@
           <el-table-column prop="descriptionPurchase" label="采购说明" width="0" align="left"
           />
           <el-table-column prop="descriptionSale" label="销售说明" width="0" align="left"
-          />
+          />-->
           <el-table-column prop="purchasePrice" label="销售价格" width="0" align="left"
           />
           <el-table-column prop="specification" label="规格" width="0" align="left"
@@ -194,7 +194,7 @@
           {prop: 'uomId', label: '计量单位'},
           {prop: 'uomPoId', label: '采购计量单位'},
         ],
-        productCategoryOptions: [{"fullName": "物料", "id": "0"}, {"fullName": "半成品", "id": "1"}, {
+        productCategoryOptions: [{"fullName": "半成品", "id": "1"}, {
           "fullName": "成品",
           "id": "2"
         }],

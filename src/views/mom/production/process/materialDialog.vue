@@ -76,6 +76,7 @@ export default {
         type:undefined,
       },
       isCheckedList: [],
+      checkedList:[],
       checked: "",
       list: [],
       listLoading: true,

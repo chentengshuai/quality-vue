@@ -305,14 +305,13 @@
             </el-dialog>
           </div>
           <el-dialog
-            title="原料半成品"
+            title="原料半成品成品"
             :close-on-click-modal="false"
             append-to-body
             :visible.sync="materialVisible"
             class="JNPF-dialog JNPF-dialog_center"
             lock-scroll
-            width="1000px"
-          >
+            width="1000px">
             <material-dialog
               ref="materialDialog"
               @onChange="materialDialogChange"
@@ -588,14 +587,12 @@ export default {
     },
     selectStandard() {
       if (this.dataForm.standardType) {
-        if (this.dataForm.standardType == "materialCheck") { // 物料/半成品检验
+        if (this.dataForm.standardType == "materialCheck") { // 物料/半成品/成品检验
           this.materialVisible = true;
           this.$nextTick(() => {
             this.$refs.materialDialog.initData();
           });
         } else if (this.dataForm.standardType == "courseCheck") { // 过程工序检验
-
-        } else if (this.dataForm.standardType == "finishedCheck") { // 成品检验
 
         } else if (this.dataForm.standardType == "equipmentCheck") { // 设备检验
           this.equipmentVisible = true;
@@ -607,7 +604,7 @@ export default {
         this.$message.error("请选择检验类型");
       }
     },
-    // 物料/半导体
+    // 物料/半成品/ 成品
     materialDialogChange(dataRow){
       this.dataForm.materialCode = dataRow.materialCode
       this.dataForm.materialName = dataRow.materialName

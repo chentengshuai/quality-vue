@@ -1,6 +1,5 @@
 <template>
   <div class="JNPF-common-layout">
-
     <div class="JNPF-common-layout-center">
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
@@ -21,8 +20,7 @@
                 placeholder="请选择"
                 clearable
                 :style="{ width: '100%' }"
-                :multiple="false"
-              >
+                :multiple="false">
                 <el-option
                   v-for="(item, index) in typeOptions"
                   :key="index"
@@ -106,7 +104,8 @@ export default {
       this.listLoading = true;
       let _query = {
         ...this.listQuery,
-        ...this.query
+        ...this.query,
+        typeStatus:"1"
       };
       request({
         url: `/api/project/Material/getList`,
