@@ -119,9 +119,6 @@
                          @click="submitBoe(scope.row.id,'revoke')">撤销
               </el-button>
               <el-button type="text" v-if="scope.row.boeStatus == 1 || scope.row.boeStatus == 2"
-                         @click="printBoxLabel(scope.row.boxNum,'look')">打印箱号
-              </el-button>
-              <el-button type="text" v-if="scope.row.boeStatus == 1 || scope.row.boeStatus == 2"
                          @click="addOrUpdateHandle(scope.row.id,'look')">详情
               </el-button>
               <el-button type="text" class="JNPF-table-delBtn" v-if="scope.row.boeStatus == 0"

@@ -22,7 +22,7 @@
           <template v-if="showAll">
             <el-col :span="6">
               <el-form-item label="单据编号">
-                <el-input v-model="query.billNo" placeholder="请输入" clearable></el-input>
+                <el-input v-model="query.stockMoveCode" placeholder="请输入" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
