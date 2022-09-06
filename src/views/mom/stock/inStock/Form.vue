@@ -33,52 +33,10 @@
                 <el-col :span="8">
                   <el-form-item label="入库类型" prop="stockMoveType">
                     <el-select v-model="dataForm.stockMoveType" placeholder="请选择" clearable :style='{"width":"100%"}'
-                               :multiple="false">
+                              :multiple="false">
                       <el-option v-for="(item, index) in stockMoveTypeOptions" :key="index" :label="item.fullName"
-                                 :value="item.enCode" :disabled="item.disabled"></el-option>
+                                :value="item.enCode" :disabled="item.disabled"></el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="通知单编号" v-if="saleReturnStockShow" prop="noticeBillNo">
-                    <el-input v-model="dataForm.noticeBillNo" placeholder="请选择ERP退货通知单编号" readonly clearable
-                              :style='{"width":"100%"}' @click.native="clickSalReturnNotice">
-
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="库存组" prop="stockerGroup">
-                    <el-select v-model="dataForm.stockerGroup" placeholder="请选择" clearable :style='{"width":"100%"}'
-                               :multiple="false">
-                      <el-option v-for="(item, index) in operatorGroupOptions" :key="index" :label="item.name"
-                                 :value="item.number" :disabled="item.disabled"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="仓管员" prop="stocker">
-                    <el-select v-model="dataForm.stocker" placeholder="请选择" clearable :style='{"width":"100%"}'
-                               :multiple="false">
-                      <el-option v-for="(item, index) in operatorOptions" :key="index" :label="item.name"
-                                 :value="item.number" :disabled="item.disabled"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item :label="deptName" prop="dept" v-if="saleReturnStockShow">
-                    <el-select v-model="dataForm.dept" placeholder="请选择" clearable :style='{"width":"100%"}'
-                               :multiple="false">
-                      <el-option v-for="(item, index) in departmentOptions" :key="index" :label="item.name"
-                                 :value="item.code" :disabled="item.disabled"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="运输单号" v-if="saleReturnStockShow" prop="carriageNo">
-                    <el-input v-model="dataForm.carriageNo" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-                    </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="16">
@@ -89,61 +47,39 @@
                   </el-form-item>
                 </el-col>
               </el-collapse-item>
-              <div style="margin-top:5px;" v-show="!saleReturnStockShow">
-                <el-button type="primary" icon="el-icon-plus" @click="selectBdBoxList()">选择装箱单
-                </el-button>
-                <span style="float:right;">扫描批号/箱号
-                  <el-input v-model="boxNum" placeholder="请扫描批号/箱号" clearable :style='{"width":"60%"}'
-                            @keyup.enter.native="scanningBoxNum()">
-                  </el-input>
-                </span>
-              </div>
               <el-collapse-item title="明细" name="2">
                 <el-col :span="24">
                   <el-form-item label-width="0">
                     <el-table :data="dataForm.bizstockmovelineList" size='mini'>
                       <el-table-column type="index" width="50" label="序号" align="center"/>
-                      <el-table-column prop="lotNumber" label="批号/箱号" width="150">
-                        <template slot-scope="scope">
-                          <el-input v-model="scope.row.lotNumber" readonly :style='{"width":"100%"}'>
-                          </el-input>
-                        </template>
-                      </el-table-column>
                       <el-table-column prop="productCode" label="物料编码" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productCode" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productCode"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productName" label="物料名称" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productName" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productName"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productSpc" label="规格型号" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productSpc" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productSpc"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productLvl" label="产品等级" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productLvl" placeholder="请输入" readonly clearable
+                          <el-input v-model="scope.row.productLvl" placeholder="请输入"  clearable
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="uomName" label="单位" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.uomName" readonly :style='{"width":"100%"}'>
-                          </el-input>
-                        </template>
-                      </el-table-column>
-
-                      <el-table-column prop="returnQty" label="应退数量" width="150" v-if="saleReturnStockShow">
-                        <template slot-scope="scope">
-                          <el-input v-model="scope.row.returnQty" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.uomName"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
@@ -154,14 +90,14 @@
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="grossWeight" label="毛重" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="grossWeight" label="毛重" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.grossWeight" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.grossWeight"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
 
-                      <el-table-column prop="stockType" label="入库类型" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="stockType" label="入库类型" width="150" >
                         <template slot-scope="scope">
                           <el-select v-model="scope.row.stockType" placeholder="请选择" clearable :style='{"width":"100%"}'
                                      :multiple="false">
@@ -171,54 +107,53 @@
                         </template>
                       </el-table-column>
 
-                      <el-table-column prop="customerName" label="客户" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="customerName" label="客户" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.customerName" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.customerName"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="contractNo" label="合同号" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="contractNo" label="合同号" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.contractNo" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.contractNo"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="warehouseName" label="仓库" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.warehouseName" placeholder="请输入" readonly
+                          <el-input v-model="scope.row.warehouseName" placeholder="请输入" 
                                     :style='{"width":"100%"}' @click.native="choosePosition(scope.$index)">
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="locationName" label="仓位" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.locationName" readonly :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.locationName"  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="frp" label="FRP管" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="frp" label="FRP管" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.frp" placeholder="请输入" readonly clearable
+                          <el-input v-model="scope.row.frp" placeholder="请输入"  clearable
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="workShopName" label="生产车间" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="workShopName" label="生产车间" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.workShopName" placeholder="请输入" clearable readonly
+                          <el-input v-model="scope.row.workShopName" placeholder="请输入" clearable 
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="customerProductCode" label="客户物料编码" width="150"
-                                       v-if="!saleReturnStockShow">
+                      <el-table-column prop="customerProductCode" label="客户物料编码" width="150" >
                         <template slot-scope="scope">
                           <el-input v-model="scope.row.customerProductCode" placeholder="请输入" clearable
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="customerOrderNum" label="客户订单号" width="150" v-if="!saleReturnStockShow">
+                      <el-table-column prop="customerOrderNum" label="客户订单号" width="150" >
                         <template slot-scope="scope">
                           <el-input v-model="scope.row.customerOrderNum" placeholder="请输入" clearable
                                     :style='{"width":"100%"}'>
@@ -240,23 +175,14 @@
                         </template>
                       </el-table-column>
                     </el-table>
+                    <div class="table-actions" @click="addbizstockmovelineList()">
+                      <el-button type="text" icon="el-icon-plus">添加</el-button>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-collapse-item>
             </el-collapse>
           </el-col>
-
-          <sal-return-notice-choose ref="SalReturnNoticeChoose" v-if="salReturnNoticeChooseShow"
-                                    @selectSalReturnNotice="selectSalReturnNotice"
-                                    @closeSalReturnNotice="closeSalReturnNotice"></sal-return-notice-choose>
-
-          <el-dialog title="选择装箱单"
-                     :close-on-click-modal="false" append-to-body
-                     :visible.sync="bdBoxListShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-                     width="1000px">
-            <bd-box-list ref="BdBoxList" @bdBoxListDataForm="processBdBoxList"
-                         @bdBoxListDisplay="clickBdBoxListDisplay"></bd-box-list>
-          </el-dialog>
 
           <el-dialog title="仓库列表"
                      :close-on-click-modal="false" append-to-body
@@ -281,23 +207,19 @@
   import BdBoxList from './bdBoxList'
   import PositionChoose from './positionChoose'
   import {getDictionaryDataByTypeCode} from '@/api/systemData/dictionary'
-  import SalReturnNoticeChoose from './salReturnNoticeChoose'
 
   export default {
-    components: {BdBoxList, PositionChoose, SalReturnNoticeChoose},
+    components: {BdBoxList, PositionChoose},
     props: [],
     data() {
       return {
         visible: false,
         loading: false,
         isDetail: false,
-        salReturnNoticeChooseShow: false,
-        bdBoxListShow: false,
         positionChooseShow: false,
         rowNum: 0,
         boxNum: '',
         deptName: '发货部门', //frp管变量名称
-        saleReturnStockShow: false, //销售退库
         columnShow: true,
         dataForm: {
           stockMoveCode: '',
@@ -380,10 +302,8 @@
           /*切换为销售退货入库*/
           if (newValue === 'SP_InStock') {
             this.deptName = '发货部门';
-            this.saleReturnStockShow = false;
           } else if (newValue === 'SAL_RETURNSTOCK') {
             this.deptName = '库存部门';
-            this.saleReturnStockShow = true;
           }
         }
       }
@@ -400,18 +320,15 @@
         this.$nextTick(() => {
           if (this.dataForm.id) {
             this.loading = true
-            this.getStockMoveTypeList().then(() => {
-              request({
-                url: '/api/InStock/BizStockMove/' + this.dataForm.id,
-                method: 'get'
-              }).then(res => {
-                this.dataInfo(res.data)
-                this.loading = false
-              })
+            request({
+              url: '/api/InStock/BizStockMove/' + this.dataForm.id,
+              method: 'get'
+            }).then(res => {
+              this.dataInfo(res.data)
+              this.loading = false
             })
           } else {
             this.reset();
-            this.getStockMoveTypeList();
           }
 
         });
@@ -419,29 +336,30 @@
         getDepartmentSelector().then(res => {
           this.departmentTreeData = res.data.list
         });
-        // 获取订单号下拉
-        getOrderList().then(res => {
-          this.getOrderListData = res.data
+	      getDictionaryDataByTypeCode("inSockMoveType").then(res => {
+          this.stockMoveTypeOptions= res.data
         });
+        // 获取订单号下拉
+        // getOrderList().then(res => {
+        //   this.getOrderListData = res.data
+        // });
         // 获取部门
-        this.getDepartmentListNoPaging();
-        // 获取库存组
-        this.getOperatorGroupBillNoPaging();
-        // 获取仓管员
-        this.getOperatorNoPaging();
+        // this.getDepartmentListNoPaging();
+        // // 获取库存组
+        // this.getOperatorGroupBillNoPaging();
+        // // 获取仓管员
+        // this.getOperatorNoPaging();
         //获取简单生产入库类型
-        this.getStockTypeList();
+        // this.getStockTypeList();
       },
       //关闭表单
       closeForm() {
-        debugger
         this.visible = false
       },
       // 表单提交
       dataFormSubmit() {
         this.$refs['elForm'].validate((valid) => {
           if (valid) {
-            debugger
             this.request()
           }
         })
@@ -494,8 +412,6 @@
       },
       addbizstockmovelineList() {
         let item = {
-          packageId: undefined,  //装箱单Id
-          lotNumber: undefined,
           productId: undefined,
           productCode: undefined,
           productName: undefined,
@@ -536,25 +452,19 @@
       dataInfo(dataAll) {
         this.dataForm = dataAll
       },
-      selectBdBoxList() {  //选择装箱单
-        this.bdBoxListShow = true;
-        this.$nextTick(() => {
-          this.$refs.BdBoxList.initData();
-        })
-      },
-      processBdBoxList(data) {
-        let _list = [];
-        for (let i = 0; i < data.length; i++) {
-          let bdBox = data[i];
-          request({
-            url: `/api/project/stockApi/getBoxInfo?boxNum=` + bdBox.boxNum,
-            method: 'get'
-          }).then(res => {
-            _list.push(res.data);
-            this.bdBoxListData(_list); //调用公共数据回写
-          });
-        }
-      },
+      // processBdBoxList(data) {
+      //   let _list = [];
+      //   for (let i = 0; i < data.length; i++) {
+      //     let bdBox = data[i];
+      //     request({
+      //       url: `/api/project/stockApi/getBoxInfo?boxNum=` + bdBox.boxNum,
+      //       method: 'get'
+      //     }).then(res => {
+      //       _list.push(res.data);
+      //       this.bdBoxListData(_list); //调用公共数据回写
+      //     });
+      //   }
+      // },
       bdBoxListData(data) {  //装箱弹框回写数据(公共回写方法)
         this.bdBoxListShow = false;
         let checkList = [];
@@ -641,9 +551,7 @@
           this.dataForm.bizstockmovelineList = [...this.dataForm.bizstockmovelineList, ...checkList]
         }
       },
-      clickBdBoxListDisplay(flag) {  //装箱弹框显示或关闭
-        this.bdBoxListShow = false;
-      },
+      
       choosePosition(index) {  //仓库弹框
         this.rowNum = index; //仓库行数
         this.positionChooseShow = true;
@@ -676,51 +584,39 @@
         }
         this.boxNum = '';
       },
-      getStockMoveTypeList() {
-        return getDictionaryDataByTypeCode('inSockMoveType').then(res => {
-          this.stockMoveTypeOptions = res.data
-          this.dataForm.stockMoveType = this.stockMoveTypeOptions[0].enCode;
-        }).catch(() => {
-        })
-      },
-      getDepartmentListNoPaging() {
-        let _query = {
-          code: "BM000005"
-        };
-        request({
-          url: `/api/project/stockApi/getDepartmentListNoPaging`,
-          method: 'post',
-          data: _query
-        }).then(res => {
-          this.departmentOptions = res.data
-          this.dataForm.dept = this.departmentOptions[0].code;
-        });
-      },
-      getOperatorGroupBillNoPaging() {
-        let _query = {
-          "operatorGroupType": "KCZ"
-        };
-        request({
-          url: `/api/project/stockApi/getOperatorGroupBillNoPaging`,
-          method: 'post',
-          data: _query
-        }).then(res => {
-          this.operatorGroupOptions = res.data
-          this.dataForm.stockerGroup = this.operatorGroupOptions[0].number;
-        });
-      },
-      getOperatorNoPaging() {
-        let _query = {
-          "operatorType": "WHY"
-        };
-        request({
-          url: `/api/project/stockApi/getOperatorNoPaging`,
-          method: 'post',
-          data: _query
-        }).then(res => {
-          this.operatorOptions = res.data;
-        });
-      },
+      // getStockMoveTypeList() {
+      //   return getDictionaryDataByTypeCode('inSockMoveType').then(res => {
+      //     this.stockMoveTypeOptions = res.data
+      //     this.dataForm.stockMoveType = this.stockMoveTypeOptions[0].enCode;
+      //   }).catch(() => {
+      //   })
+      // },
+      // getDepartmentListNoPaging() {
+      //   let _query = {
+      //     code: "BM000005"
+      //   };
+      //   request({
+      //     url: `/api/project/stockApi/getDepartmentListNoPaging`,
+      //     method: 'post',
+      //     data: _query
+      //   }).then(res => {
+      //     this.departmentOptions = res.data
+      //     this.dataForm.dept = this.departmentOptions[0].code;
+      //   });
+      // },
+      // getOperatorGroupBillNoPaging() {
+      //   let _query = {
+      //     "operatorGroupType": "KCZ"
+      //   };
+      //   request({
+      //     url: `/api/project/stockApi/getOperatorGroupBillNoPaging`,
+      //     method: 'post',
+      //     data: _query
+      //   }).then(res => {
+      //     this.operatorGroupOptions = res.data
+      //     this.dataForm.stockerGroup = this.operatorGroupOptions[0].number;
+      //   });
+      // },
       reset() {
         for (let key in this.dataForm) {
           if (key === "stockMoveDate") {
@@ -733,55 +629,6 @@
           this.dataForm[key] = ''
         }
       },
-      getSaleReturnInInfo() {
-        if (!this.dataForm.noticeBillNo) {
-          this.$message({
-            type: 'error',
-            message: "单据编号不能为空!"
-          });
-          return;
-        }
-        request({
-          url: '/api/project/stockApi/getSaleReturnInInfo?noticeBillNo=' + this.dataForm.noticeBillNo,
-          method: 'get'
-        }).then((res) => {
-          let data = res.data;
-          if (data.stocker)
-            this.dataForm.stocker = data.stocker;
-          if (data.dept)
-            this.dataForm.dept = data.dept;
-          if (data.carriageNo)
-            this.dataForm.carriageNo = data.carriageNo;
-          this.dataForm.bizstockmovelineList = [...this.dataForm.bizstockmovelineList, ...data.bizstockmovelineList];
-        })
-      },
-      getStockTypeList() {
-        let _query = {
-          "stockType": "SP_InStock",
-          "name": "",
-          "code": ""
-        };
-        request({
-          url: `/api/project/stockApi/getStockType`,
-          method: 'post',
-          data: _query
-        }).then(res => {
-          this.stockTypeOptions = res.data;
-        });
-      },
-      clickSalReturnNotice() {
-        this.salReturnNoticeChooseShow = true;
-        this.$nextTick(() => {
-          this.$refs.SalReturnNoticeChoose.initData();
-        })
-      },
-      selectSalReturnNotice(data) {
-        this.dataForm.noticeBillNo = data[0].billNo;
-        this.getSaleReturnInInfo()
-      },
-      closeSalReturnNotice() {
-        this.salReturnNoticeChooseShow = false;
-      }
     }
   }
 

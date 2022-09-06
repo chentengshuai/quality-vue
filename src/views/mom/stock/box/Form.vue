@@ -155,15 +155,10 @@
             <el-form-item label-width="0">
               <div class="JNPF-common-title">
                 <h2>明细</h2>
-                <el-form-item label="扫描卷号" prop="titleRollNum">
-                  <el-input v-model="titleRollNum" placeholder="请扫描子卷号" clearable :style='{"width":"100%"}'
-                            @keyup.enter.native="scanningDivide()">
-                  </el-input>
-                </el-form-item>
               </div>
               <el-table :data="dataForm.bdboxlineList" size='large'>
                 <el-table-column type="index" width="50" label="序号" align="center"/>
-                <el-table-column prop="rollId" label="卷号ID" v-if="false">
+                <!-- <el-table-column prop="rollId" label="卷号ID" v-if="false">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.rollId" readonly clearable :style='{"width":"100%"}'>
                     </el-input>
@@ -175,7 +170,7 @@
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="materialId" label="物料ID" v-if="false">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.materialId" readonly clearable :style='{"width":"100%"}'>
@@ -184,58 +179,58 @@
                 </el-table-column>
                 <el-table-column prop="materialCode" label="物料编码" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.materialCode" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.materialCode" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="materialName" label="物料名称" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.materialName" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.materialName" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="specification" label="规格型号" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.specification" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.specification" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productGradeName" label="产品等级" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productGradeName" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.productGradeName" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productGrade" label="产品等级编码" width="200" v-if="false">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productGrade" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.productGrade" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="uomUnit" label="单位" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.uomUnit" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.uomUnit" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="netWeight" label="净重" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.netWeight" placeholder="请输入" clearable
-                              :style='{"width":"100%"}' @change="totalNumber()">
-                    </el-input>
+                    <el-input-number v-model="scope.row.netWeight" placeholder="数字文本" :step="1"
+                                     @change="totalNumber()">
+                    </el-input-number>
                   </template>
                 </el-table-column>
                 <el-table-column prop="grossWeight" label="毛重" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.grossWeight" placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
-                    </el-input>
+                    <el-input-number v-model="scope.row.grossWeight" placeholder="数字文本" :step="1"
+                                     @change="totalNumber()">
+                    </el-input-number>
                   </template>
                 </el-table-column>
                 <el-table-column prop="paperTubeWeight" label="纸管重量" width="200">
@@ -260,20 +255,20 @@
                 </el-table-column>
                 <el-table-column prop="machineNumber" label="机台号" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.machineNumber" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.machineNumber" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="meters" label="米数" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.meters" placeholder="请输入" readonly clearable :style='{"width":"100%"}'>
+                    <el-input v-model="scope.row.meters" placeholder="请输入" clearable :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="contractNo" label="合同号" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.contractNo" placeholder="请输入" readonly clearable
+                    <el-input v-model="scope.row.contractNo" placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
@@ -307,7 +302,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <div class="table-actions" @click="chooseRoll()">
+              <div class="table-actions" @click="addbdboxlineList()">
                 <el-button type="text" icon="el-icon-plus">添加</el-button>
               </div>
             </el-form-item>
@@ -324,12 +319,6 @@
                      width="1000px">
             <product-choose ref="ProductChoose" @onChange="dialogProductChange"></product-choose>
           </el-dialog>
-          <el-dialog title="分切记录列表"
-                     :close-on-click-modal="false" append-to-body
-                     :visible.sync="divideChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-                     width="1000px">
-            <divide-choose ref="DivideChoose" @onChange="dialogDivideChange"></divide-choose>
-          </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -344,10 +333,9 @@
   import {printProcessFlowChart} from '@/api/systemData/dataTeam'
   import ClientChoose from './clientChoose'
   import ProductChoose from './productChoose'
-  import DivideChoose from './divideChoose'
 
   export default {
-    components: {ClientChoose, ProductChoose, DivideChoose},
+    components: {ClientChoose, ProductChoose},
     props: [],
     data() {
       return {
@@ -356,7 +344,6 @@
         isDetail: false,
         clientChooseShow: false,
         productChooseShow: false,
-        divideChooseShow: false,
         isFrp: false,
         dataForm: {
           boxNum: '',
@@ -494,18 +481,18 @@
         printProcessFlowChart(this.dataForm.printTemplate, param);
       },
       getWorkShopNameOptions() {
-        let _query = {
-          code: "BM000019"
-        };
-        request({
-          url: `/api/project/stockApi/getDepartmentListNoPaging`,
-          method: 'post',
-          data: _query
-        }).then(res => {
-          this.workShopNameOptions = res.data
-          this.dataForm.workShopName = res.data[0].name;
-          this.dataForm.workShopCode = res.data[0].code;
-        });
+        // let _query = {
+        //   code: "BM000019"
+        // };
+        // request({
+        //   url: `/api/project/stockApi/getDepartmentListNoPaging`,
+        //   method: 'post',
+        //   data: _query
+        // }).then(res => {
+        //   this.workShopNameOptions = res.data
+        //   this.dataForm.workShopName = res.data[0].name;
+        //   this.dataForm.workShopCode = res.data[0].code;
+        // });
       },
       workShopNameChange(value) {
         if (value === "" || value === null) {
@@ -586,6 +573,32 @@
           })
         }
       },
+      addbdboxlineList() {
+        let item = {
+          materialId: undefined,
+          materialCode: undefined,
+          materialName: undefined,
+          specification: undefined,
+          productGradeName: undefined,
+          productGrade: undefined,
+          uomUnit: undefined,
+          netWeight: undefined,
+          grossWeight: undefined,
+          paperTubeWeight: undefined,
+          frp: undefined,
+          unitArea: undefined,
+          machineNumber: undefined,
+          meters: undefined,
+          contractNo: undefined,
+          divideId: undefined,
+          divideName: undefined,
+          weighId: undefined,
+          weighName: undefined,
+          inspectorId: undefined,
+          inspectorName: undefined,
+        };
+        this.dataForm.bdboxlineList.push(item);
+      },
       delbdboxlineList(index) {
         this.dataForm.totalNetWeight = (parseFloat(this.dataForm.totalNetWeight) - this.dataForm.bdboxlineList[index].netWeight).toFixed(2);
         this.dataForm.bdboxlineList.splice(index, 1);
@@ -598,158 +611,6 @@
       },
       dataInfo(dataAll) {
         this.dataForm = dataAll
-      },
-      chooseRoll() {
-        if (!this.dataForm.productId) {
-          this.$message({
-            message: '请先选择产品!',
-            type: 'info'
-          })
-          return;
-        }
-        if (!this.dataForm.clientId) {
-          this.$message({
-            message: '请先选择客户!',
-            type: 'info'
-          })
-          return;
-        }
-        this.divideChooseShow = true;
-        this.$nextTick(() => {
-          this.$refs.DivideChoose.query.size = this.dataForm.size;
-          this.$refs.DivideChoose.query.customerName = this.dataForm.clientName;
-          this.$refs.DivideChoose.initData();
-        })
-      },
-
-      dialogDivideChange(data) {
-        debugger
-        for (let i = 0; i < data.length; i++) {
-          let query = {
-            rollNum: data[i],
-            specification: this.dataForm.size,
-            customerCode: this.dataForm.clientCode,
-            productGrade: this.dataForm.productGrade,
-            contractNo: this.dataForm.contractNo,
-          }
-          this.commonScanningDivide(query);
-          this.divideChooseShow = false;
-        }
-      },
-      scanningDivide() {
-        let titleRollNum = this.titleRollNum.trim().toUpperCase();
-        if (titleRollNum === ''
-          || titleRollNum === undefined) {
-          this.$message({
-            message: "扫描卷号不能为空!",
-            type: 'error',
-            duration: 2000,
-          })
-          return;
-        }
-        let query = {
-          rollNum: titleRollNum,
-          specification: this.dataForm.size,
-          customerCode: this.dataForm.clientCode,
-          productGrade: this.dataForm.productGrade,
-          contractNo: this.dataForm.contractNo,
-        }
-        this.commonScanningDivide(query);
-        this.titleRollNum = '';
-      },
-      commonScanningDivide(query) {
-        let exist = this.dataForm.bdboxlineList.some(o => o.rollNum === query.rollNum); //去重复
-        if (exist) {
-          this.$message({
-            message: "卷号" + query.rollNum + "重复!",
-            type: 'error',
-            duration: 2000,
-          })
-          this.titleRollNum = '';
-          return;
-        }
-        let detailCount = this.dataForm.bdboxlineList.length;
-        if (detailCount === 0) {
-          query.firstRoll = true;
-          request({
-            url: '/api/project/stockApi/getRollInfo',
-            method: 'post',
-            data: query
-          }).then((res) => {
-            let data = res.data;
-            this.dataForm.clientName = data.customerName;
-            this.dataForm.clientCode = data.customerCode;
-            this.dataForm.clientId = data.customerId;
-
-            this.dataForm.customerProductCode = data.customerProductCode;
-
-            this.dataForm.customerOrderNum = data.customerOrderNum;
-
-            this.dataForm.productGrade = data.productGrade;
-            this.dataForm.productGradeName = data.productGradeName;
-
-            //扫描卷号时自动添加产品信息
-            this.dataForm.productId = data.materialId;
-            this.dataForm.productCode = data.materialCode;
-            this.dataForm.productName = data.materialName;
-            this.dataForm.specification = data.spec;
-            this.dataForm.size = data.specification;
-            this.dataForm.uomUnit = data.uomUnit;
-            this.dataForm.uomId = data.uomId;
-            this.dataForm.contractNo = data.contractNo;
-            this.isFrp = data.isFrp;
-            this.transferLineData(data);
-          })
-        } else {
-          query.firstRoll = false;
-          query.isFrp = this.isFrp;
-          request({
-            url: '/api/project/stockApi/getRollInfo',
-            method: 'post',
-            data: query
-          }).then((res) => {
-            let data = res.data;
-            this.transferLineData(data);
-          })
-        }
-      },
-      transferLineData(data) {
-        this.dataForm.totalNetWeight = (parseFloat(this.dataForm.totalNetWeight) + data.netWeight).toFixed(3);
-        this.dataForm.paperTubeWeight = (parseFloat(this.dataForm.paperTubeWeight) + data.paperTubeWeight).toFixed(3);
-        this.dataForm.frp = (parseFloat(this.dataForm.frp) + data.frp).toFixed(3);
-        this.dataForm.totalGrossWeight = (parseFloat(this.dataForm.totalGrossWeight) + data.paperTubeWeight + data.frp + data.netWeight).toFixed(3);
-
-        let detail = {
-          rollId: data.id,
-          rollNum: data.rollNum,
-          materialId: data.materialId,
-          materialCode: data.materialCode,
-          materialName: data.materialName,
-          specification: data.specification,
-          productGrade: data.productGrade,
-          productGradeName: data.productGradeName,
-          uomId: data.uomId,
-          uomUnit: data.uomUnit,
-          netWeight: data.netWeight,
-          grossWeight: data.grossWeight,
-          paperTubeWeight: data.paperTubeWeight,
-          frp: data.frp,
-          unitArea: data.unitArea,
-          machineNumber: data.machineNumber,
-          meters: data.meters,
-          contractNo: data.contractNo,
-          divideId: data.divideId,
-          divideName: data.divideName,
-          weighId: data.weighId,
-          weighName: data.weighName,
-          inspectorId: data.inspectorId,
-          inspectorName: data.inspectorName,
-          warehouseCode: data.warehouseCode,
-          warehouseName: data.warehouseName,
-          stockLocationCode: data.stockLocationCode,
-          stockLocationName: data.stockLocationName
-        }
-        this.dataForm.bdboxlineList.push(detail)
       },
       totalNumber() {
         let _frp = 0;

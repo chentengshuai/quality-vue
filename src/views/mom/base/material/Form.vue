@@ -142,7 +142,7 @@
                         },
                     ],
                 },
-                typeOptions: [{fullname:"原料",value:1},{fullname:"半成品",value:2}],
+                typeOptions: [{fullname:"原料",value:1},{fullname:"半成品",value:2},{fullname:"成品",value:3}],
         }
         },
         computed: {},

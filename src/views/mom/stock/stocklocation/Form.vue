@@ -2,7 +2,7 @@
   <el-dialog :title="!dataForm.id ? '新建' :  isDetail ? '详情':'编辑'"
              :close-on-click-modal="false" append-to-body
              :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-             width="600px">
+             width="800px">
     <el-row :gutter="15" class="">
       <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right">
         <template v-if="!loading">

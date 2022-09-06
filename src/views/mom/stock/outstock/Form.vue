@@ -37,7 +37,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <!-- <el-col :span="8">
                 <el-form-item label="通知单编号" v-if="noticeBillNoShow" prop="noticeBillNo">
                   <el-input v-model="dataForm.noticeBillNo" placeholder="请选择ERP发货通知单编号" readonly clearable
                             :style='{"width":"100%"}' @click.native="clickSalDeliveryNotice">
@@ -86,12 +86,13 @@
 
                   </el-input>
                 </el-form-item>
-              </el-col>
+              </el-col> -->
               <el-col :span="16">
                 <el-form-item label="备注" prop="remark">
-                  <el-input v-model="dataForm.remark" placeholder="请输入" :style='{"width":"100%"}' true type="textarea"
-                            :autosize='{"minRows":4,"maxRows":4}'>
-                  </el-input>
+                  <el-form-item label="备注" prop="remark">
+                    <el-input v-model="dataForm.remark" placeholder="请输入" clearable :style='{"width":"100%"}'>
+                    </el-input>
+                  </el-form-item>
                 </el-form-item>
               </el-col>
             </el-card>
@@ -100,7 +101,7 @@
             <el-form-item label-width="0">
               <div class="JNPF-common-title">
                 <h2>明细</h2>
-                <div style="float:left;">
+                <!-- <div style="float:left;">
                   <el-button type="primary" @click="selectBdQuanList">选择出库数据</el-button>
                 </div>
                 <div>
@@ -119,75 +120,75 @@
                                   @click.native="chooseMaterial()">
                         </el-input>
                     </span>
-                </div>
+                </div> -->
               </div>
               <el-table :data="dataForm.bizstockmovelineList" size='mini'>
                 <el-table-column type="index" label="序号" align="center"/>
-                <el-table-column prop="lotNumber" label="批号/箱号" width="150">
+                <!-- <el-table-column prop="lotNumber" label="批号/箱号" width="150">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.lotNumber" readonly placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="productCode" label="物料编码" width="140">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productCode" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.productCode"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productName" label="物料名称" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productName" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.productName"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productSpc" label="规格型号" width="140">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productSpc" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.productSpc"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productLvl" label="产品等级" width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.productLvl" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.productLvl"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="uomName" :label=uomName width="100">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.uomName" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.uomName"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="returnQty" v-if="returnQtyShow" label="应发数量" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.returnQty" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.returnQty"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="qty" :label=qtyName width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.qty" :readonly="qtyReadOnly" placeholder="请输入" clearable
+                    <el-input v-model="scope.row.qty"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
-                <el-table-column prop="grossWeight" v-if="grossWeightShow" label="毛重" width="150">
+                <el-table-column prop="grossWeight"  label="毛重" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.grossWeight" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.grossWeight"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="stockType" label="退库类型" width="150" v-if="stockTypeShow">
+                <!-- <el-table-column prop="stockType" label="退库类型" width="150" v-if="stockTypeShow">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.stockType" placeholder="请选择" clearable :style='{"width":"100%"}'
                                :multiple="false">
@@ -195,39 +196,39 @@
                                  :value="item.code" :disabled="item.disabled"></el-option>
                     </el-select>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
 
                 <el-table-column prop="customerName" v-if="customerNameShow" label="客户" width="200">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.customerName" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.customerName"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column v-if="false" prop="warehouseCode" label="仓库编码">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.warehouseCode" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.warehouseCode"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="warehouseName" label="仓库" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.warehouseName" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.warehouseName"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="locationName" label="仓位" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.locationName" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.locationName"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column v-if="false" prop="workShopCode" label="生产车间编码">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.workShopCode" readonly placeholder="请输入" clearable
+                    <el-input v-model="scope.row.workShopCode"  placeholder="请输入" clearable
                               :style='{"width":"100%"}'>
                     </el-input>
                   </template>
@@ -549,14 +550,17 @@
             this.departmentTreeData = res.data.list
           })
         });
-        // 获取部门
-        this.getDepartmentListNoPaging();
-        // 获取库存组
-        this.getOperatorGroupBillNoPaging();
-        // 获取仓管员
-        this.getOperatorNoPaging();
-        //获取简单生产退库类型
-        this.getStockTypeList();
+        getDictionaryDataByTypeCode("outSockMoveType").then(res => {
+          this.stockMoveTypeOptions= res.data
+        });
+        // // 获取部门
+        // this.getDepartmentListNoPaging();
+        // // 获取库存组
+        // this.getOperatorGroupBillNoPaging();
+        // // 获取仓管员
+        // this.getOperatorNoPaging();
+        // //获取简单生产退库类型
+        // this.getStockTypeList();
       },
       // 表单提交
       dataFormSubmit() {
