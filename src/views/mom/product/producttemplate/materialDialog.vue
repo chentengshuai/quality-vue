@@ -5,12 +5,12 @@
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="产品名称">
-              <el-input v-model="query.materialName" placeholder="请输入" clearable>  </el-input>
+              <el-input v-model="query.materialName" placeholder="请输入" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="产品编码">
-              <el-input v-model="query.materialCode" placeholder="请输入" clearable>  </el-input>
+              <el-input v-model="query.materialCode" placeholder="请输入" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -41,24 +41,17 @@
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange' @row-click="rowClick">
-          <el-table-column prop="materialName" label="产品名称" width="0" align="left"
-          />
-          <el-table-column prop="materialCode" label="产品编码" width="0" align="left"
-          />
-          <el-table-column prop="typeName" label="类型" width="0" align="left"
-          />
-          <el-table-column prop="materialSpec" label="规格" width="0" align="left"
-          />
-          <el-table-column prop="materialModel" label="型号" width="0" align="left"
-          />
-          <el-table-column prop="materialType" label="物料类型" width="0" align="left"
-          />
-          <el-table-column prop="materialUnit" label="单位" width="0" align="left"
-          />
-          <el-table-column prop="description" label="描述" width="0" align="left"
-          />
+          <el-table-column prop="materialName" label="产品名称" width="0" align="left"/>
+          <el-table-column prop="materialCode" label="产品编码" width="0" align="left"/>
+          <el-table-column prop="typeName" label="类型" width="0" align="left"/>
+          <el-table-column prop="materialSpec" label="规格" width="0" align="left"/>
+          <el-table-column prop="materialModel" label="型号" width="0" align="left"/>
+          <el-table-column prop="materialType" label="物料类型" width="0" align="left"/>
+          <el-table-column prop="materialUnit" label="单位" width="0" align="left"/>
+          <el-table-column prop="description" label="描述" width="0" align="left"/>
         </JNPF-table>
-        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData"/>
+        <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
+                    @pagination="initData"/>
       </div>
     </div>
   </div>
@@ -71,9 +64,9 @@ export default {
   data() {
     return {
       query: {
-        materialName:undefined,
-        materialCode:undefined,
-        type:undefined,
+        materialName: undefined,
+        materialCode: undefined,
+        type: undefined,
       },
       treeProps: {
         children: 'children',
@@ -90,7 +83,7 @@ export default {
         sort: "desc",
         sidx: "",
       },
-      typeOptions: [{fullname:"原料",value:1},{fullname:"半成品",value:2},{fullname:"成品",value:3}],
+      typeOptions: [{fullname: "原料", value: 1}, {fullname: "半成品", value: 2}, {fullname: "成品", value: 3}],
     }
   },
   computed: {},
@@ -105,15 +98,15 @@ export default {
       let _query = {
         ...this.listQuery,
         ...this.query,
-        typeStatus:"1"
+        typeStatus: "1"
       };
       request({
         url: `/api/project/Material/getList`,
         method: 'post',
         data: _query
       }).then(res => {
-        var _list =[];
-        for(let i=0;i<res.data.list.length;i++){
+        var _list = [];
+        for (let i = 0; i < res.data.list.length; i++) {
           let _data = res.data.list[i];
           _list.push(_data)
         }

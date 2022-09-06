@@ -1,75 +1,77 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新建' :  isDetail ? '详情':'编辑'"
-             :close-on-click-modal="false" append-to-body
-             :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-             width="1200px">
+  <el-drawer
+    :title="!dataForm.id ? '新建' : isDetail ? '详情' : '编辑'"
+    :wrapperClosable="false"
+    ref="drawer"
+    :visible.sync="visible"
+    :before-close="handleDrawerClose"
+    class="JNPF-common-drawer"
+    size="100%">
     <el-row :gutter="15" class="">
-      <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right">
-        <template v-if="!loading">
-          <el-col :span="12">
-            <el-form-item label="产品模板ID" prop="productTemplateId">
-              <el-input v-model="dataForm.productTemplateId" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="产品模板名称" prop="productTemplateName">
-              <el-input v-model="dataForm.productTemplateName" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+      <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right"
+               style="overflow: auto;height: calc(87vh)">
+        <div height="100px" style="margin-top: 12px;">
+          <el-col :span="8">
             <el-form-item label="产品流程编码" prop="productFlowCode">
-              <el-input v-model="dataForm.productFlowCode" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
+              <el-input v-model="dataForm.productFlowCode" placeholder="请选择" clearable :style='{"width":"100%"}' readonly>
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
+            <el-form-item label="产品模板名称" prop="productTemplateName">
+              <el-input prefix-icon="el-icon-search" v-model="dataForm.productTemplateName" placeholder="请选择" clearable
+                        readonly @click.native="productTemplateShow()" :style='{"width":"100%"}'>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="产品模板编码" prop="productTemplateCode">
-              <el-input v-model="dataForm.productTemplateCode" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
+              <el-input v-model="dataForm.productTemplateCode" placeholder="请选择" clearable :style='{"width":"100%"}'>
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="产品类型" prop="productType">
-              <el-input v-model="dataForm.productType" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
+              <el-input v-model="dataForm.productType" placeholder="请选择" clearable :style='{"width":"100%"}'>
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态(是否启用)" prop="status">
-              <el-input v-model="dataForm.status" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </template>
+        </div>
       </el-form>
     </el-row>
     <span slot="footer" class="dialog-footer">
         <el-button @click="visible = false"> 取 消</el-button>
         <el-button type="primary" @click="dataFormSubmit()" v-if="!isDetail"> 确 定</el-button>
     </span>
-  </el-dialog>
+
+    <el-dialog
+      title="产品模板"
+      :close-on-click-modal="false"
+      append-to-body
+      :visible.sync="productTemplateVisible"
+      class="JNPF-dialog JNPF-dialog_center"
+      lock-scroll
+      width="1000px">
+      <product-template-dialog
+        ref="productTemplateDialog"
+        @onChange="productTemplateChange"></product-template-dialog>
+    </el-dialog>
+  </el-drawer>
 </template>
 <script>
 import request from '@/utils/request'
-import {previewDataInterface} from '@/api/systemData/dataInterface'
-import {getDictionaryDataSelector} from '@/api/systemData/dictionary'
+import productTemplateDialog from "./productTemplateDialog";
 
 export default {
-  components: {},
+  name: 'flowFormDialog',
+  components: {productTemplateDialog},
   props: [],
   data() {
     return {
       visible: false,
       loading: false,
       isDetail: false,
+      productTemplateVisible: false,
       dataForm: {
         productTemplateId: '',
         productTemplateName: '',
@@ -105,8 +107,11 @@ export default {
             this.dataInfo(res.data)
             this.loading = false
           })
+        } else {
+          debugger
+          this.dataForm = this.$options.data().dataForm
+          this.dataForm.productFlowCode = new Date().getTime()
         }
-
       })
     },
     // 表单提交
@@ -116,6 +121,29 @@ export default {
           this.request()
         }
       })
+    },
+    productTemplateShow() {
+      this.productTemplateVisible = true
+      this.$nextTick(() => {
+        this.$refs.productTemplateDialog.initData(id, isDetail)
+      })
+    },
+    productTemplateChange(rowData) {
+      this.dataForm.productTemplateId = rowData.id
+      this.dataForm.productTemplateCode = rowData.productTemplateCode
+      this.dataForm.productTemplateName = rowData.productTemplateName
+      this.dataForm.productType = rowData.productType
+
+      let _data = {}
+      _data.productTemplateId = rowData.id
+      request({
+        url: '/api/project/Bd_product_flow/getProductTemplateData',
+        method: 'post',
+        data: _data
+      }).then((res) => {
+           debugger
+      })
+      this.productTemplateVisible = false
     },
     request() {
       var _data = this.dataList()
@@ -160,6 +188,10 @@ export default {
     dataInfo(dataAll) {
       let _dataAll = dataAll
       this.dataForm = _dataAll
+    },
+    handleDrawerClose(done) {
+      done()
+      this.$emit('refreshDataList')
     },
   },
 }
