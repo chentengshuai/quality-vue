@@ -113,7 +113,7 @@
         let _query = {
           ...this.query,
           ...this.listQuery,
-          type: 1,
+          type: 3,
         };
         request({
           url: `/api/project/BizQualityInspection/getMaterialList`,

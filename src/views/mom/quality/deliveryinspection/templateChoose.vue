@@ -5,14 +5,14 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="8">
-            <el-form-item label="物料编码">
-              <el-input v-model="query.materialCode" placeholder="请输入" clearable
+            <el-form-item label="产品模板名称">
+              <el-input v-model="query.productTemplateName" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="物料名称">
-              <el-input v-model="query.materialName" placeholder="请输入" clearable
+            <el-form-item label="产品模板编码">
+              <el-input v-model="query.productTemplateCode" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
@@ -35,13 +35,19 @@
               <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
             </template>
           </el-table-column>
-            <el-table-column prop="materialName" label="产品名称" width="0" align="left"/>
-            <el-table-column prop="materialCode" label="产品编码" width="0" align="left"/>
-            <el-table-column prop="typeName" label="类型" width="0" align="left"/>
-            <el-table-column prop="materialSpec" label="规格" width="0" align="left"/>
-            <el-table-column prop="materialModel" label="型号" width="0" align="left"/>
-            <el-table-column prop="materialType" label="物料类型" width="0" align="left"/>
-            <el-table-column prop="materialUnit" label="单位" width="0" align="left"/>
+          <el-table-column prop="productTemplateName" label="产品模板名称" width="0" align="left"/>
+          <el-table-column prop="productTemplateCode" label="产品模板编码" width="0" align="left"/>
+          <el-table-column prop="productCategory" label="产品分类" width="0" align="left">
+            <template slot-scope="scope">
+              {{ scope.row.productCategory | dynamicText(productCategoryOptions) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="productType" label="产品类型" width="0" align="left"/>
+          <el-table-column prop="materialUnit" label="单位" width="0" align="left"/>
+          <el-table-column prop="purchasePrice" label="销售价格" width="0" align="left"/>
+          <el-table-column prop="specification" label="规格" width="0" align="left"/>
+          <el-table-column prop="uomId" label="计量单位" width="0" align="left"/>
+          <el-table-column prop="uomPoId" label="采购计量单位" width="0" align="left"/>
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -65,8 +71,8 @@
       return {
         showAll: false,
         query: {
-          materialCode: undefined,
-          materialName: undefined,
+          productTemplateName: undefined,
+          productTemplateCode: undefined,
         },
         treeProps: {
           children: 'children',
@@ -85,12 +91,11 @@
           sort: "desc",
           sidx: "",
         },
-        formVisible: false,
-        exportBoxVisible: false,
-        columnList: [
-          {prop: 'partnerCode', label: '客户编码'},
-          {prop: 'partnerName', label: '客户名称'},
-        ],
+        productCategoryOptions: [{"fullName": "半成品", "id": "2"}, {
+          "fullName": "成品",
+          "id": "3"
+        }],
+        productCategoryProps: {"label": "fullName", "value": "id"},
       }
     },
     computed: {},
@@ -113,10 +118,10 @@
         let _query = {
           ...this.query,
           ...this.listQuery,
-          type: 1,
+          productCategory:2,
         };
         request({
-          url: `/api/project/BizQualityInspection/getMaterialList`,
+          url: `/api/project/BizQualityInspection/getProductTemplateList`,
           method: 'post',
           data: _query
         }).then(res => {

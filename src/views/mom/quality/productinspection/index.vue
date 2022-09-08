@@ -72,7 +72,7 @@
 />
                             <el-table-column prop="materialCode" label="物料编码" width="0" align="left"
 />
-                            <el-table-column prop="relationName" label="采购订单号" width="0" align="left"
+                            <el-table-column prop="relationName" label="产品模板" width="0" align="left"
 />
                             <el-table-column prop="materialNumber" label="货品数量" width="0" align="left"
 />
@@ -82,8 +82,11 @@
 />
                             <el-table-column prop="badPercent" label="不良率" width="0" align="left"
 />
-                            <el-table-column prop="result" label="检验结果" width="0" align="left"
-/>
+                            <el-table-column label="检验结果" width="0" prop="result" algin="left">
+                                <template slot-scope="scope">
+                                    {{ scope.row.result | dynamicText(resultOptions) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column prop="submitterName" label="送检人" width="0" align="left"
 />
                             <el-table-column prop="inspectorName" label="检验员" width="0" align="left"
@@ -177,7 +180,7 @@
                 let _query = {
                     ...this.listQuery,
                     ...this.query,
-                    inspectionType : 1,
+                    inspectionType : 2,
                 };
                 request({
                     url: `/api/project/BizQualityInspection/getList`,

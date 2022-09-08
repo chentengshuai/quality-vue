@@ -14,8 +14,9 @@
                 </el-form-item>
             </el-col>
             <el-col :span="8" >
-                <el-form-item  label="采购订单号"   prop="relationName" >
-                    <el-input    v-model="dataForm.relationName" placeholder="请输入"  clearable  :style='{"width":"100%"}'>
+                <el-form-item  label="产品模板"   prop="relationName" >
+                    <el-input    v-model="dataForm.relationName" placeholder="请输入"  clearable  :style='{"width":"100%"}'
+                                    @click.native="chooseTemplate()">
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -118,31 +119,31 @@
         <el-table-column type="index" width="50" label="序号" align="center" />
             <el-table-column prop="inspectionItems" label="检测项">
                 <template slot-scope="scope">
-                    <el-input   v-model="scope.row.inspectionItems" placeholder="请输入"  readonly  :style='{"width":"100%"}'>
+                    <el-input   v-model="scope.row.inspectionItems" placeholder="请输入"    readonly    :style='{"width":"100%"}'>
                     </el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="standardValue" label="标准值">
                 <template slot-scope="scope">
-                    <el-input   v-model="scope.row.standardValue" placeholder="请输入"  readonly  :style='{"width":"100%"}'>
+                    <el-input   v-model="scope.row.standardValue" placeholder="请输入"  readonly    :style='{"width":"100%"}'>
                     </el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="unit" label="单位">
                 <template slot-scope="scope">
-                    <el-input   v-model="scope.row.unit" placeholder="请输入"  readonly  :style='{"width":"100%"}'>
+                    <el-input   v-model="scope.row.unit" placeholder="请输入"   readonly    :style='{"width":"100%"}'>
                     </el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="inspectionMethod" label="检查方法">
                 <template slot-scope="scope">
-                    <el-input   v-model="scope.row.inspectionMethod" placeholder="请输入"  readonly  :style='{"width":"100%"}'>
+                    <el-input   v-model="scope.row.inspectionMethod" placeholder="请输入"   readonly    :style='{"width":"100%"}'>
                     </el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="inspectionFrequency" label="检查频率">
                 <template slot-scope="scope">
-                    <el-input   v-model="scope.row.inspectionFrequency" placeholder="请输入"  readonly  :style='{"width":"100%"}'>
+                    <el-input   v-model="scope.row.inspectionFrequency" placeholder="请输入"    readonly    :style='{"width":"100%"}'>
                     </el-input>
                 </template>
             </el-table-column>
@@ -212,6 +213,12 @@
                      v-if="materialChooseShow" width="1000px">
                 <material-choose ref="MaterialChoose" @onChange="dialogMaterialChange"></material-choose>
             </el-dialog>
+            <el-dialog title="产品模板列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="templateChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     v-if="templateChooseShow" width="1000px">
+                <template-choose ref="TemplateChoose" @onChange="dialogTemplateChange"></template-choose>
+            </el-dialog>
     </template>
 </el-form>
 </el-row>
@@ -227,9 +234,10 @@
     import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
     import { getStandardOptions } from '@/api/systemData/dataTeam'
     import MaterialChoose from './materialChoose'
+    import TemplateChoose from './templateChoose'
 
     export default {
-        components: {MaterialChoose},
+        components: {MaterialChoose,TemplateChoose},
         props: [],
         data() {
             return {
@@ -237,6 +245,7 @@
                 loading: false,
                 isDetail: false,
                 materialChooseShow: false,
+                templateChooseShow: false,
             dataForm: {
                             materialId : '',
                             materialCode : '',
@@ -251,7 +260,7 @@
                             inspectorId : '',
                             inspectorName : '',
                             inspectTime : new Date().getTime(),
-                            inspectionType : 1,
+                            inspectionType : 2,
                             relationId : '',
                             relationCode : '',
                             relationName : '',
@@ -263,6 +272,13 @@
             rules:
             {
                 materialName: [
+                    {
+                        required: true,
+                        message: '请填写',
+                        trigger: 'click'
+                    },
+                ],
+                relationName: [
                     {
                         required: true,
                         message: '请填写',
@@ -481,6 +497,18 @@
                     }
                 })
                 this.materialChooseShow = false;
+            },
+            chooseTemplate() {
+                this.templateChooseShow = true;
+                this.$nextTick(() => {
+                this.$refs.TemplateChoose.initData();
+                })
+            },
+            dialogTemplateChange(template) {
+                this.dataForm.relationId = template.id;
+                this.dataForm.relationCode = template.productTemplateCode;
+                this.dataForm.relationName = template.productTemplateName;
+                this.templateChooseShow = false;
             },
             changeStandard(){
                 let listLength = this.dataForm.bizqualityinspectiondetailList.length
