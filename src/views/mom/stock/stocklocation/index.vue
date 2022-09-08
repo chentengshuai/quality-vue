@@ -71,6 +71,10 @@
           />
           <el-table-column prop="locationParentId" label="上级位置ID" width="0" align="left"
           />
+          <el-table-column prop="warehouseName" label="仓库名称" width="0" align="left"
+          />
+          <el-table-column prop="warehouseLocation" label="仓库位置" width="0" align="left"
+          />
           <el-table-column prop="isStockLocation" label="存放位置" width="0" align="left">
             <template slot-scope="scope">
               <el-switch
