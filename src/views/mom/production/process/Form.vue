@@ -88,15 +88,8 @@
                       </el-table-column>
                       <el-table-column prop="uomName" label="计量单位">
                         <template slot-scope="scope">
-                          <el-select
-                            v-model="scope.row.uomName"
-                            placeholder="请选择" clearable
-                            :style="{ width: '100%' }" :multiple="false" >
-                            <el-option
-                              v-for="(item, index) in uomNameOptions"
-                              :key="index" :label="item.fullName"
-                              :value="item.id" :disabled="item.disabled" ></el-option>
-                          </el-select>
+                            <el-input v-model="scope.row.uomName"  placeholder="请输入" clearable :style="{ width: '100%' }">
+                            </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="isColumnAttribute" label="是否列属性">
@@ -257,8 +250,9 @@ export default {
       rules: {},
 
       attributeTypeOptions: [
-        {fullName: "选项一", id: "1"},
-        {fullName: "选项二", id: "2"},
+        {fullName: "日期", id: "1"},
+        {fullName: "数字", id: "2"},
+        {fullName: "文本", id: "3"},
       ],
       uomNameOptions: [
         {fullName: "选项一", id: "1"},

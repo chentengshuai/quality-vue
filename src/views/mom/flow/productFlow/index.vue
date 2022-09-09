@@ -69,7 +69,7 @@
           <el-table-column prop="productFlowCode" label="产品流程编码" width="0" align="left"/>
           <el-table-column prop="productTemplateCode" label="产品模板编码" width="0" align="left"/>
           <el-table-column prop="productType" label="产品类型" width="0" align="left"/>
-          <el-table-column prop="status" label="状态(是否启用)" width="0" align="left"/>
+<!--          <el-table-column prop="status" label="状态(是否启用)" width="0" align="left"/>-->
           <el-table-column label="操作" fixed="right"
                            width="100">
             <template slot-scope="scope">
@@ -169,7 +169,7 @@ export default {
       })
     },
     handleDel(id) {
-      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该数据, 是否继续?', '提示', {
         type: 'warning'
       }).then(() => {
         request({
