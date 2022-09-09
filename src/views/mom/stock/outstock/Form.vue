@@ -88,12 +88,10 @@
                 </el-form-item>
               </el-col> -->
               <el-col :span="16">
-                <el-form-item label="备注" prop="remark">
                   <el-form-item label="备注" prop="remark">
                     <el-input v-model="dataForm.remark" placeholder="请输入" clearable :style='{"width":"100%"}'>
                     </el-input>
                   </el-form-item>
-                </el-form-item>
               </el-col>
             </el-card>
           </el-col>

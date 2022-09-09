@@ -2,7 +2,7 @@
   <el-dialog :title="!dataForm.id ? '新建' :  isDetail ? '详情':'编辑'"
              :close-on-click-modal="false" append-to-body
              :visible.sync="visible" class="JNPF-dialog JNPF-dialog_center" lock-scroll
-             width="600px">
+             width="800px">
     <el-row :gutter="15" class="">
       <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right">
         <template v-if="!loading">
@@ -20,40 +20,9 @@
               </el-input>
             </el-form-item>
           </el-col>
-<!--          <el-col :span="12">-->
-<!--            <el-form-item label="仓库类型" prop="warehouseType">-->
-<!--              <el-input v-model="dataForm.warehouseType" placeholder="请输入" clearable :style='{"width":"100%"}'>-->
-
-<!--              </el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-          <el-col :span="12">
-            <el-form-item label="仓库类型" prop="warehouseType">
-              <el-select v-model="dataForm.warehouseType" placeholder="请选择"
-                         clearable>
-                <el-option v-for="(item, index) in warehouseTypeOptions" :key="index"
-                           :label="item.fullName" :value="item.id"
-                           :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="位置id" prop="locationId">
-              <el-input v-model="dataForm.locationId" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="位置名称" prop="locationName">
+          <el-col :span="24">
+            <el-form-item label="仓库位置" prop="locationName">
               <el-input v-model="dataForm.locationName" placeholder="请输入" clearable :style='{"width":"100%"}'>
-
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="ERP ID" prop="erpId">
-              <el-input v-model="dataForm.erpId" placeholder="请输入" clearable :style='{"width":"100%"}'>
 
               </el-input>
             </el-form-item>

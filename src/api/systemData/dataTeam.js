@@ -105,6 +105,17 @@ export function getDataExceptionCodeSelectorView(category, code, depth) {
   })
 }
 
+// 获取取样点信息下拉框列表
+export function getStandardOptions(materialCode) {
+  return request({
+    url: '/api/project/BizQualityInspection/getStandardOptions',
+    method: 'POST',
+    params: {
+      materialCode: materialCode,
+    }
+  })
+}
+
 // 获取烘烤位下拉框列表
 export function getDataBakeBitSelectorView(code) {
   return request({

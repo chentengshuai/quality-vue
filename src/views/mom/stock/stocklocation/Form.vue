@@ -33,8 +33,21 @@
           <el-col :span="12">
             <el-form-item label="上级位置" prop="locationParentId">
               <JNPF-TreeSelect :options="locationTree" v-model="dataForm.locationParentId" placeholder="选择上级位置"
-                               :props="{value: 'id', label: 'locationName', children: 'children'}">
+                          :props="{value: 'id', label: 'locationName', children: 'children'}">
               </JNPF-TreeSelect>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="仓库" prop="warehouseName">
+                    <el-input    v-model="dataForm.warehouseName" placeholder="请输入"  clearable  readonly  :style='{"width":"100%"}'
+                                    @click.native="chooseWarehouse()">
+                    </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="仓库位置" prop="warehouseLocation">
+                    <el-input    v-model="dataForm.warehouseLocation" readonly  :style='{"width":"100%"}'>
+                    </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -94,6 +107,12 @@
               </el-input>
             </el-form-item>
           </el-col>
+            <el-dialog title="仓库列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="warehouseChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     v-if="warehouseChooseShow" width="1000px">
+                <warehouse-choose ref="WarehouseChoose" @onChange="dialogWarehouseChange"></warehouse-choose>
+            </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -107,20 +126,28 @@
   import request from '@/utils/request'
   import {previewDataInterface} from '@/api/systemData/dataInterface'
   import {getDictionaryDataSelector} from '@/api/systemData/dictionary'
+  import WarehouseChoose from './warehouseChoose'
 
   export default {
-    components: {},
+    components: {WarehouseChoose},
     props: [],
     data() {
       return {
         visible: false,
         loading: false,
         isDetail: false,
+        warehouseChooseShow: false,
         dataForm: {
           locationName: '',
           locationCode: '',
           locationType: "",
           locationParentId: '',
+          locationParentName: '',
+          locationParentPath: '',
+          warehouseId: '',
+          warehouseCode: '',
+          warehouseName: '',
+          warehouseLocation: '',
           isStockLocation: 0,
           isConsumeLocation: 0,
           isScrapLocation: 0,
@@ -229,6 +256,19 @@
       dataInfo(dataAll) {
         let _dataAll = dataAll
         this.dataForm = _dataAll
+      },
+      chooseWarehouse() {
+          this.warehouseChooseShow = true;
+          this.$nextTick(() => {
+          this.$refs.WarehouseChoose.initData();
+          })
+      },
+      dialogWarehouseChange(data) {
+          this.dataForm.warehouseId = data.id;
+          this.dataForm.warehouseCode = data.warehouseCode;
+          this.dataForm.warehouseName = data.warehouseName;
+          this.dataForm.warehouseLocation = data.locationName;
+          this.warehouseChooseShow = false;
       },
     },
   }

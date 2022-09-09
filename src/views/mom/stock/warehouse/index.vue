@@ -14,40 +14,10 @@
               <el-input v-model="query.warehouseCode" placeholder="请输入" clearable></el-input>
             </el-form-item>
           </el-col>
-<!--          <el-col :span="6">-->
-<!--            <el-form-item label="仓库类型">-->
-<!--              <el-input v-model="query.warehouseType" placeholder="请输入" clearable></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-          <el-col :span="6">
-            <el-form-item label="仓库类型">
-              <el-select v-model="query.warehouseType" placeholder="请选择"
-                         clearable>
-                <el-option v-for="(item, index) in warehouseTypeOptions" :key="index"
-                           :label="item.fullName" :value="item.id"
-                           :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
-            </el-form-item>
-          </el-col>
-        </el-form>
-      </el-row>
-      <el-row class="JNPF-common-search-box" :gutter="16">
-        <el-form @submit.native.prevent>
-          <el-col :span="6">
-            <el-form-item label="仓库编码">
-              <el-input v-model="warehouseCode" placeholder="请输入" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="importFromERP()">ERP导入</el-button>
-<!--              <el-button icon="el-icon-refresh-right" @click="uploadForm()">ERP EXCEL导入</el-button>-->
             </el-form-item>
           </el-col>
         </el-form>
@@ -71,12 +41,6 @@
           />
           <el-table-column prop="warehouseCode" label="仓库编码" width="0" align="left"
           />
-          <el-table-column prop="warehouseType" label="仓库类型" width="0" algin="left"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.warehouseType | dynamicText(warehouseTypeOptions) }}
-            </template>
-          </el-table-column>
           <el-table-column prop="locationName" label="位置名称" width="0" align="left"
           />
           <el-table-column label="操作" fixed="right"

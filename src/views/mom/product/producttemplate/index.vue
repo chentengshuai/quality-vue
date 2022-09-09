@@ -194,9 +194,9 @@
           {prop: 'uomId', label: '计量单位'},
           {prop: 'uomPoId', label: '采购计量单位'},
         ],
-        productCategoryOptions: [{"fullName": "半成品", "id": "1"}, {
+        productCategoryOptions: [{"fullName": "半成品", "id": "2"}, {
           "fullName": "成品",
-          "id": "2"
+          "id": "3"
         }],
         productCategoryProps: {"label": "fullName", "value": "id"},
         productTypeOptions: [],
