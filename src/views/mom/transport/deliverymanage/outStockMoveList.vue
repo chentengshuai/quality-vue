@@ -4,14 +4,8 @@
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
               <el-col :span="8">
-                <el-form-item label="设备编码">
-                  <el-input v-model="query.equipmentCode" placeholder="请输入设备编码查询" clearable
-                    @keyup.enter.native="search()" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="设备名称">
-                  <el-input v-model="query.equipmentName" placeholder="请输入设备名称" clearable
+                <el-form-item label="出库单号编码">
+                  <el-input v-model="query.stockMoveCode" placeholder="请输入出库单号查询" clearable
                     @keyup.enter.native="search()" />
                 </el-form-item>
               </el-col>
@@ -34,11 +28,11 @@
           </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <el-table v-loading="listLoading"  :data="list" size='mini' @row-click="rowClick">
-          <el-table-column prop="equipmentCode" label="设备编码" width="0" align="left" />
-          <el-table-column prop="equipmentName" label="设备名称" width="0" align="left" />
-          <el-table-column prop="productionProcessName" label="生产工序" width="0" align="left" />
-          <el-table-column prop="productLinesName" label="所属产线" width="0" align="left" />
-          <el-table-column prop="equipmentCategoryName" label="所属设备类别" width="0" align="left" />
+          <el-table-column prop="stockMoveCode" label="出库单号" width="0" align="left" />
+          <el-table-column prop="stockMoveDate" label="出库日期" width="0" align="left" />
+          <el-table-column prop="totalQty" label="出库数量" width="0" align="left" />
+          <el-table-column prop="stockPersonName" label="仓管员" width="0" align="left" />
+          <el-table-column prop="stockSumGrossWeight" label="出库物料总毛重" width="0" align="left" />
         </el-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -62,8 +56,7 @@
       return {
         showAll: false,
         query: { 
-          equipmentCode: undefined,
-          equipmentName: undefined,
+          stockMoveCode: undefined,
         },
         treeProps: {
           children: 'children',
@@ -84,14 +77,6 @@
         },
         formVisible: false,
         exportBoxVisible: false,
-        columnList: [
-          {prop: 'equipmentCode', label: '设备编码'},
-          {prop: 'equipmentName', label: '设备名称'},
-          {prop: 'productionProcessName', label: '生产工序'},
-          {prop: 'productLinesName', label: '所属产线'},
-          {prop: 'equipmentCategoryName', label: '所属设备类别'},
-          
-        ],
       }
     },
     computed: {},
@@ -100,7 +85,7 @@
       this.visible = true
     },
     mounted() {
-      this.initData();
+     // this.initData();
     },
     methods: {
       sortChange({column, prop, order}) {
@@ -115,7 +100,7 @@
           ...this.query
         };
         request({
-          url: `/api/project/BdEquipment/getPatrolRulesEquipmentList`,
+          url: `/api/project/DmDeliveryManage/getDeliverOutStockMoveList`,
           method: 'post',
           data: _query
         }).then(res => {
@@ -137,8 +122,7 @@
         this.listQuery.pageSize = this.hasPage ? this.pageSize : 20
       },
       reset() {
-        this.query.equipmentCode = ''
-        this.query.equipmentName = ''
+        this.query.stockMoveCode = ''
         this.listQuery.currentPage = 1
         this.listQuery.pageSize = this.hasPage ? this.pageSize : 20
         this.initData()
@@ -151,13 +135,13 @@
             this.$emit('change', this.checked, this.checkedRow)
       },
       rowClick(row, preRow) {
-          this.$emit('bdEquipmentListDataForm', row)
+          this.$emit('outStockMoveDataForm', row)
       },
       handleSelectionChange(val) {
        // this.checked = val;
       },
       select() {
-        //this.$emit('bdEquipmentListDataForm', this.checked)
+        //this.$emit('outStockMoveDataForm', this.checked)
       },
       closeDialog() {
         //this.$emit('clickPatrolEquipmentListDisplay', false)

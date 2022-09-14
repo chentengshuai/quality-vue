@@ -4,14 +4,26 @@
           <el-row class="JNPF-common-search-box" :gutter="16">
             <el-form @submit.native.prevent>
               <el-col :span="8">
-                <el-form-item label="设备编码">
-                  <el-input v-model="query.equipmentCode" placeholder="请输入设备编码查询" clearable
+                <el-form-item label="驾驶人名称">
+                  <el-input v-model="query.driverName" placeholder="请输入驾驶人名称查询" clearable
                     @keyup.enter.native="search()" />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="设备名称">
-                  <el-input v-model="query.equipmentName" placeholder="请输入设备名称" clearable
+                <el-form-item label="车牌号 ">
+                  <el-input v-model="query.licenseNumber" placeholder="请输入车牌号查询" clearable
+                    @keyup.enter.native="search()" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="7">
+                <el-form-item label="车辆所属省份">
+                  <el-input v-model="query.vehicleProvinceName" placeholder="请输入车辆所属省份查询" clearable
+                    @keyup.enter.native="search()" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="车辆品牌">
+                  <el-input v-model="query.vehicelBrand" placeholder="请输入车辆品牌查询" clearable
                     @keyup.enter.native="search()" />
                 </el-form-item>
               </el-col>
@@ -34,11 +46,11 @@
           </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <el-table v-loading="listLoading"  :data="list" size='mini' @row-click="rowClick">
-          <el-table-column prop="equipmentCode" label="设备编码" width="0" align="left" />
-          <el-table-column prop="equipmentName" label="设备名称" width="0" align="left" />
-          <el-table-column prop="productionProcessName" label="生产工序" width="0" align="left" />
-          <el-table-column prop="productLinesName" label="所属产线" width="0" align="left" />
-          <el-table-column prop="equipmentCategoryName" label="所属设备类别" width="0" align="left" />
+          <el-table-column prop="driverName" label="驾驶人名称" width="0" align="left" />
+          <el-table-column prop="licenseNumber" label="车牌号" width="0" align="left" />
+          <el-table-column prop="vehicleProvinceName" label="车辆所属省份" width="0" align="left" />
+          <el-table-column prop="vehicelBrand" label="车辆品牌" width="0" align="left" />
+          <el-table-column prop="vehicleLoad" label="车辆最大载重" width="0" align="left" />
         </el-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -61,9 +73,11 @@
     data() {
       return {
         showAll: false,
-        query: { 
-          equipmentCode: undefined,
-          equipmentName: undefined,
+        query: {
+          driverName: undefined,
+          licenseNumber: undefined,
+          vehicleProvinceName: undefined,
+          vehicelBrand: undefined,
         },
         treeProps: {
           children: 'children',
@@ -84,14 +98,6 @@
         },
         formVisible: false,
         exportBoxVisible: false,
-        columnList: [
-          {prop: 'equipmentCode', label: '设备编码'},
-          {prop: 'equipmentName', label: '设备名称'},
-          {prop: 'productionProcessName', label: '生产工序'},
-          {prop: 'productLinesName', label: '所属产线'},
-          {prop: 'equipmentCategoryName', label: '所属设备类别'},
-          
-        ],
       }
     },
     computed: {},
@@ -100,7 +106,7 @@
       this.visible = true
     },
     mounted() {
-      this.initData();
+     // this.initData();
     },
     methods: {
       sortChange({column, prop, order}) {
@@ -115,7 +121,7 @@
           ...this.query
         };
         request({
-          url: `/api/project/BdEquipment/getPatrolRulesEquipmentList`,
+          url: `/api/project/DmDeliveryManage/getDeliverVehicleList`,
           method: 'post',
           data: _query
         }).then(res => {
@@ -137,8 +143,10 @@
         this.listQuery.pageSize = this.hasPage ? this.pageSize : 20
       },
       reset() {
-        this.query.equipmentCode = ''
-        this.query.equipmentName = ''
+        this.query.driverName = ''
+        this.query.licenseNumber = ''
+        this.query.vehicleProvinceName = ''
+        this.query.vehicelBrand = ''
         this.listQuery.currentPage = 1
         this.listQuery.pageSize = this.hasPage ? this.pageSize : 20
         this.initData()
@@ -151,13 +159,13 @@
             this.$emit('change', this.checked, this.checkedRow)
       },
       rowClick(row, preRow) {
-          this.$emit('bdEquipmentListDataForm', row)
+          this.$emit('vehicleDataForm', row)
       },
       handleSelectionChange(val) {
        // this.checked = val;
       },
       select() {
-        //this.$emit('bdEquipmentListDataForm', this.checked)
+        //this.$emit('outStockMoveDataForm', this.checked)
       },
       closeDialog() {
         //this.$emit('clickPatrolEquipmentListDisplay', false)
