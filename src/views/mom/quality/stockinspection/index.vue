@@ -86,7 +86,9 @@
 />
                             <el-table-column prop="materialCode" label="物料编码" width="0" align="left"
 />
-                            <el-table-column prop="relationName" label="发货单号" width="0" align="left"
+                            <el-table-column prop="warehouseName" label="仓库" width="0" align="left"
+/>
+                            <el-table-column prop="relationName" label="位置" width="0" align="left"
 />
                             <el-table-column prop="materialNumber" label="货品数量" width="0" align="left"
 />
@@ -194,7 +196,7 @@
                 let _query = {
                     ...this.listQuery,
                     ...this.query,
-                    inspectionType : 5,
+                    inspectionType : 4,
                 };
                 request({
                     url: `/api/project/BizQualityInspection/getList`,

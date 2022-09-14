@@ -5,14 +5,14 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="8">
-            <el-form-item label="物料编码">
-              <el-input v-model="query.materialCode" placeholder="请输入" clearable
+            <el-form-item label="位置名称">
+              <el-input v-model="query.locationName" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="物料名称">
-              <el-input v-model="query.materialName" placeholder="请输入" clearable
+            <el-form-item label="位置编码">
+              <el-input v-model="query.locationCode" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
@@ -35,13 +35,45 @@
               <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
             </template>
           </el-table-column>
-            <el-table-column prop="materialName" label="产品名称" width="0" align="left"/>
-            <el-table-column prop="materialCode" label="产品编码" width="0" align="left"/>
-            <el-table-column prop="typeName" label="类型" width="0" align="left"/>
-            <el-table-column prop="materialSpec" label="规格" width="0" align="left"/>
-            <el-table-column prop="materialModel" label="型号" width="0" align="left"/>
-            <el-table-column prop="materialType" label="物料类型" width="0" align="left"/>
-            <el-table-column prop="materialUnit" label="单位" width="0" align="left"/>
+          <el-table-column prop="locationName" label="位置名称" width="200" align="left"/>
+          <el-table-column prop="locationCode" label="位置编码" width="0" align="left"/>
+          <el-table-column prop="locationType" label="位置类型" width="0" align="left"/>
+          <el-table-column prop="locationParentId" label="上级位置ID" width="0" align="left"/>
+          <el-table-column prop="warehouseName" label="仓库名称" width="0" align="left"/>
+          <el-table-column prop="warehouseLocation" label="仓库位置" width="0" align="left"/>
+          <el-table-column prop="isStockLocation" label="存放位置" width="0" align="left">
+            <template slot-scope="scope">
+              <el-switch
+                disabled
+                v-model="scope.row.isStockLocation"
+                :active-value="1"
+                :inactive-value="0">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="isConsumeLocation" label="消耗位置" width="0" align="left">
+            <template slot-scope="scope">
+              <el-switch
+                disabled
+                v-model="scope.row.isConsumeLocation"
+                :active-value="1"
+                :inactive-value="0">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="isScrapLocation" label="报废位置" width="0" align="left">
+            <template slot-scope="scope">
+              <el-switch
+                disabled
+                v-model="scope.row.isScrapLocation"
+                :active-value="1"
+                :inactive-value="0">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="locationRow" label="排" width="0" align="left"/>
+          <el-table-column prop="locationColumn" label="列" width="0" align="left"/>
+          <el-table-column prop="locationLayer" label="层" width="0" align="left"/>
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -65,8 +97,8 @@
       return {
         showAll: false,
         query: {
-          materialCode: undefined,
-          materialName: undefined,
+          locationName: undefined,
+          locationCode: undefined,
         },
         treeProps: {
           children: 'children',
@@ -85,12 +117,6 @@
           sort: "desc",
           sidx: "",
         },
-        formVisible: false,
-        exportBoxVisible: false,
-        columnList: [
-          {prop: 'partnerCode', label: '客户编码'},
-          {prop: 'partnerName', label: '客户名称'},
-        ],
       }
     },
     computed: {},
@@ -113,10 +139,9 @@
         let _query = {
           ...this.query,
           ...this.listQuery,
-          type: 23,
         };
         request({
-          url: `/api/project/BizQualityInspection/getMaterialList`,
+          url: `/api/project/BizQualityInspection/getWarehouseLocationList`,
           method: 'post',
           data: _query
         }).then(res => {

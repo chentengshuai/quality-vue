@@ -14,9 +14,15 @@
                 </el-form-item>
             </el-col>
             <el-col :span="8" >
-                <el-form-item  label="发货单"   prop="relationName" >
+                <el-form-item  label="位置名称"   prop="relationName" >
                     <el-input    v-model="dataForm.relationName" placeholder="请输入"  clearable  :style='{"width":"100%"}'
                                     @click.native="chooseTemplate()">
+                    </el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="8" >
+                <el-form-item  label="仓库名称"   prop="warehouseName" >
+                    <el-input    v-model="dataForm.warehouseName" clearable  :style='{"width":"100%"}'>
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -234,7 +240,7 @@
     import { getDictionaryDataSelector } from '@/api/systemData/dictionary'
     import { getStandardOptions } from '@/api/systemData/dataTeam'
     import MaterialChoose from './materialChoose'
-    import TemplateChoose from './orderChoose'
+    import TemplateChoose from './locationChoose'
 
     export default {
         components: {MaterialChoose,TemplateChoose},
@@ -260,10 +266,13 @@
                             inspectorId : '',
                             inspectorName : '',
                             inspectTime : new Date().getTime(),
-                            inspectionType : 5,
+                            inspectionType : 4,
                             relationId : '',
                             relationCode : '',
                             relationName : '',
+                            warehouseId : '',
+                            warehouseCode : '',
+                            warehouseName : '',
                             standardId : '',
                             standardName : '',
                             remark : '',
@@ -506,8 +515,11 @@
             },
             dialogTemplateChange(template) {
                 this.dataForm.relationId = template.id;
-                this.dataForm.relationCode = template.productTemplateCode;
-                this.dataForm.relationName = template.productTemplateName;
+                this.dataForm.relationCode = template.locationCode;
+                this.dataForm.relationName = template.locationName;
+                this.dataForm.warehouseId = template.warehouseId;
+                this.dataForm.warehouseCode = template.warehouseCode;
+                this.dataForm.warehouseName = template.warehouseName;
                 this.templateChooseShow = false;
             },
             changeStandard(){

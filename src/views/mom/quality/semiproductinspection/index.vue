@@ -16,7 +16,21 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="检验结果">
-                                        <el-input v-model="query.result" placeholder="请输入" clearable>  </el-input>
+                                        <el-select
+                                            v-model="query.result"
+                                            placeholder="请选择"
+                                            clearable
+                                            :style="{ width: '100%' }"
+                                            :multiple="false"
+                                        >
+                                            <el-option
+                                            v-for="(item, index) in resultOptions"
+                                            :key="index"
+                                            :label="item.fullName"
+                                            :value="item.id"
+                                            :disabled="item.disabled"
+                                            ></el-option>
+                                        </el-select>
                                 </el-form-item>
                             </el-col>
                         <template v-if="showAll">
