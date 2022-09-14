@@ -143,7 +143,7 @@ export function toFileSize(size) {
 
 // 代码生成器数据匹配
 export function dynamicText(value, options) {
-  if (!value) return ''
+  if (!value && value!=0) return ''
   if (Array.isArray(value)) {
     if (!options || !Array.isArray(options)) return value.join()
     let textList = []

@@ -45,6 +45,16 @@
                 <el-input v-model="query.clientName" placeholder="请输入" clearable></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="状态">
+                <el-select v-model="query.status" placeholder="请选择"
+                           clearable>
+                  <el-option v-for="(item, index) in statusOptions" :key="index"
+                             :label="item.fullName" :value="item.id"
+                             :disabled="item.disabled"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </template>
           <el-col :span="6">
             <el-form-item>
@@ -82,6 +92,13 @@
           <el-table-column prop="materialName" label="售后产品名称" width="0" align="left"/>
           <el-table-column prop="clientCode" label="客户编码" width="0" align="left"/>
           <el-table-column prop="clientName" label="客户名称" width="0" align="left"/>
+          <el-table-column prop="status" label="状态" width="0" align="left">
+            <template slot-scope="scope">
+              {{
+                scope.row.status | dynamicText(statusOptions)
+              }}
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right"
                            width="100">
             <template slot-scope="scope">
@@ -147,6 +164,10 @@ export default {
         {prop: 'materialCode', label: '售后产品编码'},
         {prop: 'materialName', label: '售后产品名称'},
         {prop: 'salesOrderCode', label: '销售订单号'},
+      ],
+      statusOptions: [
+        {fullName: "已处理", id: 1},
+        {fullName: "未处理", id: 0},
       ],
       afterSaleTypeOptions: [],
       afterSaleTypeProps: {"label": "fullName", "value": "id"},
