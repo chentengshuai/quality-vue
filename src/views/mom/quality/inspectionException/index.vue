@@ -91,18 +91,33 @@
                     <el-table-column prop="handleCommentsName" label="处理意见" width="0" align="left"/>
                     <el-table-column prop="handlerName" label="处理人" width="0" align="left"/>
                     <el-table-column prop="handleTime" label="处理时间" width="0" align="left"/>
+
+                    <el-table-column prop="status" label="状态" width="0" align="left">
+                        <template slot-scope="scope">
+                            <el-tag type="danger" v-if="scope.row.status == 0">草稿</el-tag>
+                            <el-tag type="warning" v-else-if="scope.row.status == 1">已提交</el-tag>
+                            <el-tag type="success" v-else-if="scope.row.status == 2">已审核</el-tag>
+                        </template>
+                    </el-table-column>
+
                     <el-table-column prop="remark" label="备注" width="0" align="left"/>
                     <el-table-column label="操作" fixed="right"
                                     width="100" >
                         <template slot-scope="scope">
-                                    <el-button type="text"
+                                    <el-button type="text" v-if="!scope.row.status || scope.row.status == 0"
                                             @click="addOrUpdateHandle(scope.row.id,scope.row.inspectionId)" >异常处理
                                     </el-button>
-                                    <el-button type="text"
-                                            @click="addOrUpdateHandle(scope.row.id)" >提交
+                                    <el-button type="text" v-if="scope.row.status == 0 || scope.row.status == 1 || scope.row.status == 2"
+                                            @click="addOrUpdateHandle(scope.row.id,scope.row.inspectionId,true)" >详情
                                     </el-button>
-                                    <el-button type="text"
-                                            @click="addOrUpdateHandle(scope.row.id)" >审核
+                                    <el-button type="text" v-if="scope.row.status == 0"
+                                            @click="submitHandle(scope.row.id,'submit')" >提交
+                                    </el-button>
+                                    <el-button type="text" v-if="scope.row.status == 1"
+                                            @click="submitHandle(scope.row.id,'revoke')" >撤销
+                                    </el-button>
+                                    <el-button type="text" v-if="scope.row.status == 1"
+                                            @click="submitHandle(scope.row.id,'audit')" >审核
                                     </el-button>
                         </template>
                     </el-table-column>
@@ -366,7 +381,6 @@
         methods: {
 
             handleClick(target, action) {
-                debugger;
                 if(target.index != "0"){
                     this.query.inspectionType = target.index
                 }else{
@@ -426,6 +440,33 @@
                 this.$nextTick(() => {
                     this.$refs.JNPFForm.init(id, inspectionId, isDetail)
                 })
+            },
+            submitHandle(id,action){
+                var msg = "";
+                if (action == 'submit') {
+                    msg = "是否确认提交？";
+                } else if (action == 'revoke') {
+                    msg = "是否确认撤销？";
+                } else if (action == 'revoke') {
+                    msg = "是否确认审核通过？";
+                }
+                this.$confirm(msg, '提示', {
+                type: 'warning'
+                }).then(() => {
+                request({
+                    url: `/api/project/BizQualityInspectionException/submit/${id}/${action}`,
+                    method: 'PUT'
+                }).then(res => {
+                    this.$message({
+                    type: 'success',
+                    message: res.msg,
+                    onClose: () => {
+                        this.initData()
+                    }
+                    });
+                })
+                }).catch(() => {
+                });
             },
             exportData() {
                 this.exportBoxVisible = true

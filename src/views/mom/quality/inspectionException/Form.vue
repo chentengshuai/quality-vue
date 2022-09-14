@@ -199,7 +199,6 @@
     import request from '@/utils/request'
     import { previewDataInterface } from '@/api/systemData/dataInterface'
     import { getDictionaryDataByTypeCode } from '@/api/systemData/dictionary'
-    import { getStandardOptions } from '@/api/systemData/dataTeam'
 
     export default {
         components: {},
@@ -253,7 +252,7 @@
                 handleComments: [
                     {
                         required: true,
-                        message: '请填写',
+                        message: '请选择',
                         trigger: 'click'
                     },
                 ],
@@ -264,7 +263,7 @@
                         trigger: 'click'
                     },
                 ],
-                handlerName: [
+                handlerId: [
                     {
                         required: true,
                         message: '请填写',
@@ -274,7 +273,7 @@
                 handleTime: [
                     {
                         required: true,
-                        message: '请填写',
+                        message: '请选择',
                         trigger: 'click'
                     },
                 ],
@@ -283,7 +282,6 @@
             typeOptions: [{fullname:"合格",value:1},{fullname:"不合格",value:2}],
             resultOptions:[{"fullName":"合格","id":1},{"fullName":"不合格","id":2}],
             resultProps:{"label":"fullName","value":"id"},
-            standardOptions: [],
         }
         },
         computed: {},
@@ -293,7 +291,6 @@
         mounted() {},
         methods: {
             init(id, inspectionId, isDetail) {
-                debugger;
                 this.dataForm.id = id || 0;
                 this.dataForm.inspectionId = inspectionId || 0;
                 this.visible = true;
@@ -304,7 +301,7 @@
                     if(this.dataForm.inspectionId){
                         this.loading = true
                         request({
-                            url: '/api/project/BizQualityInspection/'+this.dataForm.inspectionId,
+                            url: '/api/project/BizQualityInspection/'+inspectionId,
                             method: 'get'
                         }).then(res => {
                             this.inspectionInfo = res.data;
@@ -339,7 +336,6 @@
                 })
             },
             request() {
-                debugger;
                 var _data =this.dataList()
                 if (!this.dataForm.id) {
                     request({
@@ -391,7 +387,12 @@
                 this.dataForm = dataAll
             },
             handleChange(){
-
+                debugger;
+                var _this = this;
+                let obj = _this.handleOptions.find(function (item) {
+                    return item.enCode === _this.dataForm.handleComments;
+                });
+                _this.dataForm.handleCommentsName = obj.fullName;
             }
         },
     }
