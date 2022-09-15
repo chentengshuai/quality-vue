@@ -10,8 +10,8 @@
             <el-collapse :accordion="false" v-model="activezblmsx" class="mb-20">
               <el-collapse-item title="基本信息" name="1">
                 <el-col :span="8">
-                  <el-form-item label="单据编号" prop="stockMoveCode">
-                    <el-input v-model="dataForm.stockMoveCode" readonly :style='{"width":"100%"}'>
+                  <el-form-item label="入库单号" prop="stockMoveCode">
+                    <el-input v-model="dataForm.stockMoveCode" placeholder="自动生成" readonly :style='{"width":"100%"}'>
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -54,19 +54,19 @@
                       <el-table-column type="index" width="50" label="序号" align="center"/>
                       <el-table-column prop="productCode" label="物料编码" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productCode"  :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productCode" @click.native="chooseMaterial(scope.$index)" readonly :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productName" label="物料名称" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productName"  :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productName"  readonly  :style='{"width":"100%"}'> 
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productSpc" label="规格型号" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productSpc"  :style='{"width":"100%"}'>
+                          <el-input v-model="scope.row.productSpc" readonly  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
@@ -96,17 +96,6 @@
                           </el-input>
                         </template>
                       </el-table-column>
-
-                      <el-table-column prop="stockType" label="入库类型" width="150" >
-                        <template slot-scope="scope">
-                          <el-select v-model="scope.row.stockType" placeholder="请选择" clearable :style='{"width":"100%"}'
-                                     :multiple="false">
-                            <el-option v-for="(item, index) in stockTypeOptions" :key="index" :label="item.name"
-                                       :value="item.code" :disabled="item.disabled"></el-option>
-                          </el-select>
-                        </template>
-                      </el-table-column>
-
                       <el-table-column prop="customerName" label="客户" width="150" >
                         <template slot-scope="scope">
                           <el-input v-model="scope.row.customerName"  :style='{"width":"100%"}'>
@@ -190,7 +179,12 @@
                      v-if="positionChooseShow" width="1000px" height="800px">
             <position-choose ref="PositionChoose" @returnPositionData="returnPositionData"></position-choose>
           </el-dialog>
-
+          <el-dialog title="物料列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="materialChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     v-if="materialChooseShow" width="1000px">
+              <material-choose ref="MaterialChoose" @onChange="dialogMaterialChange"></material-choose>
+          </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -206,10 +200,11 @@
   import {getDepartmentSelector} from '@/api/permission/department'
   import BdBoxList from './bdBoxList'
   import PositionChoose from './positionChoose'
+  import MaterialChoose from './materialChoose'
   import {getDictionaryDataByTypeCode} from '@/api/systemData/dictionary'
 
   export default {
-    components: {BdBoxList, PositionChoose},
+    components: {BdBoxList, PositionChoose,MaterialChoose},
     props: [],
     data() {
       return {
@@ -217,7 +212,9 @@
         loading: false,
         isDetail: false,
         positionChooseShow: false,
+        materialChooseShow: false,
         rowNum: 0,
+        rowIndex: 0,
         boxNum: '',
         deptName: '发货部门', //frp管变量名称
         columnShow: true,
@@ -628,6 +625,22 @@
           }
           this.dataForm[key] = ''
         }
+      },
+      chooseMaterial(index) {
+          this.rowIndex = index;
+          this.materialChooseShow = true;
+          this.$nextTick(() => {
+          this.$refs.MaterialChoose.initData();
+          })
+      },
+      dialogMaterialChange(material) {
+          var i = this.rowIndex;
+          this.dataForm.bizstockmovelineList[i].productId = material.id;
+          this.dataForm.bizstockmovelineList[i].productCode = material.materialCode;
+          this.dataForm.bizstockmovelineList[i].productName = material.materialName;
+          this.dataForm.bizstockmovelineList[i].productSpc = material.materialSpec;
+          this.dataForm.bizstockmovelineList[i].uomName = material.materialUnit;
+          this.materialChooseShow = false;
       },
     }
   }

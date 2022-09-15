@@ -21,11 +21,6 @@
           </el-col>
           <template v-if="showAll">
             <el-col :span="6">
-              <el-form-item label="单据编号">
-                <el-input v-model="query.stockMoveCode" placeholder="请输入" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
               <el-form-item label="入库类型">
                 <el-select v-model="query.stockMoveType" placeholder="请选择"
                            clearable>
@@ -135,7 +130,6 @@
           </el-table-column>
           <el-table-column prop="totalQty" label="总量" width="0" align="left"/>
           <el-table-column prop="stockPersonName" label="入库人员" width="0" align="left"/>
-          <el-table-column prop="billNo" label="单据编号" width="0" align="left"/>
           <el-table-column prop="remark" label="备注" width="0" align="left"/>
           <el-table-column label="操作" fixed="right"
                            width="150">
