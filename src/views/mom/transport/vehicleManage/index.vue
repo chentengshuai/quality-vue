@@ -91,9 +91,9 @@
                                         <el-button type="text"
                                                    @click="addOrUpdateHandle(scope.row.id)" >编辑
                                         </el-button>
-                                        <el-button type="text"  v-if="scope.row.enabledMark=='1'"  @click="updateEnabledMark(scope.row)">禁用
+                                        <el-button type="text"  v-if="scope.row.vehicleStatus=='0'&&scope.row.enabledMark=='1'"  @click="updateEnabledMark(scope.row)">禁用
                                         </el-button>
-                                        <el-button type="text"  v-if="scope.row.enabledMark=='0'"  @click="updateEnabledMark(scope.row)">启用
+                                        <el-button type="text"  v-if="scope.row.vehicleStatus=='0'&&scope.row.enabledMark=='0'"  @click="updateEnabledMark(scope.row)">启用
                                         </el-button>
                                         <el-button type="text" class="JNPF-table-delBtn" v-if="scope.row.vehicleStatus=='0'"  @click="handleDel(scope.row.id)">删除
                                         </el-button>

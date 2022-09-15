@@ -4,7 +4,7 @@
         <div class="JNPF-common-layout-center">
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-form @submit.native.prevent>
-                                                                <el-col :span="6">
+                            <el-col :span="6">
                                 <el-form-item label="发货编码">
                                         <el-input v-model="query.bdDeliveryCode" placeholder="请输入" clearable>  </el-input>
                                 </el-form-item>
@@ -20,34 +20,24 @@
                                 </el-form-item>
                             </el-col>
                         <template v-if="showAll">
+                                <el-col :span="6">
+                                        <el-form-item label="始发地">
+                                                <JNPF-Address  v-model="query.originPlaceCode" placeholder="请选择" :level="0" filterable
+                                                               clearable/>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-form-item label="目的地">
+                                                <JNPF-Address  v-model="query.aimPlaceCode" placeholder="请选择" :level="0" filterable
+                                                               clearable/>
+                                        </el-form-item>
+                                    </el-col>
                                     <el-col :span="6">
                                         <el-form-item label="到货日期">
                                                 <el-date-picker v-model="query.arrivalDate" type="datetimerange"
                                                                 value-format="timestamp" format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期"
                                                                 end-placeholder="结束日期" >
                                                 </el-date-picker>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="始发地名称">
-                                                <el-input v-model="query.originPlaceName" placeholder="请输入" clearable>  </el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="目的地名称">
-                                                <el-input v-model="query.aimPlaceName" placeholder="请输入" clearable>  </el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="始发地">
-                                                <JNPF-Address  v-model="query.originPlaceCode" placeholder="请选择" :level="0"
-                                                               clearable/>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="目的地">
-                                                <JNPF-Address  v-model="query.aimPlaceCode" placeholder="请选择" :level="0"
-                                                               clearable/>
                                         </el-form-item>
                                     </el-col>
                         </template>
@@ -84,33 +74,28 @@
                     </div>
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange'  has-c @selection-change="handleSelectionChange">
-                            <el-table-column prop="bdDeliveryCode" label="发货编码" width="0" align="left"
-/>
-                            <el-table-column prop="bdDeliveryName" label="发货名称" width="0" align="left"
-/>
-                            <el-table-column prop="stockMoveId" label="出库单id" width="0" align="left"
-/>
-                            <el-table-column prop="stockMoveCode" label="出库单号" width="0" align="left"
-/>
-                            <el-table-column prop="originPlaceCode" label="始发地" width="0" align="left"
-/>
-                            <el-table-column prop="originPlaceName" label="始发地名称" width="0" align="left"
-/>
-                            <el-table-column prop="aimPlaceCode" label="目的地" width="0" align="left"
-/>
-                            <el-table-column prop="aimPlaceName" label="目的地名称" width="0" align="left"
-/>
-                            <el-table-column prop="arrivalDate" label="到货日期" width="0" align="left"
-/>
-                            <el-table-column prop="stockGrossWeight" label="出库单总毛重" width="0" align="left"
-/>
+                            <el-table-column prop="bdDeliveryCode" label="发货编码" width="0" align="left"/>
+                            <el-table-column prop="bdDeliveryName" label="发货名称" width="0" align="left"/>
+                            <el-table-column prop="stockMoveCode" label="出库单号" width="0" align="left"/>
+                            <el-table-column prop="originPlaceName" label="始发地" width="0" align="left"/>
+                            <el-table-column prop="aimPlaceName" label="目的地" width="0" align="left"/>
+                            <el-table-column prop="arrivalDate" label="到货日期" width="0" align="left"/>
+                            <el-table-column prop="stockGrossWeight" label="出库单总毛重" width="0" align="left"/>
+                            <el-table-column prop="bdDeliveryStatusName" label="发货状态" width="0" align="left"/>
                         <el-table-column label="操作" fixed="right"
-                                         width="100" >
+                                         width="120" >
                             <template slot-scope="scope">
-                                        <el-button type="text"
+                                    
+                                        <el-button type="text" v-if="scope.row.bdDeliveryStatus=='0'"
                                                    @click="addOrUpdateHandle(scope.row.id)" >编辑
                                         </el-button>
-                                        <el-button type="text" class="JNPF-table-delBtn"  @click="handleDel(scope.row.id)">删除
+                                        <el-button type="text" v-if="scope.row.bdDeliveryStatus=='0'"
+                                                   @click="deliverGoods(scope.row.id)" >发货
+                                        </el-button>
+                                        <el-button type="text" class="JNPF-table-delBtn"  v-if="scope.row.bdDeliveryStatus=='0'"  @click="handleDel(scope.row.id)">删除
+                                        </el-button>
+                                        <el-button type="text" v-if="scope.row.bdDeliveryStatus=='1'"
+                                                   @click="addOrUpdateHandle(scope.row.id,true)" >查看
                                         </el-button>
                             </template>
                         </el-table-column>
@@ -307,6 +292,36 @@
                     sidx: "bdDeliveryCode",
                 }
                 this.initData()
+            },deliverGoods(id){
+                this.$confirm('是否确认发货?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    request({
+                        url: `/api/project/DmDeliveryManage/deliverGoods/${id}`,
+                        method: 'PUT'
+                    }).then(res => {
+                        let resultData=res.data;
+                        let resultFlag=resultData.flag;
+                        if(resultFlag=="success"){
+                            this.$message({
+                            type: 'success',
+                            message: "发货成功!",
+                                onClose: () => {
+                                    this.initData()
+                                }
+                            });
+                        }else{
+                            this.$message({
+                            type: 'error',
+                            message: resultData.message,
+                                onClose: () => {
+                                }
+                            });
+                        }
+                   
+                    })
+                }).catch(() => {
+                });
             }
         }
     }
