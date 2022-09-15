@@ -14,6 +14,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="售后信息来源" prop="afterSaleSource">
+                <el-select v-model="dataForm.afterSaleSource" placeholder="请选择" clearable :style='{"width":"100%"}'
+                           :multiple="false">
+                  <el-option v-for="(item, index) in afterSaleSourceOptions" :key="index" :label="item.fullName"
+                             :value="item.id" :disabled="item.disabled"></el-option>
+
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="售后类型" prop="afterSaleType">
               <el-select v-model="dataForm.afterSaleType" placeholder="请选择" clearable :style='{"width":"100%"}'
                          :multiple="false">
@@ -21,6 +31,13 @@
                            :value="item.id" :disabled="item.disabled"></el-option>
 
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="客户联系电话" prop="customerCalls">
+              <el-input v-model="dataForm.customerCalls" placeholder="请输入" clearable :style='{"width":"100%"}'>
+
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -98,7 +115,10 @@ export default {
       materialVisible:false,
       dataForm: {
         salesOrderCode: '',
-        afterSaleType: "",
+        afterSaleType: '',
+        afterSaleSource:'',
+        afterSaleSourceName:'',
+        customerCalls:'',
         afterSaleCause: '',
         materialCode: '',
         materialName: '',
@@ -121,7 +141,21 @@ export default {
               trigger: 'change'
             },
           ],
+          afterSaleSource: [
+            {
+              required: true,
+              message: '请选择',
+              trigger: 'change'
+            },
+          ],
           afterSaleCause: [
+            {
+              required: true,
+              message: '请输入',
+              trigger: 'blur'
+            },
+          ],
+          customerCalls: [
             {
               required: true,
               message: '请输入',
@@ -151,13 +185,15 @@ export default {
           ],
         },
       afterSaleTypeOptions: [],
+      afterSaleSourceOptions: [],
 
     }
   },
   computed: {},
   watch: {},
   created() {
-    this.getafterSaleTypeOptions();
+    this.getafterSaleTypeOptions()
+    this.getafterSaleSourceOptions()
   },
   mounted() {
   },
@@ -165,6 +201,11 @@ export default {
     getafterSaleTypeOptions() {
       getDictionaryDataByTypeCode('saleType').then(res => {
         this.afterSaleTypeOptions = res.data
+      })
+    },
+    getafterSaleSourceOptions() {
+      getDictionaryDataByTypeCode('afterSaleSource').then(res => {
+        this.afterSaleSourceOptions = res.data
       })
     },
     init(id, isDetail) {

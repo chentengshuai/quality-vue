@@ -132,21 +132,21 @@
                 <el-table-column prop="productCode" label="物料编码" width="140">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.productCode"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
+                              prefix-icon="el-icon-search" @click.native="chooseMaterial(scope.$index)" readonly :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productName" label="物料名称" width="150">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.productName"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
+                              :style='{"width":"100%"}' readonly >
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="productSpc" label="规格型号" width="140">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.productSpc"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
+                              :style='{"width":"100%"}' readonly >
                     </el-input>
                   </template>
                 </el-table-column>
@@ -203,24 +203,17 @@
                     </el-input>
                   </template>
                 </el-table-column>
-                <el-table-column v-if="false" prop="warehouseCode" label="仓库编码">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.warehouseCode"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
-                    </el-input>
-                  </template>
-                </el-table-column>
                 <el-table-column prop="warehouseName" label="仓库" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.warehouseName"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
+                    <el-input prefix-icon="el-icon-search" v-model="scope.row.warehouseName" readonly clearable
+                              :style='{"width":"100%"}' @click.native="choosePosition(scope.$index)"  placeholder="请选择">
                     </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column prop="locationName" label="仓位" width="150">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.locationName"  placeholder="请输入" clearable
-                              :style='{"width":"100%"}'>
+                    <el-input prefix-icon="el-icon-search" v-model="scope.row.locationName"  placeholder="请选择" clearable readonly
+                              @click.native="chooseStocklocation(scope.$index,scope.row.warehouseId)" :style='{"width":"100%"}'>
                     </el-input>
                   </template>
                 </el-table-column>
@@ -294,7 +287,21 @@
                        :close-on-click-modal="false" append-to-body
                        :visible.sync="materialChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
                        v-if="materialChooseShow" width="1000px" height="800px">
-              <material-choose ref="MaterialChoose" @returnMaterialInfo="returnMaterialInfo"></material-choose>
+              <material-choose ref="MaterialChoose" @onChange="returnMaterialInfo"></material-choose>
+            </el-dialog>
+
+            <el-dialog title="仓库列表"
+                       :close-on-click-modal="false" append-to-body
+                       :visible.sync="positionChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                       v-if="positionChooseShow" width="1000px" height="800px">
+              <position-choose ref="PositionChoose" @returnPositionData="returnPositionData"></position-choose>
+            </el-dialog>
+
+            <el-dialog title="仓位列表"
+                       :close-on-click-modal="false" append-to-body
+                       :visible.sync="stockLocationShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                       v-if="stockLocationShow" width="1000px">
+              <StockLocationChoose ref="StockLocationChoose" @onChange="dialogStockLocationChange"></StockLocationChoose>
             </el-dialog>
 
             <sal-delivery-notice-choose ref="SalDeliveryNoticeChoose" v-if="salDeliveryNoticeChooseShow"
@@ -317,12 +324,14 @@
   import ProductChoose from './productChoose'
   import InventoryChoose from './inventoryChoose'
   import PickerChoose from './pickerChoose'
-  import MaterialChoose from './materialChoose'
+  import MaterialChoose from '../inStock/materialChoose'
+  import PositionChoose from '../inStock/positionChoose'
+  import StockLocationChoose from '../inStock/stockLocationChoose'
   import {getDictionaryDataByTypeCode} from '@/api/systemData/dictionary'
   import SalDeliveryNoticeChoose from './salDeliveryNoticeChoose'
 
   export default {
-    components: {ProductChoose, PickerChoose, MaterialChoose, InventoryChoose, SalDeliveryNoticeChoose},
+    components: {ProductChoose, PickerChoose, MaterialChoose, InventoryChoose, SalDeliveryNoticeChoose,PositionChoose,StockLocationChoose},
     props: [],
     data() {
       return {
@@ -347,7 +356,12 @@
         carriageNoShow: false,
         scanningProductCodeShow: false, //简单生产领料
         pickerChooseShow: false,
+        positionChooseShow:false,
         materialChooseShow: false,
+        stockLocationShow: false,
+        rowNum: 0,
+        rowIndex: 0,
+        rowStockLocation:0,
         qtyReadOnly: true,
         uomName: "库存单位",
         qtyName: "实发数量",
@@ -524,18 +538,6 @@
               }).then(res => {
                 let details = res.data.bizstockmovelineList;
                 this.dataInfo(res.data)
-                if (this.dataForm.stockMoveType === "SAL_OUTSTOCK") {
-                  request({
-                    url: '/api/project/stockApi/getDeliveryNoticeInfo?billNo=' + this.dataForm.noticeBillNo,
-                    method: 'get'
-                  }).then((res) => {
-                    this.remainOutQty = res.data;
-                    for (let i = 0; i < details.length; i++) {
-                      let stockDetail = details[i];
-                      this.remainOutQty[stockDetail["productCode"]] = this.remainOutQty[stockDetail["productCode"]] - stockDetail["returnQty"];
-                    }
-                  })
-                }
                 this.loading = false
               })
             })
@@ -569,7 +571,7 @@
         })
       },
       request() {
-        if (this.dataForm.stockMoveType === "SAL_OUTSTOCK") {
+        /*if (this.dataForm.stockMoveType === "SAL_OUTSTOCK") {
           if (this.dataForm.noticeBillNo === ''
             || this.dataForm.noticeBillNo === undefined) {
             this.$message({
@@ -579,7 +581,7 @@
             })
             return;
           }
-        }
+        }*/
         var _data = this.dataList()
         if (!this.dataForm.id) {
           request({
@@ -982,7 +984,8 @@
           this.$refs.PickerChoose.initData();
         })
       },
-      chooseMaterial() {  //仓库弹框
+      chooseMaterial(index) {  // 物料弹窗
+        this.rowIndex = index;
         this.materialChooseShow = true;
         this.$nextTick(() => {
           this.$refs.MaterialChoose.initData();
@@ -993,9 +996,13 @@
         this.dataForm.pickerNo = empInfo.code; //领料人编码
         this.pickerChooseShow = false;
       },
-      returnMaterialInfo(materialInfo) {//仓库弹框返回值
-        this.scanningProductCode = materialInfo.productCode; //物料条码
-        this.scanningWarehouseCode = materialInfo.wareHouseCode; //仓库编码
+      returnMaterialInfo(material) {//仓库弹框返回值
+        var i = this.rowIndex;
+        this.dataForm.bizstockmovelineList[i].productId = material.id;
+        this.dataForm.bizstockmovelineList[i].productCode = material.materialCode;
+        this.dataForm.bizstockmovelineList[i].productName = material.materialName;
+        this.dataForm.bizstockmovelineList[i].productSpc = material.materialSpec;
+        this.dataForm.bizstockmovelineList[i].uomName = material.materialUnit;
         this.materialChooseShow = false;
       },
       clickSalDeliveryNotice() {
@@ -1009,6 +1016,41 @@
       },
       closeSalDeliveryNotice() {
         this.salDeliveryNoticeChooseShow = false;
+      },
+      choosePosition(index) {  //仓库弹框
+        this.rowNum = index; //仓库行数
+        this.positionChooseShow = true;
+        this.$nextTick(() => {
+          this.$refs.PositionChoose.initData();
+        })
+      },
+      returnPositionData(positionData) {//仓库弹框返回值
+        this.dataForm.bizstockmovelineList[this.rowNum].warehouseName = positionData.warehouseName; //仓库名称
+        this.dataForm.bizstockmovelineList[this.rowNum].warehouseCode = positionData.warehouseCode; //仓库编码
+        this.dataForm.bizstockmovelineList[this.rowNum].warehouseId = positionData.id; //仓库ID
+        this.positionChooseShow = false;
+      },
+      chooseStocklocation(index,warehouseId) {  //仓位弹框
+        if(!warehouseId){
+          this.$message({
+            message: "请选择仓库!",
+            type: 'error',
+            duration: 2000,
+          })
+          return
+        }
+        this.rowStockLocation = index; //仓库行数
+        this.stockLocationShow = true;
+        this.$nextTick(() => {
+          this.$refs.StockLocationChoose.init(warehouseId);
+        })
+      },
+      dialogStockLocationChange(rowData){
+        var i = this.rowStockLocation;
+        this.dataForm.bizstockmovelineList[i].locationId = rowData.id;
+        this.dataForm.bizstockmovelineList[i].locationCode = rowData.locationCode;
+        this.dataForm.bizstockmovelineList[i].locationName = rowData.locationName;
+        this.stockLocationShow = false;
       }
     }
   }

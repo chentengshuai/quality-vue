@@ -54,13 +54,13 @@
                       <el-table-column type="index" width="50" label="序号" align="center"/>
                       <el-table-column prop="productCode" label="物料编码" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productCode" @click.native="chooseMaterial(scope.$index)" readonly :style='{"width":"100%"}'>
+                          <el-input prefix-icon="el-icon-search"  v-model="scope.row.productCode" @click.native="chooseMaterial(scope.$index)" readonly :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="productName" label="物料名称" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.productName"  readonly  :style='{"width":"100%"}'> 
+                          <el-input v-model="scope.row.productName"  readonly  :style='{"width":"100%"}'>
                           </el-input>
                         </template>
                       </el-table-column>
@@ -110,27 +110,28 @@
                       </el-table-column>
                       <el-table-column prop="warehouseName" label="仓库" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.warehouseName" placeholder="请输入" 
+                          <el-input prefix-icon="el-icon-search"  v-model="scope.row.warehouseName" readonly placeholder="请选择"
                                     :style='{"width":"100%"}' @click.native="choosePosition(scope.$index)">
                           </el-input>
                         </template>
                       </el-table-column>
                       <el-table-column prop="locationName" label="仓位" width="150">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.locationName"  :style='{"width":"100%"}'>
+                          <el-input prefix-icon="el-icon-search" @click.native="chooseStocklocation(scope.$index,scope.row.warehouseId)"
+                                    v-model="scope.row.locationName" readonly :style='{"width":"100%"}' placeholder="请选择">
                           </el-input>
                         </template>
                       </el-table-column>
-                      <el-table-column prop="frp" label="FRP管" width="150" >
+<!--                      <el-table-column prop="frp" label="FRP管" width="150" >
                         <template slot-scope="scope">
                           <el-input v-model="scope.row.frp" placeholder="请输入"  clearable
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
-                      </el-table-column>
+                      </el-table-column>-->
                       <el-table-column prop="workShopName" label="生产车间" width="150" >
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.workShopName" placeholder="请输入" clearable 
+                          <el-input v-model="scope.row.workShopName" placeholder="请输入" clearable
                                     :style='{"width":"100%"}'>
                           </el-input>
                         </template>
@@ -185,6 +186,13 @@
                      v-if="materialChooseShow" width="1000px">
               <material-choose ref="MaterialChoose" @onChange="dialogMaterialChange"></material-choose>
           </el-dialog>
+
+          <el-dialog title="仓位列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="stockLocationShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     v-if="stockLocationShow" width="1000px">
+            <StockLocationChoose ref="StockLocationChoose" @onChange="dialogStockLocationChange"></StockLocationChoose>
+          </el-dialog>
         </template>
       </el-form>
     </el-row>
@@ -201,10 +209,11 @@
   import BdBoxList from './bdBoxList'
   import PositionChoose from './positionChoose'
   import MaterialChoose from './materialChoose'
+  import StockLocationChoose from './stockLocationChoose'
   import {getDictionaryDataByTypeCode} from '@/api/systemData/dictionary'
 
   export default {
-    components: {BdBoxList, PositionChoose,MaterialChoose},
+    components: {BdBoxList, PositionChoose,MaterialChoose,StockLocationChoose},
     props: [],
     data() {
       return {
@@ -213,8 +222,10 @@
         isDetail: false,
         positionChooseShow: false,
         materialChooseShow: false,
+        stockLocationShow: false,
         rowNum: 0,
         rowIndex: 0,
+        rowStockLocation:0,
         boxNum: '',
         deptName: '发货部门', //frp管变量名称
         columnShow: true,
@@ -548,12 +559,27 @@
           this.dataForm.bizstockmovelineList = [...this.dataForm.bizstockmovelineList, ...checkList]
         }
       },
-      
+
       choosePosition(index) {  //仓库弹框
         this.rowNum = index; //仓库行数
         this.positionChooseShow = true;
         this.$nextTick(() => {
           this.$refs.PositionChoose.initData();
+        })
+      },
+      chooseStocklocation(index,warehouseId) {  //仓位弹框
+        if(!warehouseId){
+          this.$message({
+            message: "请选择仓库!",
+            type: 'error',
+            duration: 2000,
+          })
+          return
+        }
+        this.rowStockLocation = index; //仓库行数
+        this.stockLocationShow = true;
+        this.$nextTick(() => {
+          this.$refs.StockLocationChoose.init(warehouseId);
         })
       },
       returnPositionData(positionData) {//仓库弹框返回值
@@ -642,6 +668,13 @@
           this.dataForm.bizstockmovelineList[i].uomName = material.materialUnit;
           this.materialChooseShow = false;
       },
+      dialogStockLocationChange(rowData){
+        var i = this.rowStockLocation;
+        this.dataForm.bizstockmovelineList[i].locationId = rowData.id;
+        this.dataForm.bizstockmovelineList[i].locationCode = rowData.locationCode;
+        this.dataForm.bizstockmovelineList[i].locationName = rowData.locationName;
+        this.stockLocationShow = false;
+      }
     }
   }
 

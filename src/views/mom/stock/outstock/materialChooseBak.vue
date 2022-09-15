@@ -91,12 +91,10 @@
     mounted() {},
     methods: {
       initData() {
-
         this.listLoading = true;
         let _query = {
           ...this.listQuery,
           ...this.query
-
         };
         request({
           url: `/api/project/stockApi/getMaterialList`,

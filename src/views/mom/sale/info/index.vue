@@ -86,7 +86,9 @@
         </div>
         <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange'>
           <el-table-column prop="salesOrderCode" label="销售订单号" width="0" align="left"/>
+          <el-table-column prop="afterSaleSourceName" label="售后信息来源" width="0" align="left"/>
           <el-table-column prop="afterSaleTypeName" label="售后类型" width="0" align="left"/>
+          <el-table-column prop="customerCalls" label="客户联系电话" width="0" align="left"/>
           <el-table-column prop="afterSaleCause" label="售后原因" width="0" align="left"/>
           <el-table-column prop="materialCode" label="售后产品编码" width="0" align="left"/>
           <el-table-column prop="materialName" label="售后产品名称" width="0" align="left"/>
