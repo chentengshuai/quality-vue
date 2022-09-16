@@ -106,7 +106,8 @@ export default {
       that.isCheckedList = list
       let _query = {
         ...that.listQuery,
-        ...that.query
+        ...that.query,
+        typeStatus: "2"
       };
       debugger
       request({
