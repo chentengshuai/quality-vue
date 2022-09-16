@@ -5,14 +5,20 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="8">
-            <el-form-item label="产品模板名称">
-              <el-input v-model="query.productTemplateName" placeholder="请输入" clearable
+            <el-form-item label="发货编码">
+              <el-input v-model="query.bdDeliveryCode" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="产品模板编码">
-              <el-input v-model="query.productTemplateCode" placeholder="请输入" clearable
+            <el-form-item label="发货名称">
+              <el-input v-model="query.bdDeliveryName" placeholder="请输入" clearable
+                        @keyup.enter.native="search()"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="出库单号">
+              <el-input v-model="query.stockMoveCode" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
@@ -35,19 +41,14 @@
               <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
             </template>
           </el-table-column>
-          <el-table-column prop="productTemplateName" label="产品模板名称" width="0" align="left"/>
-          <el-table-column prop="productTemplateCode" label="产品模板编码" width="0" align="left"/>
-          <el-table-column prop="productCategory" label="产品分类" width="0" align="left">
-            <template slot-scope="scope">
-              {{ scope.row.productCategory | dynamicText(productCategoryOptions) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="productType" label="产品类型" width="0" align="left"/>
-          <el-table-column prop="materialUnit" label="单位" width="0" align="left"/>
-          <el-table-column prop="purchasePrice" label="销售价格" width="0" align="left"/>
-          <el-table-column prop="specification" label="规格" width="0" align="left"/>
-          <el-table-column prop="uomId" label="计量单位" width="0" align="left"/>
-          <el-table-column prop="uomPoId" label="采购计量单位" width="0" align="left"/>
+          <el-table-column prop="bdDeliveryCode" label="发货编码" width="0" align="left"/>
+          <el-table-column prop="bdDeliveryName" label="发货名称" width="0" align="left"/>
+          <el-table-column prop="stockMoveCode" label="出库单号" width="0" align="left"/>
+          <el-table-column prop="originPlaceName" label="始发地" width="0" align="left"/>
+          <el-table-column prop="aimPlaceName" label="目的地" width="0" align="left"/>
+          <el-table-column prop="arrivalDate" label="到货日期" width="0" align="left"/>
+          <el-table-column prop="stockGrossWeight" label="出库单总毛重" width="0" align="left"/>
+          <el-table-column prop="bdDeliveryStatusName" label="发货状态" width="0" align="left"/>
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -118,10 +119,9 @@
         let _query = {
           ...this.query,
           ...this.listQuery,
-          productCategory:2,
         };
         request({
-          url: `/api/project/BizQualityInspection/getProductTemplateList`,
+          url: `/api/project/BizQualityInspection/getDeliveryList`,
           method: 'post',
           data: _query
         }).then(res => {
