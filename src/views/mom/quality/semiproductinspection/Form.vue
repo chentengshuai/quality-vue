@@ -470,7 +470,9 @@ export default {
       let _dataAll = dataAll
       for (let i = 0; i < _dataAll.bizqualityinspectiondetailList.length; i++) {
         var _list = _dataAll.bizqualityinspectiondetailList[i];
+        _list.detailResult = Number(_list.detailResult)
       }
+      _dataAll.result = Number(_dataAll.result)
       this.dataForm = _dataAll
     },
     chooseMaterial() {
