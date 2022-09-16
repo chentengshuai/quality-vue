@@ -93,6 +93,7 @@
     "vue": "2.6.10",
     "vue-count-to": "1.0.13",
     "vue-drag-resize": "^1.4.2",
+    "vue-easy-print": "^0.0.8",
     "vue-esign": "^1.0.5",
     "vue-grid-layout": "2.3.12-legacy",
     "vue-i18n": "7.3.2",
