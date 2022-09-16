@@ -34,15 +34,15 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item  label="始发地"   prop="originPlaceCode" >
-                    <JNPF-Address    v-model="dataForm.originPlaceCode" placeholder="请选择"  clearable  level=0 filterable >
+                <el-form-item  label="始发地"   prop="originPlaceCodeList" >
+                    <JNPF-Address    v-model="dataForm.originPlaceCodeList" placeholder="请选择"  clearable  level=0 filterable >
                     </JNPF-Address>
                 </el-form-item>
             </el-col>
   
             <el-col :span="12" >
-                <el-form-item  label="目的地"   prop="aimPlaceCode" >
-                    <JNPF-Address    v-model="dataForm.aimPlaceCode" placeholder="请选择"  clearable level=0  filterable >
+                <el-form-item  label="目的地"   prop="aimPlaceCodeList" >
+                    <JNPF-Address    v-model="dataForm.aimPlaceCodeList" placeholder="请选择"  clearable level=0  filterable >
                     </JNPF-Address>
                 </el-form-item>
             </el-col>
@@ -54,13 +54,6 @@
                 </el-date-picker>
                 </el-form-item>
             </el-col>
-            <!-- <el-col :span="24" >
-                <el-form-item  label="删除人姓名"   prop="deleterName" >
-                    <JNPF-Address    v-model="dataForm.deleterName" placeholder="请选择"  clearable  level=2 >
-
-                </JNPF-Address>
-                </el-form-item>
-            </el-col> -->
     <el-col :span="24"  >
     <el-form-item label-width="0">
             <div class="JNPF-common-title">
@@ -159,12 +152,13 @@
                             stockMoveId : '',
                             stockMoveCode : '',
                             stockGrossWeight : '',
-                            originPlaceCode : [],
+                            originPlaceCodeList : [],
+                            originPlaceCode : '',
                             originPlaceName : '',
-                            aimPlaceCode : [],
+                            aimPlaceCodeList : [],
+                            aimPlaceCode : '',
                             aimPlaceName : '',
                             arrivalDate : '',
-                            deleterName : [],
                         dmdeliverymanagelineList:[],
             },
             rules:
@@ -183,14 +177,14 @@
                                     trigger: 'blur'
                                 },
                         ],
-                            originPlaceCode: [
+                            originPlaceCodeList: [
                                 {
                                     required: true,
                                     message: '请至少选择一个',
                                     trigger: 'change'
                                 },
                         ],
-                            aimPlaceCode: [
+                            aimPlaceCodeList: [
                                 {
                                     required: true,
                                     message: '请至少选择一个',
@@ -237,7 +231,31 @@
             dataFormSubmit() {
                 this.$refs['elForm'].validate((valid) => {
                     if (valid) {
-                            this.request()
+                           let stockGrossWeight=this.dataForm.stockGrossWeight; //出库单总毛重
+                           if(!stockGrossWeight){
+                            stockGrossWeight=0;
+                           }else{
+                            stockGrossWeight=Number(stockGrossWeight);
+                           }
+                           let vehicleLoadSum=0; //车辆最大载重之和
+                           this.dataForm.dmdeliverymanagelineList.forEach((value,index)=>{
+                                let vehicleLoad=value.vehicleLoad;
+                                if(!vehicleLoad){
+                                    vehicleLoad=0;
+                                }
+                                vehicleLoadSum+= Number(value.vehicleLoad);
+                           });
+                           if(stockGrossWeight>vehicleLoadSum){ //超重了
+                                this.$message({
+                                    message:"出库单总毛重超过了车辆最大载重之和,请修改!",
+                                    type:'warning',
+                                    duration: 2000,
+                                    onClose:()=>{
+                                    }
+                                });
+                                return false;
+                           }
+                           this.request();
                     }
                 })
             },
@@ -295,22 +313,22 @@
                 },
             dataList(){
                 var _data = JSON.parse(JSON.stringify(this.dataForm));
-                        _data.originPlaceCode = JSON.stringify(_data.originPlaceCode)
-                        _data.aimPlaceCode = JSON.stringify(_data.aimPlaceCode)
-                        _data.deleterName = JSON.stringify(_data.deleterName)
-                    for(let i=0;i<_data.dmdeliverymanagelineList.length;i++){
-                        var _list = _data.dmdeliverymanagelineList[i];
-                    }
+                if(_data.originPlaceCodeList.length>0){
+                    _data.originPlaceCode = _data.originPlaceCodeList[0]
+                }
+                if(_data.aimPlaceCodeList.length>0){
+                    _data.aimPlaceCode = _data.aimPlaceCodeList[0]
+                }
+                for(let i=0;i<_data.dmdeliverymanagelineList.length;i++){
+                    var _list = _data.dmdeliverymanagelineList[i];
+                }
                 return _data;
             },
             dataInfo(dataAll){
                 let _dataAll =dataAll
-                        _dataAll.originPlaceCode = JSON.parse( _dataAll.originPlaceCode)
-                        _dataAll.aimPlaceCode = JSON.parse( _dataAll.aimPlaceCode)
-                        _dataAll.deleterName = JSON.parse( _dataAll.deleterName)
-                    for(let i=0;i<_dataAll.dmdeliverymanagelineList.length;i++){
-                        var _list = _dataAll.dmdeliverymanagelineList[i];
-                    }
+                for(let i=0;i<_dataAll.dmdeliverymanagelineList.length;i++){
+                    var _list = _dataAll.dmdeliverymanagelineList[i];
+                }
                 this.dataForm = _dataAll
             }, selectOutStockMoveList() {  //选择出库单
                 this.outStockMoveListShow = true;
@@ -329,15 +347,43 @@
                     this.$refs.vehicleList.initData();
                 });
             },processVehicle(data){  //车辆信息数据回写
-                let getSeletedRowData=this.dataForm.dmdeliverymanagelineList[this.clickVehicleRow];
-                getSeletedRowData.vehicelId=data.id  //车辆信息id
-                getSeletedRowData.driverAccount=data.driverAccount;//驾驶人
-                getSeletedRowData.driverName= data.driverName;//驾驶人名称
-                getSeletedRowData.licenseNumber= data.licenseNumber;// 车牌号 
-                getSeletedRowData.vehicelBrand= data.vehicelBrand;//车辆品牌
-                getSeletedRowData.vehicleProvinceName=data.vehicleProvinceName;//车辆所属省份
-                getSeletedRowData.vehicleLoad=data.vehicleLoad;  //车辆最大载重
-                getSeletedRowData.vehiclePicture=data.vehiclePicture;  //车辆图片
+                let returnId=data.id;
+                let boo = this.dataForm.dmdeliverymanagelineList.some(o => o.vehicelId == data.id); //判断是否存在
+                if(!boo){ 
+                    let getSeletedRowData=this.dataForm.dmdeliverymanagelineList[this.clickVehicleRow];
+                    getSeletedRowData.vehicelId=data.id  //车辆信息id
+                    getSeletedRowData.driverAccount=data.driverAccount;//驾驶人
+                    getSeletedRowData.driverName= data.driverName;//驾驶人名称
+                    getSeletedRowData.licenseNumber= data.licenseNumber;// 车牌号 
+                    getSeletedRowData.vehicelBrand= data.vehicelBrand;//车辆品牌
+                    getSeletedRowData.vehicleProvinceName=data.vehicleProvinceName;//车辆所属省份
+                    getSeletedRowData.vehicleLoad=data.vehicleLoad;  //车辆最大载重
+                    getSeletedRowData.vehiclePicture=data.vehiclePicture;  //车辆图片
+                }else{
+                    //列表中已存在
+                    this.$confirm('您选择的车辆信息已存在列表是否替换更新?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.dataForm.dmdeliverymanagelineList.forEach((value,index)=>{
+                            if(value.vehicelId==returnId){ //数据更新
+                                let getRowData=this.dataForm.dmdeliverymanagelineList[index];
+                                console.log(getRowData);
+                                getRowData.vehicelId=data.id  //车辆信息id
+                                getRowData.driverAccount=data.driverAccount;//驾驶人
+                                getRowData.driverName= data.driverName;//驾驶人名称
+                                getRowData.licenseNumber= data.licenseNumber;// 车牌号 
+                                getRowData.vehicelBrand= data.vehicelBrand;//车辆品牌
+                                getRowData.vehicleProvinceName=data.vehicleProvinceName;//车辆所属省份
+                                getRowData.vehicleLoad=data.vehicleLoad;  //车辆最大载重
+                                getRowData.vehiclePicture=data.vehiclePicture;  //车辆图片
+                            }
+                        });
+                    }).catch(() => { 
+
+                    });
+                }
                 this.vehicleListShow = false;
             }
 
