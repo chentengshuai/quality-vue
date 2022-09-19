@@ -7,9 +7,9 @@
 <script>
 
 import echarts from 'echarts'
-import resize from '../mixins/resize'
+import resize from '@/views/extend/graphDemo/mixins/resize'
 export default {
-  name: 'extend-graphDemo-echartsLineBar',
+  name: 'materialInspectionReport',
   mixins: [resize],
   data() {
     return {
