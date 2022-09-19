@@ -39,7 +39,7 @@
           <el-col>
             <el-card class="mb-20" shadow ="always">
             <div class="JNPF-common-title">
-              <h2 style="padding-left: 24px;">>>检测单列表<<</h2>
+              <h2 style="padding-left: 24px;">>>检测单列表&lt;&lt;</h2>
             </div>
             <el-table
               :data="dataForm.inspectionList"
@@ -73,6 +73,13 @@
               <el-table-column prop="handleCommentsName" label="处理意见" width="0" align="left"/>
               <el-table-column prop="handlerName" label="处理人" width="0" align="left"/>
               <el-table-column prop="handleTime" label="处理时间" width="0" align="left"/>
+              <el-table-column label="操作" fixed="right"
+                                width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="examineHandle(scope.row.id,scope.row.inspectionType)">查看
+                  </el-button>
+                </template>
+              </el-table-column>
 
               <!-- <el-table-column prop="maxValues" label="最大值">
                 <template slot-scope="scope">
@@ -97,7 +104,7 @@
 
             <el-col>
               <div class="JNPF-common-title">
-                <h2 style="padding-left: 24px;">>>半成品检测列表<<</h2>
+                <h2 style="padding-left: 24px;">>>半成品检测列表&lt;&lt;</h2>
               </div>
               <el-table
                 :data="dataForm.semiProductInspectionList"
@@ -130,12 +137,19 @@
                 <el-table-column prop="handleCommentsName" label="处理意见" width="0" align="left"/>
                 <el-table-column prop="handlerName" label="处理人" width="0" align="left"/>
                 <el-table-column prop="handleTime" label="处理时间" width="0" align="left"/>
+                <el-table-column label="操作" fixed="right"
+                                 width="100">
+                  <template slot-scope="scope">
+                    <el-button type="text" @click="examineHandle(scope.row.id,scope.row.inspectionType)">查看
+                    </el-button>
+                  </template>
+                </el-table-column>
               </el-table>
             </el-col>
 
             <el-col>
               <div class="JNPF-common-title">
-                <h2 style="padding-left: 24px;">>>物料检测列表<<</h2>
+                <h2 style="padding-left: 24px;">>>物料检测列表&lt;&lt;</h2>
               </div>
               <el-table
                 :data="dataForm.materialInspectionList"
@@ -178,7 +192,7 @@
 
             <el-col>
               <div class="JNPF-common-title">
-                <h2 style="padding-left: 24px;">>>设备检测列表<<</h2>
+                <h2 style="padding-left: 24px;">>>设备检测列表&lt;&lt;</h2>
               </div>
               <el-table
                 :data="dataForm.equipmentInspectionList"
@@ -288,6 +302,9 @@ export default {
       })
     },
     rowClick(row, preRow){
+        if(preRow && preRow.label=='操作'){
+          return;
+        }
         //查询工序，设置查询时间区间，用于追溯检测单
         //this.tracebackIntervalTime
         let endTime = row.creationTime;

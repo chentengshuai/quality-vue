@@ -20,18 +20,11 @@
                 {{ dataForm.materialName }}
               </el-form-item>
             </el-col>
-            
             <el-col :span="8">
-              <el-form-item label="关联信息1" prop="relationName">
+              <el-form-item label="采购订单号" prop="relationName">
                 {{ dataForm.relationName }}
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="关联信息2" prop="relationName">
-                {{ dataForm.warehouseName }}
-              </el-form-item>
-            </el-col>
-
             <el-col :span="8">
               <el-form-item label="检验基准" prop="standardName">
                 {{ dataForm.standardName }}
@@ -203,9 +196,8 @@ export default {
   mounted() {
   },
   methods: {
-    init(id,inspectionType) {
+    init(id) {
       this.dataForm.id = id || 0;
-      this.dataForm.inspectionType = inspectionType;
       this.visible = true;
       this.$nextTick(() => {
         this.$refs['elForm'].resetFields();
