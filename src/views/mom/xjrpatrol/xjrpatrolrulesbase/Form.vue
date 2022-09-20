@@ -7,7 +7,7 @@
 <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right" >
     <template v-if="!loading">
             <el-col :span="24" >
-                <el-form-item  label="巡检规则编码"   prop="patrolRulesCode" >
+                <el-form-item  label="检验规则编码"   prop="patrolRulesCode" >
                     <el-input    v-model="dataForm.patrolRulesCode" placeholder="自动生成"  :disabled="true"   :style='{"width":"100%"}'>
 
                 </el-input>
@@ -21,7 +21,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="24" >
-                <el-form-item  label="巡检单位"   prop="patrolUnit" >
+                <el-form-item  label="检验单位"   prop="patrolUnit" >
                     <el-select    v-model="dataForm.patrolUnit" placeholder="请选择"  clearable  @change="handlerSelectpatrol_unit"    :style='{"width":"100%"}' :multiple="false" >
                             <el-option v-for="(item, index) in patrolUnitOptions" :key="index" :label="item.fullName" :value="item.enCode" :disabled="item.disabled" ></el-option>
                 </el-select>
@@ -37,11 +37,11 @@
     <el-col :span="24"   v-show="optionRulestime">
     <el-form-item label-width="0" >
             <div class="JNPF-common-title">
-                <h2>巡检时间</h2>
+                <h2>检验时间</h2>
             </div>
     <el-table :data="dataForm.xjrpatrolrulestimeList" size='mini' >
         <el-table-column type="index" width="50" label="序号" align="center" />
-        <el-table-column prop="patrolRulesTimelist"  align="center"  label="巡检开始时间">
+        <el-table-column prop="patrolRulesTimelist"  align="center"  label="检验开始时间">
             <template slot-scope="scope">
                 <el-time-picker
                     is-range
@@ -71,7 +71,7 @@
     <el-col :span="24"  >
     <el-form-item label-width="0">
             <div class="JNPF-common-title">
-                <h2>巡检内容</h2>
+                <h2>检验内容</h2>
             </div>
     <el-table :data="dataForm.xjrpatrolrulescontentList" size='mini'>
         <el-table-column type="index" width="50" label="序号" align="center" />
@@ -218,7 +218,7 @@
                             method: 'get'
                         }).then(res => {
                             this.dataInfo(res.data);
-                            this.rulesTimeTableChange();//根据巡检单位切换巡检时间tabel
+                            this.rulesTimeTableChange();//根据检验单位切换检验时间tabel
                             this.loading = false
                         })
                     }
@@ -322,9 +322,9 @@
                     }
                 this.dataForm = _dataAll
             },handlerSelectpatrol_unit(val) {
-                this.dataForm.xjrpatrolrulestimeList=[];//置空巡检时间
+                this.dataForm.xjrpatrolrulestimeList=[];//置空检验时间
                 this.rulesTimeTableChange();
-            }, rulesTimeTableChange(){ //巡检时间列表根据巡检单位进行隐藏显示切换
+            }, rulesTimeTableChange(){ //检验时间列表根据检验单位进行隐藏显示切换
                 let patrolUnit=this.dataForm.patrolUnit;
                 if(patrolUnit=="DAY"){
                     this.optionRulestime=true;
@@ -360,7 +360,7 @@
                 }).then(res => {
                     getSeletedRowData.materialStandardIdOptions=res.data;
                 });
-            }, viewMaterialStandardList(row) {  //查看巡检内容
+            }, viewMaterialStandardList(row) {  //查看检验内容
                 let materialStandardId=row.materialStandardId;
                 if(materialStandardId){
                     this.patrolStandardListShow = true;

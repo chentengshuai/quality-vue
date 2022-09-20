@@ -7,25 +7,25 @@
 <el-form ref="elForm" :model="dataForm" :rules="rules" size="small" label-width="100px" label-position="right" >
     <template v-if="!loading">
             <el-col :span="12" >
-                <el-form-item  label="巡检计划编码"   prop="patrolPlanCode" >
+                <el-form-item  label="检验计划编码"   prop="patrolPlanCode" >
                     <el-input    v-model="dataForm.patrolPlanCode" :disabled="true"  :style='{"width":"100%"}'>
                 </el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item  label="巡检规则编码"   prop="patrolRulesCode" >
+                <el-form-item  label="检验规则编码"   prop="patrolRulesCode" >
                     <el-input    v-model="dataForm.patrolRulesCode" :disabled="true"  :style='{"width":"100%"}'>
                 </el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item  label="巡检规则名称"   prop="patrolRulesName" >
+                <el-form-item  label="检验规则名称"   prop="patrolRulesName" >
                     <el-input    v-model="dataForm.patrolRulesName"  :disabled="true" :style='{"width":"100%"}'>
                 </el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item  label="巡检单位"   prop="patrolUnit" >
+                <el-form-item  label="检验单位"   prop="patrolUnit" >
                     <el-select    v-model="dataForm.patrolUnit" :style='{"width":"100%"}' :disabled="true" :multiple="false" >
                         <el-option v-for="(item, index) in patrolUnitOptions" :key="index" :label="item.fullName" :value="item.enCode" :disabled="item.disabled" ></el-option>
                     </el-select>
@@ -53,14 +53,14 @@
             </el-col>
       
             <el-col :span="12" >
-                <el-form-item  label="巡检计划状态"   prop="patrolPlanStatus" >
+                <el-form-item  label="检验计划状态"   prop="patrolPlanStatus" >
                     <el-select    v-model="dataForm.patrolPlanStatus" :disabled="true"  :style='{"width":"100%"}' :multiple="false" >
                         <el-option v-for="(item, index) in patrolPlanStatusOptions" :key="index" :label="item.fullName" :value="item.enCode" :disabled="item.disabled" ></el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item  label="巡检记录时间"   prop="patrolRecordTime" >
+                <el-form-item  label="检验记录时间"   prop="patrolRecordTime" >
                     <el-input    v-model="dataForm.patrolRecordTime" :disabled="true"  :style='{"width":"100%"}'>
                 </el-input>
                 </el-form-item>
@@ -68,7 +68,7 @@
     <el-col :span="24"  >
     <el-form-item label-width="0">
             <div class="JNPF-common-title">
-                <h2>巡检计划内容</h2>
+                <h2>检验计划内容</h2>
             </div>
     <el-table :data="dataForm.xjrpatrolplancontentList" size='mini'>
         <el-table-column type="index" width="50" label="序号" align="center" />
@@ -96,6 +96,13 @@
                     <el-input   v-model="scope.row.materialStandardName" :disabled="true"   :style='{"width":"100%"}'>
                 </el-input>
             </template>
+        </el-table-column>
+        <el-table-column prop="patrolEquipmentResult" label="检验结果">
+                <template slot-scope="scope">
+                    <el-select   v-model="scope.row.patrolEquipmentResult" placeholder=""    :style='{"width":"100%"}' :multiple="false" :disabled="true">
+                            <el-option v-for="(item, index) in patrolResultOptions" :key="index" :label="item.fullName" :value="item.enCode"  :disabled="item.disabled"></el-option>
+                    </el-select>
+                </template>
         </el-table-column>
         <el-table-column  width="100" label="设备检测内容">
             <template slot-scope="scope">
@@ -160,8 +167,9 @@
             rules:
             {
             },
-                        patrolUnitOptions:[],
-                        patrolPlanStatusOptions:[],
+            patrolUnitOptions:[],
+            patrolPlanStatusOptions:[],
+            patrolResultOptions:[],
 
         }
         },
@@ -170,6 +178,7 @@
         created() {
                     this.getpatrolUnitOptions();
                     this.getpatrolPlanStatusOptions();
+                    this.getpatrolResultOptions();
         },
         mounted() {},
         methods: {
@@ -181,6 +190,10 @@
                     getpatrolPlanStatusOptions() {
                         getDictionaryDataSelector('336761711560230149').then(res => {
                             this.patrolPlanStatusOptions = res.data.list
+                        })
+                    }, getpatrolResultOptions() {
+                        getDictionaryDataSelector('341902226291164421').then(res => {
+                            this.patrolResultOptions = res.data.list
                         })
                     },
             init(id, isDetail) {
@@ -272,7 +285,7 @@
                         var _list = _dataAll.xjrpatrolplancontentList[i];
                     }
                 this.dataForm = _dataAll
-            },viewPatrolplanDeviceContentList(row) {  //查看巡检内容
+            },viewPatrolplanDeviceContentList(row) {  //查看检验内容
                 let contentId=row.id;
                 if(contentId){
                     this.patrolplanDeviceContentViewShow = true;

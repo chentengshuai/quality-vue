@@ -8,7 +8,7 @@
           <el-table-column prop="unit" label="单位" width="0" align="left" />
           <el-table-column prop="inspectionMethod" label="检查方法" width="0" align="left" />
           <el-table-column prop="inspectionFrequency" label="检查频率" width="0" align="left" />
-          <el-table-column prop="patrolRecordContent" label="巡检记录结果" width="0" align="left" />
+          <el-table-column prop="patrolRecordContent" label="检验记录结果" width="0" align="left" />
         </el-table>
       </div>
       <!-- <span slot="footer" class="dialog-footer" style="background:#ffffff">

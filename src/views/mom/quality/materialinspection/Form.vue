@@ -101,7 +101,14 @@
                     </el-date-picker>
                 </el-form-item>
             </el-col>
-            
+
+           <el-col :span="8" >
+                <el-form-item  label="供应商"   prop="partnerName" >
+                    <el-input    v-model="dataForm.partnerName" placeholder="请输入"  clearable  readonly  :style='{"width":"100%"}'
+                                    @click.native="choosePartner()">
+                    </el-input>
+                </el-form-item>
+            </el-col>
             <el-col :span="24" >
                 <el-form-item  label="备注"   prop="remark" >
                     <el-input    v-model="dataForm.remark" placeholder="请输入"  clearable  :style='{"width":"100%"}'>
@@ -212,6 +219,13 @@
                      v-if="materialChooseShow" width="1000px">
                 <material-choose ref="MaterialChoose" @onChange="dialogMaterialChange"></material-choose>
             </el-dialog>
+
+            <el-dialog title="供应商列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="partnerChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     v-if="partnerChooseShow"  width="1000px">
+                    <partner-choose ref="PartnerChoose" @onChange="dialogPartnerChange"></partner-choose>
+            </el-dialog>
     </template>
 </el-form>
 </el-row>
@@ -228,8 +242,12 @@
     import { getStandardOptions } from '@/api/systemData/dataTeam'
     import MaterialChoose from './materialChoose'
 
+    import PartnerChoose from './partnerChoose'
+
+
+
     export default {
-        components: {MaterialChoose},
+        components: {MaterialChoose,PartnerChoose},
         props: [],
         data() {
             return {
@@ -237,6 +255,7 @@
                 loading: false,
                 isDetail: false,
                 materialChooseShow: false,
+                partnerChooseShow: false,
             dataForm: {
                             materialId : '',
                             materialCode : '',
@@ -258,6 +277,8 @@
                             standardId : '',
                             standardName : '',
                             remark : '',
+                            partnerName:'',
+                            bdPartnerId:'',
                         bizqualityinspectiondetailList:[],
             },
             rules:
@@ -268,7 +289,7 @@
                         message: '请填写',
                         trigger: 'click'
                     },
-                ],
+                ], 
                 materialNumber: [
                     {
                         required: true,
@@ -322,6 +343,12 @@
                     {
                         required: true,
                         message: '请选择',
+                        trigger: 'click'
+                    },
+                ],partnerName: [
+                    {
+                        required: true,
+                        message: '请填写',
                         trigger: 'click'
                     },
                 ],
@@ -575,7 +602,19 @@
                 }else{
                     row.badPercent = row.sampleNumber==0?0:(row.badNumber / row.sampleNumber).toFixed(4);
                 }
-            }
+            },
+            choosePartner() {
+                this.partnerChooseShow = true;
+                this.$nextTick(() => { 
+                    this.$refs.PartnerChoose.initData();
+                });
+            },
+            dialogPartnerChange(partner) {
+                console.log(partner); 
+                this.dataForm.partnerName = partner.partnerName;
+                this.dataForm.bdPartnerId = partner.id;
+                this.partnerChooseShow = false;
+            },
 
         },
     }
