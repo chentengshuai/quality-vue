@@ -70,8 +70,6 @@
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
-            <el-button type="primary" icon="el-icon-plus" @click="addOrUpdateHandle()">新增
-            </el-button>
           </div>
           <div class="JNPF-common-head-right">
             <el-tooltip effect="dark" content="刷新" placement="top">
@@ -100,11 +98,6 @@
               <el-button type="text"
                          @click="examineHandle(scope.row.id)">查看
               </el-button>
-              <el-button type="text"
-                         @click="addOrUpdateHandle(scope.row.id)">编辑
-              </el-button>
-              <el-button type="text" class="JNPF-table-delBtn" @click="handleDel(scope.row.id)">删除
-              </el-button>
             </template>
           </el-table-column>
         </JNPF-table>
@@ -113,21 +106,17 @@
       </div>
     </div>
     <ShowForm v-if="showFormVisible" ref="ShowForm"/>
-    <JNPF-Form v-if="formVisible" ref="JNPFForm" @refresh="refresh"/>
-    <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download"/>
   </div>
 </template>
 
 <script>
 import request from '@/utils/request'
 import {getDictionaryDataSelector} from '@/api/systemData/dictionary'
-import JNPFForm from './Form'
 import ShowForm from './ShowForm'
-import ExportBox from './ExportBox'
 import {previewDataInterface} from '@/api/systemData/dataInterface'
 
 export default {
-  components: {JNPFForm, ExportBox, ShowForm},
+  components: { ShowForm },
   data() {
     return {
       showAll: false,
@@ -154,7 +143,6 @@ export default {
       },
       showFormVisible: false,
       formVisible: false,
-      exportBoxVisible: false,
       columnList: [
         {prop: 'materialName', label: '物料名称'},
         {prop: 'materialNumber', label: '货品数量'},
@@ -223,31 +211,8 @@ export default {
       }).catch(() => {
       });
     },
-    addOrUpdateHandle(id, isDetail) {
-      this.formVisible = true
-      this.$nextTick(() => {
-        this.$refs.JNPFForm.init(id, isDetail)
-      })
-    },
-    exportData() {
-      this.exportBoxVisible = true
-      this.$nextTick(() => {
-        this.$refs.ExportBox.init(this.columnList)
-      })
-    },
-    download(data) {
-      let query = {...data, ...this.listQuery, ...this.query}
-      request({
-        url: `/api/project/BizQualityInspection/Actions/Export`,
-        method: 'GET',
-        data: query
-      }).then(res => {
-        if (!res.data.url) return
-        window.location.href = this.define.comUrl + res.data.url
-        this.$refs.ExportBox.visible = false
-        this.exportBoxVisible = false
-      })
-    },
+    
+    
     search() {
       this.listQuery = {
         currentPage: 1,
