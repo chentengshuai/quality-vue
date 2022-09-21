@@ -104,6 +104,9 @@ export default {
         }
         if (item.type == 1) {
           this.visible = true
+        } else if (item.type == 3) {
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/abarbeitungShow?id=${body.id}`)
         } else {
           let body = this.info.bodyText ? JSON.parse(this.info.bodyText) : {}
           let url = 'flowLaunch'

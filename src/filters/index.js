@@ -184,6 +184,28 @@ export function dynamicTextByCode(value, options) {
   return item.fullName
 }
 
+// 数据字典代码生成器数据匹配 根据id匹配数据
+export function dynamicTextById(value, options) {
+  if (!value) return ''
+  if (Array.isArray(value)) {
+    if (!options || !Array.isArray(options)) return value.join()
+    let textList = []
+    for (let i = 0; i < value.length; i++) {
+      let item = options.filter(o => o.id == value[i])[0]
+      if (!item || !item.fullName) {
+        textList.push(value[i])
+      } else {
+        textList.push(item.fullName)
+      }
+    }
+    return textList.join()
+  }
+  if (!options || !Array.isArray(options)) return value
+  let item = options.filter(o => o.id == value)[0]
+  if (!item || !item.fullName) return value
+  return item.fullName
+}
+
 export function dynamicTreeText(value, options) {
   if (!value) return ''
 

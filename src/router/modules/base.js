@@ -53,6 +53,17 @@ const baseRouter = [{
       zhTitle: '个人信息',
       icon: 'icon-ym icon-ym-user',
     }
-  }
+  },
+  {
+    path: '/abarbeitungShow',
+    component: (resolve) => require(['@/views/mom/sale/abarbeitungShow'], resolve),
+    name: 'abarbeitungShow',
+    meta: {
+      title: 'abarbeitungShow',
+      affix: false,
+      zhTitle: '质量整改',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
+  },
 ]
 export default baseRouter
