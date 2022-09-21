@@ -5,20 +5,14 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="8">
-            <el-form-item label="发货编码">
-              <el-input v-model="query.bdDeliveryCode" placeholder="请输入" clearable
+            <el-form-item label="供应商编码">
+              <el-input v-model="query.partnerCode" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="发货名称">
-              <el-input v-model="query.bdDeliveryName" placeholder="请输入" clearable
-                        @keyup.enter.native="search()"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="出库单号">
-              <el-input v-model="query.stockMoveCode" placeholder="请输入" clearable
+            <el-form-item label="供应商名称">
+              <el-input v-model="query.partnerName" placeholder="请输入" clearable
                         @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
@@ -34,21 +28,17 @@
         </el-form>
       </el-row>
       <div class="JNPF-common-layout-main JNPF-flex-main">
-        <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange'
+        <JNPF-table v-loading="listLoading" :data="list"
                     @row-click="rowClick">
           <el-table-column width="35">
             <template slot-scope="scope">
               <el-radio :label="scope.row.id" v-model="checked">&nbsp;</el-radio>
             </template>
           </el-table-column>
-          <el-table-column prop="bdDeliveryCode" label="发货编码" width="0" align="left"/>
-          <el-table-column prop="bdDeliveryName" label="发货名称" width="0" align="left"/>
-          <el-table-column prop="stockMoveCode" label="出库单号" width="0" align="left"/>
-          <el-table-column prop="originPlaceName" label="始发地" width="0" align="left"/>
-          <el-table-column prop="aimPlaceName" label="目的地" width="0" align="left"/>
-          <el-table-column prop="arrivalDate" label="到货日期" width="0" align="left"/>
-          <el-table-column prop="stockGrossWeight" label="出库单总毛重" width="0" align="left"/>
-          <el-table-column prop="bdDeliveryStatusName" label="发货状态" width="0" align="left"/>
+            <el-table-column prop="partnerCode" label="供应商编码" width="0" align="left"/>
+            <el-table-column prop="partnerName" label="供应商名称" width="0" align="left"/>
+            <el-table-column prop="partnerShortName" label="供应商简称" width="0" align="left"/>
+            <el-table-column prop="taxCode" label="统一社会信用代码" width="0" align="left"/>
         </JNPF-table>
         <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
                     @pagination="initData"/>
@@ -72,8 +62,8 @@
       return {
         showAll: false,
         query: {
-          productTemplateName: undefined,
-          productTemplateCode: undefined,
+          partnerCode: undefined,
+          partnerName: undefined,
         },
         treeProps: {
           children: 'children',
@@ -92,11 +82,8 @@
           sort: "desc",
           sidx: "",
         },
-        productCategoryOptions: [{"fullName": "半成品", "id": "2"}, {
-          "fullName": "成品",
-          "id": "3"
-        }],
-        productCategoryProps: {"label": "fullName", "value": "id"},
+        formVisible: false,
+        exportBoxVisible: false,
       }
     },
     computed: {},
@@ -108,20 +95,16 @@
       this.initData()
     },
     methods: {
-      sortChange({column, prop, order}) {
-        this.listQuery.sort = order == 'ascending' ? 'asc' : 'desc'
-        this.listQuery.sidx = !order ? '' : prop
-        this.initData()
-      },
       initData() {
 
         this.listLoading = true;
         let _query = {
           ...this.query,
           ...this.listQuery,
+          type: 1,
         };
         request({
-          url: `/api/project/BizQualityInspection/getDeliveryList`,
+          url: `/api/project/Partner/getPartnerChooseList`,
           method: 'post',
           data: _query
         }).then(res => {
@@ -160,11 +143,7 @@
         this.$emit("onChange", row);
       },
       select() {
-        //console.warn("this:"+this);
-        //this.innerValue = this.checkedTxt
         this.$emit('onChange', this.checked)
-        //this.$emit('change', this.checked, this.checkedRow)
-        //this.visible = false
       },
     }
   }

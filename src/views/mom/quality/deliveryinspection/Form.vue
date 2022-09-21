@@ -228,7 +228,7 @@
                      v-if="materialChooseShow" width="1000px">
             <material-choose ref="MaterialChoose" @onChange="dialogMaterialChange"></material-choose>
           </el-dialog>
-          <el-dialog title="产品模板列表"
+          <el-dialog title="发货单列表"
                      :close-on-click-modal="false" append-to-body
                      :visible.sync="templateChooseShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
                      v-if="templateChooseShow" width="1000px">
@@ -526,8 +526,8 @@ export default {
     },
     dialogTemplateChange(template) {
       this.dataForm.relationId = template.id;
-      this.dataForm.relationCode = template.productTemplateCode;
-      this.dataForm.relationName = template.productTemplateName;
+      this.dataForm.relationCode = template.bdDeliveryCode;
+      this.dataForm.relationName = template.bdDeliveryName;
       this.templateChooseShow = false;
     },
     changeStandard() {

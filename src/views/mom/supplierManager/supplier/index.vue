@@ -40,7 +40,7 @@
           </el-col>
         </el-form>
       </el-row>
-      <el-row class="JNPF-common-search-box" :gutter="16">
+      <!-- <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
             <el-form-item label="供应商编号">
@@ -54,7 +54,7 @@
             </el-form-item>
           </el-col>
         </el-form>
-      </el-row>
+      </el-row> -->
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <div class="JNPF-common-head">
           <div>
@@ -235,18 +235,7 @@
         }).catch(() => {
         });
       },
-      importFromERP() {
-        request({
-          url: `/api/project/Partner/importSupplierFromERP`,
-          method: 'post',
-          params: {
-            supplierNo: this.supplierNoInput
-          }
-        }).then(res => {
-          this.$message.success("导入成功");
-          this.initData();
-        })
-      },
+
       addOrUpdateHandle(id, isDetail) {
         this.formVisible = true
         this.$nextTick(() => {
@@ -296,6 +285,18 @@
           sidx: "",
         }
         this.initData()
+      },
+      importFromERP() {
+        request({
+          url: `/api/project/Partner/importSupplierFromERP`,
+          method: 'post',
+          params: {
+            supplierNo: this.supplierNoInput
+          }
+        }).then(res => {
+          this.$message.success("导入成功");
+          this.initData();
+        })
       },
       uploadForm() {
         this.importFormVisible = true

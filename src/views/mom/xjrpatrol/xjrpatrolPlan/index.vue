@@ -5,17 +5,17 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-form @submit.native.prevent>
                             <el-col :span="6">
-                                <el-form-item label="巡检计划编码">
+                                <el-form-item label="检验计划编码">
                                         <el-input v-model="query.patrolPlanCode" placeholder="请输入" clearable>  </el-input>
                                 </el-form-item>
                             </el-col>
                         <el-col :span="6">
-                                <el-form-item label="巡检规则编码">
+                                <el-form-item label="检验规则编码">
                                         <el-input v-model="query.patrolRulesCode" placeholder="请输入" clearable>  </el-input>
                                 </el-form-item>
                             </el-col>
                         <el-col :span="6">
-                                <el-form-item label="巡检规则名称">
+                                <el-form-item label="检验规则名称">
                                         <el-input v-model="query.patrolRulesName" placeholder="请输入" clearable>  </el-input>
                                 </el-form-item>
                             </el-col>
@@ -26,7 +26,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-form-item label="巡检单位">
+                                        <el-form-item label="检验单位">
                                                 <el-select v-model="query.patrolUnit" placeholder="请选择"
                                                            clearable>
                                                     <el-option v-for="(item, index) in patrolUnitOptions" :key="index"
@@ -36,7 +36,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-form-item label="巡检计划状态">
+                                        <el-form-item label="检验计划状态">
                                                 <el-select v-model="query.patrolPlanStatus" placeholder="请选择"
                                                            clearable>
                                                     <el-option v-for="(item, index) in patrolPlanStatusOptions" :key="index"
@@ -75,19 +75,19 @@
                     </div>
                 </div> -->
                 <JNPF-table  v-loading="listLoading" :data="list" @sort-change='sortChange' >
-                            <el-table-column prop="patrolPlanCode" label="巡检计划编码" width="0" align="left"/>
-                            <el-table-column prop="patrolRulesCode" label="巡检规则编码" width="0" align="left"/>
-                            <el-table-column prop="patrolRulesName" label="巡检规则名称" width="0" align="left"/>
-                            <el-table-column prop="patrolUnit" label="巡检单位" width="0" align="left"/>
+                            <el-table-column prop="patrolPlanCode" label="检验计划编码" width="0" align="left"/>
+                            <el-table-column prop="patrolRulesCode" label="检验规则编码" width="0" align="left"/>
+                            <el-table-column prop="patrolRulesName" label="检验规则名称" width="0" align="left"/>
+                            <el-table-column prop="patrolUnit" label="检验单位" width="0" align="left"/>
                             <el-table-column prop="patrolPlanStarttime" label="计划开始时间" width="0" align="left"/>
                             <el-table-column prop="patrolPlanEndtime" label="计划结束时间" width="0" align="left"/>
-                            <el-table-column prop="patrolPlanStatusName" label="巡检计划状态" width="0" align="left"/>
+                            <el-table-column prop="patrolPlanStatusName" label="检验计划状态" width="0" align="left"/>
                             <el-table-column prop="patrolPlanHandleusername" label="处理人" width="0" align="left">
                                 <template slot-scope="scope">
                                     {{scope.row.patrolPlanHandleusername}}
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="patrolRecordTime" label="巡检记录时间" width="0" align="left"/>
+                            <el-table-column prop="patrolRecordTime" label="检验记录时间" width="0" align="left"/>
                         <el-table-column label="操作" fixed="right"
                                          width="100" >
                             <template slot-scope="scope">
@@ -149,16 +149,16 @@
                 formVisible: false,
                 exportBoxVisible: false,
                 columnList: [
-                    {prop: 'patrolPlanCode', label: '巡检计划编码'},
-                    {prop: 'patrolRulesCode', label: '巡检规则编码'},
-                    {prop: 'patrolRulesName', label: '巡检规则名称'},
-                    {prop: 'patrolUnit', label: '巡检单位'},
+                    {prop: 'patrolPlanCode', label: '检验计划编码'},
+                    {prop: 'patrolRulesCode', label: '检验规则编码'},
+                    {prop: 'patrolRulesName', label: '检验规则名称'},
+                    {prop: 'patrolUnit', label: '检验单位'},
                     {prop: 'patrolPlanStarttime', label: '计划开始时间'},
                     {prop: 'patrolPlanEndtime', label: '计划结束时间'},
                     {prop: 'patrolPlanHandleusername', label: '处理人名称'},
                     {prop: 'patrolPlanHandleuser', label: '计划处理人id'},
-                    {prop: 'patrolPlanStatus', label: '巡检计划状态'},
-                    {prop: 'patrolRecordTime', label: '巡检记录时间'},
+                    {prop: 'patrolPlanStatus', label: '检验计划状态'},
+                    {prop: 'patrolRecordTime', label: '检验记录时间'},
                 ],
                 patrolUnitOptions:[],
                 patrolUnitProps:{"label":"fullName","value":"id"},

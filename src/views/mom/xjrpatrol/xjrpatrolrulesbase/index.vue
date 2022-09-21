@@ -5,7 +5,7 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-form @submit.native.prevent>
                                                                 <el-col :span="6">
-                                <el-form-item label="巡检规则编码">
+                                <el-form-item label="检验规则编码">
                                         <el-input v-model="query.patrolRulesCode" placeholder="请输入" clearable>  </el-input>
                                 </el-form-item>
                             </el-col>
@@ -15,7 +15,7 @@
                                 </el-form-item>
                             </el-col>
                         <el-col :span="6">
-                                <el-form-item label="巡检单位">
+                                <el-form-item label="检验单位">
                                         <el-select v-model="query.patrolUnit" placeholder="请选择"
                                                    clearable>
                                             <el-option v-for="(item, index) in patrolUnitOptions" :key="index"
@@ -47,11 +47,11 @@
                     </div>
                 </div>
                 <JNPF-table v-loading="listLoading" :data="list" @sort-change='sortChange' >
-                            <el-table-column prop="patrolRulesCode" label="巡检规则编码" width="0" align="left"/>
+                            <el-table-column prop="patrolRulesCode" label="检验规则编码" width="0" align="left"/>
                             <el-table-column prop="patrolRulesName" label="规则名称" width="0" align="left"/>
-                            <el-table-column prop="patrolUnit" label="巡检单位" width="0" align="left"/>
+                            <el-table-column prop="patrolUnit" label="检验单位" width="0" align="left"/>
                             <el-table-column prop="memo" label="备注" width="0" align="left"/>
-                            <el-table-column prop="patrolplanNextTime" label="产生巡检计划时间" width="0" align="left"/>
+                            <el-table-column prop="patrolplanNextTime" label="产生检验计划时间" width="0" align="left"/>
                             <el-table-column prop="patrolRulesStatusName" label="状态" width="0" align="left"/>
 
                         <el-table-column label="操作" fixed="right"
@@ -111,9 +111,9 @@
                 formVisible: false,
                 exportBoxVisible: false,
                 columnList: [
-                    {prop: 'patrolRulesCode', label: '巡检规则编码'},
+                    {prop: 'patrolRulesCode', label: '检验规则编码'},
                     {prop: 'patrolRulesName', label: '规则名称'},
-                    {prop: 'patrolUnit', label: '巡检单位'},
+                    {prop: 'patrolUnit', label: '检验单位'},
                     {prop: 'memo', label: '备注'},
                 ],
                             patrolUnitOptions:[],

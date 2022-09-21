@@ -3,12 +3,14 @@
     <div class="JNPF-common-layout-center">
       <div class="JNPF-common-layout-main JNPF-flex-main">
         <el-table v-loading="listLoading"  :data="list" size='mini' >
-          <el-table-column prop="inspectionItems" label="管理项目" width="0" align="left" />
-          <el-table-column prop="standardValue" label="标准值" width="0" align="left" />
-          <el-table-column prop="unit" label="单位" width="0" align="left" />
-          <el-table-column prop="inspectionMethod" label="检查方法" width="0" align="left" />
-          <el-table-column prop="inspectionFrequency" label="检查频率" width="0" align="left" />
-          <el-table-column prop="patrolRecordContent" label="检验记录结果" width="0" align="left" />
+          <el-table-column prop="bdEquipmentName" label="设备名称" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolRulesCode" label="巡检编码" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolRulesName" label="巡检名称" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolPlanHandleuser" label="巡检人工号" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolPlanHandleusername" label="巡检人" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolPlanStarttime" label="开始时间" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolRecordTime" label="结束时间" width="0" align="left" />
+          <el-table-column prop="xjrPatrolplanBaseInfoVO.patrolPlanStatus" label="巡检状态" width="0" align="left" />
         </el-table>
       </div>
       <!-- <span slot="footer" class="dialog-footer" style="background:#ffffff">
@@ -54,11 +56,16 @@
      
     },
     methods: {
-      initData(contentId) {
+      initData(bdEquipmentId) {
+        debugger;
         this.listLoading = true;
+        let _query = {
+          bdEquipmentId:bdEquipmentId,
+        };
         request({
-          url: `/api/project/XjrPatrolplanBase/patrolplanDeviceContentListByContentId/`+contentId,
-          method: 'get',
+          url: `/api/project/ProductTrace/getEuipmentPatrolContentDetail`,
+          method: 'post',
+          data: _query
         }).then(res => {
           this.list = res.data
           this.listLoading = false

@@ -8,9 +8,9 @@
           <el-table-column prop="unit" label="单位" width="0" align="left" />
           <el-table-column prop="inspectionMethod" label="检查方法" width="0" align="left" />
           <el-table-column prop="inspectionFrequency" label="检查频率" width="0" align="left" />
-          <el-table-column prop="patrolRecordContent" label="巡检记录结果" width="0" align="left" >
+          <el-table-column prop="patrolRecordContent" label="检验记录结果" width="0" align="left" >
             <template slot-scope="scope">
-              <el-input v-if="!isEdit"   v-model="scope.row.patrolRecordContent" placeholder="请填写巡检结果"   :style='{"width":"100%"}' >
+              <el-input v-if="!isEdit"   v-model="scope.row.patrolRecordContent" placeholder="请填写检验结果"   :style='{"width":"100%"}' >
               </el-input>
               <span v-if="isEdit" >{{scope.row.patrolRecordContent}}</span>
             </template>
