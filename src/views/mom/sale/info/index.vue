@@ -118,10 +118,10 @@
                          class="JNPF-table-delBtn" @click="handleDel(scope.row.id)">删除
               </el-button>
               <el-button type="text" v-if="scope.row.status == 5"
-                         @click="abarbeitungHandle(scope.row.id)">重新整改
+                         @click="abarbeitungAnewHandle(scope.row.id)">重新整改
               </el-button>
               <el-button type="text" v-if="scope.row.status == 0 || scope.row.status == 1 || scope.row.status == 4 || scope.row.status == 5"
-                         @click="abarbeitungHandle(scope.row.id)">关闭
+                         @click="closeHandle(scope.row.id)">关闭
               </el-button>
             </template>
           </el-table-column>
@@ -134,7 +134,7 @@
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download"/>
     <el-dialog title="整改" :close-on-click-modal="false" append-to-body :visible.sync="abarbeitungVisible"
       class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
-      <AbarbeitungForm ref="abarbeitungForm" @onChange="abarbeitungChange"></AbarbeitungForm>
+      <AbarbeitungForm ref="abarbeitungForm" @refresh="abarbeitungChange"></AbarbeitungForm>
     </el-dialog>
   </div>
 </template>
@@ -311,6 +311,32 @@ export default {
     },
     abarbeitungChange(){
       this.abarbeitungVisible = false
+      this.reset()
+    },
+    abarbeitungAnewHandle(id){ // 重新整改
+      this.abarbeitungVisible = true
+      this.$nextTick(() => {
+        this.$refs.abarbeitungForm.init(id,'anew')
+      })
+    },
+    closeHandle(id){ // 关闭
+      this.$confirm('此操作将关闭此售后单, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        request({
+          url: `/api/project/Sale_marketing_service_info/closeSaleInfo/${id}`,
+          method: 'PUT'
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            onClose: () => {
+              this.initData()
+            }
+          });
+        })
+      }).catch(() => {
+      });
     },
   }
 }
