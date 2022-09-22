@@ -96,18 +96,32 @@
           <el-table-column prop="clientName" label="客户名称" width="0" align="left"/>
           <el-table-column prop="status" label="状态" width="0" align="left">
             <template slot-scope="scope">
-              {{
-                scope.row.status | dynamicText(statusOptions)
-              }}
+              <el-tag type="danger" v-if="scope.row.status == 0">未处理</el-tag>
+              <el-tag type="success" v-if="scope.row.status == 1">已处理</el-tag>
+              <el-tag type="warning" v-if="scope.row.status == 2">处理中</el-tag>
+              <el-tag type="warning" v-if="scope.row.status == 3">整改中</el-tag>
+              <el-tag type="success" v-if="scope.row.status == 4">整改完成</el-tag>
+              <el-tag type="danger" v-if="scope.row.status == 5">取消整改</el-tag>
+              <el-tag type="info" v-if="scope.row.status == 6">关闭</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right"
-                           width="100">
+                           width="160">
             <template slot-scope="scope">
-              <el-button type="text"
+              <el-button type="text" v-if="scope.row.status == 0 || scope.row.status == 1 || scope.row.status == 2"
+                         @click="abarbeitungHandle(scope.row.id)">整改
+              </el-button>
+              <el-button type="text" v-if="scope.row.status == 0"
                          @click="addOrUpdateHandle(scope.row.id)">编辑
               </el-button>
-              <el-button type="text" class="JNPF-table-delBtn" @click="handleDel(scope.row.id)">删除
+              <el-button v-if="scope.row.status == 0" type="text"
+                         class="JNPF-table-delBtn" @click="handleDel(scope.row.id)">删除
+              </el-button>
+              <el-button type="text" v-if="scope.row.status == 5"
+                         @click="abarbeitungHandle(scope.row.id)">重新整改
+              </el-button>
+              <el-button type="text" v-if="scope.row.status == 0 || scope.row.status == 1 || scope.row.status == 4 || scope.row.status == 5"
+                         @click="abarbeitungHandle(scope.row.id)">关闭
               </el-button>
             </template>
           </el-table-column>
@@ -118,6 +132,10 @@
     </div>
     <JNPF-Form v-if="formVisible" ref="JNPFForm" @refresh="refresh"/>
     <ExportBox v-if="exportBoxVisible" ref="ExportBox" @download="download"/>
+    <el-dialog title="整改" :close-on-click-modal="false" append-to-body :visible.sync="abarbeitungVisible"
+      class="JNPF-dialog JNPF-dialog_center" lock-scroll width="600px">
+      <AbarbeitungForm ref="abarbeitungForm" @onChange="abarbeitungChange"></AbarbeitungForm>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,10 +144,11 @@ import request from '@/utils/request'
 import {getDictionaryDataByTypeCode, getDictionaryDataSelector} from '@/api/systemData/dictionary'
 import JNPFForm from './Form'
 import ExportBox from './ExportBox'
+import AbarbeitungForm from './AbarbeitungForm'
 import {previewDataInterface} from '@/api/systemData/dataInterface'
 
 export default {
-  components: {JNPFForm, ExportBox},
+  components: {JNPFForm, ExportBox,AbarbeitungForm},
   data() {
     return {
       showAll: false,
@@ -158,6 +177,7 @@ export default {
       },
       formVisible: false,
       exportBoxVisible: false,
+      abarbeitungVisible: false,
       columnList: [
         {prop: 'afterSaleCause', label: '售后原因'},
         {prop: 'afterSaleType', label: '售后类型'},
@@ -232,6 +252,7 @@ export default {
       }).catch(() => {
       });
     },
+
     addOrUpdateHandle(id, isDetail) {
       this.formVisible = true
       this.$nextTick(() => {
@@ -281,7 +302,16 @@ export default {
         sidx: "",
       }
       this.initData()
-    }
+    },
+    abarbeitungHandle(id){
+      this.abarbeitungVisible = true
+      this.$nextTick(() => {
+        this.$refs.abarbeitungForm.init(id)
+      })
+    },
+    abarbeitungChange(){
+      this.abarbeitungVisible = false
+    },
   }
 }
 </script>

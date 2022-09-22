@@ -6,14 +6,15 @@
           <el-col :span="6">
             <el-form-item label="关键词">
               <el-input v-model="keyword" placeholder="请输入关键词查询" clearable
-                @keyup.enter.native="search()" />
+                        @keyup.enter.native="search()"/>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">
-                {{$t('common.search')}}</el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">{{$t('common.reset')}}
+                {{ $t('common.search') }}
+              </el-button>
+              <el-button icon="el-icon-refresh-right" @click="reset()">{{ $t('common.reset') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -32,12 +33,12 @@
               <div class="JNPF-common-head-right">
                 <el-tooltip effect="dark" :content="$t('common.refresh')" placement="top">
                   <el-link icon="icon-ym icon-ym-Refresh JNPF-common-head-icon" :underline="false"
-                    @click="reset()" />
+                           @click="reset()"/>
                 </el-tooltip>
               </div>
             </div>
             <JNPF-table v-loading="listLoading" :data="list" hasC
-              @selection-change="handleSelectionChange">
+                        @selection-change="handleSelectionChange">
               <el-table-column prop="title" label="消息标题">
                 <template slot-scope="scope">
                   <el-link @click="readInfo(scope.row)" style="font-size:12px">{{ scope.row.title }}
@@ -47,13 +48,13 @@
               <el-table-column prop="type" label="消息类型" width="120">
                 <template slot-scope="scope">
                   <!-- {{ scope.row.type==1?'系统公告':scope.row.type==2?"系统消息":"私信信息"}} -->
-                  {{ scope.row.type==1?'系统消息':"私信信息"}}
+                  {{ scope.row.type == 1 ? '系统消息' : "私信信息" }}
                 </template>
               </el-table-column>
               <el-table-column prop="creatorUser" label="发送人员" width="120">
               </el-table-column>
               <el-table-column prop="lastModifyTime" label="发送时间" :formatter="jnpf.tableDateFormat"
-                width="120" />
+                               width="120"/>
               <el-table-column prop="isRead" label="状态" width="100">
                 <template slot-scope="scope">
                   <el-tag type="success" v-if="scope.row.isRead=='1'">已读</el-tag>
@@ -62,21 +63,22 @@
               </el-table-column>
             </JNPF-table>
             <pagination :total="total" :page.sync="listQuery.currentPage"
-              :limit.sync="listQuery.pageSize" @pagination="initData" />
+                        :limit.sync="listQuery.pageSize" @pagination="initData"/>
           </div>
         </el-tabs>
       </div>
     </div>
-    <Form v-if="formVisible" ref="Form" @refreshDataList="initData" />
+    <Form v-if="formVisible" ref="Form" @refreshDataList="initData"/>
   </div>
 </template>
 
 <script>
-import { getMessageList, MessageDeleteRecord, ReadInfo } from '@/api/system/message'
+import {getMessageList, MessageDeleteRecord, ReadInfo} from '@/api/system/message'
 import Form from './Form'
+
 export default {
   name: 'messageRecord',
-  components: { Form },
+  components: {Form},
   data() {
     return {
       visible: false,
@@ -133,7 +135,7 @@ export default {
     },
     handleDel() {
       if (!this.multipleSelection.length) {
-        this.$message({ type: 'error', message: '请选择一条数据' });
+        this.$message({type: 'error', message: '请选择一条数据'});
         return
       }
       let data = {
@@ -149,7 +151,8 @@ export default {
           });
           this.initData();
         })
-      }).catch(() => { });
+      }).catch(() => {
+      });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val.map(item => item.id)
@@ -160,6 +163,12 @@ export default {
         item.isRead = '1'
         this.$nextTick(() => {
           this.$refs.Form.init(item.id)
+        })
+      } else if (item.type == 3) {
+        ReadInfo(item.id).then(res => {
+          item.isRead = '1'
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/abarbeitungShow?id=${body.id}`)
         })
       } else {
         ReadInfo(item.id).then(res => {
@@ -180,11 +189,14 @@ export default {
   .JNPF-common-layout-main {
     padding: 0;
   }
+
   .messageRecord-tab {
     height: 100%;
-    >>> .el-tabs__content {
+
+    > > > .el-tabs__content {
       padding: 0;
       height: calc(100% - 40px);
+
       .box {
         flex: 1;
         height: 100%;
