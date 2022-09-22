@@ -56,7 +56,7 @@ watch: {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData);
     },setOptions(res){
-      let resultData=res.data;
+      let resultData=res.equipmentFaultNumberList;
       let option={
         tooltip: {
           trigger: 'item',

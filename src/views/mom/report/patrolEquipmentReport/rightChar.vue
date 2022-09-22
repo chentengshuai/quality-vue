@@ -56,9 +56,8 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     }, setOptions(res){
-      let data=res.data;
-      let equipmentNameList=data.equipmentNameList; //设备名称集合
-      let faultRateList=data.faultRateList;  //设备故障率集合
+      let equipmentNameList=res.equipmentNameList; //设备名称集合
+      let faultRateList=res.faultRateList;  //设备故障率集合
       let option= {
           color:['rgba(0,191,183,1)'],
           // title: {

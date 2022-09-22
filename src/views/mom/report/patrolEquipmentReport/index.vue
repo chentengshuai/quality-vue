@@ -5,8 +5,15 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-form @submit.native.prevent>
                             <el-col :span="6">
-                                <el-form-item label="检验计划编码">
-                                        <el-input v-model="query.patrolPlanCode" placeholder="请输入" clearable>  </el-input>
+                                <el-form-item label="检验时间">
+
+                                    <el-date-picker
+                                        v-model="query.timelist"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期">
+                                        </el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <template v-if="showAll">
@@ -43,6 +50,20 @@
                     </div>
                 </el-col>
             </el-row>
+
+            <div class="JNPF-common-layout-main JNPF-flex-main">
+                    <JNPF-table  v-loading="listLoading" :data="list" >
+                            <el-table-column prop="bdEquipmentName" label="设备名称" width="0" align="left"/>
+                            <el-table-column prop="equipmentFaultNumber" label="设备故障次数" width="0" align="left"/>
+                            <el-table-column prop="equipmentSumNumber" label="设备检验总次数" width="0" align="left"/>
+                            <el-table-column prop="equipmentFaultRate" label="设备故障率" width="0" align="left">
+                                <template slot-scope="scope">
+                                    {{scope.row.equipmentFaultRate}}%
+                                </template>
+                            </el-table-column>
+                    </JNPF-table>
+                    <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" :pageSizes="customPageSizes"/>
+            </div>
         </div>
     </div>
 </template>
@@ -57,8 +78,16 @@
         data() {
             return {
                 showAll: false,
+                customPageSizes:[10, 20, 50, 100],
                 query: {
-                    patrolPlanCode:undefined,
+                    timelist:undefined,
+                },
+                list: [],
+                listLoading: false,
+                total: 0,
+                listQuery: {
+                    currentPage: 1,
+                    pageSize: 10,
                 },
                 equipmentFaultRateData:{},
                 equipmentFaultNumberData:{},
@@ -75,30 +104,42 @@
         },
         methods: {
             initData(){
-                //设备不合格占比数据获取
-                this.equipmentFaultNumber();
-                // 设备故障率数据获取
-                this.equipmentFaultRate();
+                this.getEquipmentData();//获取检测设备报表数据信息
+            }, getEquipmentData(){
+                let _query = {
+                    ...this.listQuery,
+                    ...this.query
+                };
+                request({
+                    url: `/api/project/XjrPatrolplanBase/getPatrolEquipmentReportData`,
+                    method: 'post',
+                    data: _query
+                }).then(res => {
+                    let resultData=res.data;
+                    let equipmentFaultNumberList=resultData.equipmentFaultNumberList;//设备对应故障次数（饼状图所属集合）
+                    let equipmentNameList=  resultData.equipmentNameList;// 设备名称集合
+                    let faultRateList=resultData.faultRateList;// 设备故障比率集合
+                    let equipmentPageList=resultData.equipmentPageList;//报表数据
+
+                    this.equipmentFaultNumberData={
+                        "equipmentFaultNumberList":equipmentFaultNumberList
+                    }; //饼状图
+                    this.equipmentFaultRateData={  //柱状图
+                        'equipmentNameList':equipmentNameList,
+                        'faultRateList':faultRateList
+                    };
+                    //报表数据
+                    this.list = equipmentPageList.list
+                    this.total =equipmentPageList.pagination.total
+
+                });
+            }, search() {
+                this.listQuery = {
+                    currentPage: 1,
+                    pageSize: 10,
+                }
+                this.initData()
             },
-            equipmentFaultRate(){
-                let _query = this.query;
-                request({
-                    url: `/api/project/XjrPatrolplanBase/getPatrolEquipmentFaultRate`,
-                    method: 'post',
-                    data: _query
-                }).then(res => {
-                    this.equipmentFaultRateData=res;
-                });
-            }, equipmentFaultNumber(){
-                let _query =this.query;
-                request({
-                    url: `/api/project/XjrPatrolplanBase/getPatrolEquipmentFaultNumber`,
-                    method: 'post',
-                    data: _query
-                }).then(res => {
-                    this.equipmentFaultNumberData=res;
-                });
-            }
         }
     }
 </script>
