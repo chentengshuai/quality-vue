@@ -85,19 +85,21 @@
         </div>
       </div>
     </div>
-    <AbarbeitungDetailForm v-if="abDetailFormVisible" ref="abarbeitungDetailForm" @onChange="confirmAbarDetailChange"/>
+    <AbarbeitungDetailForm v-if="abDetailFormVisible" ref="abarbeitungDetailForm" @refresh="confirmAbarDetailChange"/>
     <AbarbeitungUserForm v-if="abUserVisible" ref="abarbeitungUserForm" @refresh="careOfUserChange"/>
+    <CancelRectificationForm v-if="cancelRectVisible" ref="cancelRectificationForm" @refresh="cancelRectRefresh"/>
   </div>
 </template>
 <script>
 import request from '@/utils/request'
 import AbarbeitungDetailForm from './AbarbeitungDetailForm'
 import AbarbeitungUserForm from './AbarbeitungUserForm'
+import CancelRectificationForm from './CancelRectificationForm'
 import {getDictionaryDataByTypeCode, getDictionaryDataSelector} from '@/api/systemData/dictionary'
 import {mapGetters} from "vuex";
 
 export default {
-  components: {AbarbeitungDetailForm, AbarbeitungUserForm},
+  components: {AbarbeitungDetailForm, AbarbeitungUserForm,CancelRectificationForm},
   props: [],
   data() {
     return {
@@ -107,6 +109,7 @@ export default {
       abDetailFormVisible: false,
       careOfBtuShow: false,
       abUserVisible: false,
+      cancelRectVisible: false,
       dataForm: {
         salesOrderCode: '',
         afterSaleType: '',
@@ -185,17 +188,17 @@ export default {
                     this.saleMarketingAbarbeitung = item
                     ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "新增整改需求，指派负责人:" + item.userName + "(" + item.userCode + ")"
                   } else if (item.type == 2) {
-                    this.saleMarketingAbarbeitungAppointList.push(item)
                     ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "变更负责人:" + item.userName + "(" + item.userCode + ")"
                   } else if (item.type == 3) {
-                    this.saleMarketingAbarbeitungAppointList.push(item)
-                    ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "取消整改"
+                    ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "取消整改,原因:"+item.opinion
                   } else if (item.type == 4) {
-                    this.saleMarketingAbarbeitungAppointList.push(item)
-                    ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "重新指派整改需求，指派负责人:" + item.userName + "(" + item.userCode + ")"
+                    ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "重新指派整改需求，指派负责人:" + item.userName + "(" + item.userCode + ")"+",整改意见:"+item.opinion
+                  } else if (item.type == 5) {
+                    ad.val = item.creatorName + "(" + item.creatorId + ")" + "于" + dtVal + "确认整改！"
                   }
+                  this.saleMarketingAbarbeitungAppointList.push(item)
                   this.appointValList.push(ad)
-                  if (il == 1) {
+                  if (il == 1 && item.type != 5) {
                     if (this.userInfo.userAccount == item.userCode) {
                       this.careOfBtuShow = true
                     }
@@ -224,6 +227,7 @@ export default {
       })
     },
     confirmAbarDetailChange() {
+      this.careOfBtuShow = false
       this.abDetailFormVisible = false
     },
     careOfUser() { // 转交
@@ -237,28 +241,14 @@ export default {
       this.abUserVisible = false
     },
     cancelRectification() { // 取消整改
-      this.$confirm('此操作将取消整改, 是否继续?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        let _data = {}
-        _data.saleInfoId = this.saleInfoId
-        _data.type = 3
-        request({
-          url: '/api/project/Sale_marketing_abarbeitung',
-          method: 'post',
-          data: _data
-        }).then((res) => {
-          this.$message({
-            message: res.msg,
-            type: 'success',
-            duration: 1000,
-            onClose: () => {
-              this.careOfBtuShow = false
-            }
-          })
-        })
-      }).catch(() => {
-      });
+      this.cancelRectVisible = true;
+      this.$nextTick(() => {
+        this.$refs.cancelRectificationForm.init(this.saleInfoId)
+      })
+    },
+    cancelRectRefresh() { // 取消整改
+      this.careOfBtuShow = false
+      this.cancelRectVisible = false
     }
   },
 }

@@ -40,6 +40,7 @@ export default {
       visible: false,
       loading: false,
       isDetail: false,
+      type: '',
       dataForm: {
         userCode: '',
         userName: '',
@@ -72,7 +73,7 @@ export default {
   mounted() {
   },
   methods: {
-    init(id) {
+    init(id, type) {
       this.visible = true;
       this.$nextTick(() => {
         this.$refs['elForm'].resetFields();
@@ -89,6 +90,7 @@ export default {
         }
       })
       this.dataForm.saleInfoId = id;
+      this.type = type
     },
     // 表单提交
     dataFormSubmit() {
@@ -100,7 +102,7 @@ export default {
     },
     request() {
       var _data = this.dataList()
-      if (!this.dataForm.id) {
+      // if (!this.dataForm.id) {
         request({
           url: '/api/project/Sale_marketing_abarbeitung',
           method: 'post',
@@ -116,7 +118,7 @@ export default {
             }
           })
         })
-      } else {
+/*      } else {
         request({
           url: '/api/project/Sale_marketing_abarbeitung/updateDataByInfoId/' + this.dataForm.saleInfoId,
           method: 'PUT',
@@ -132,18 +134,22 @@ export default {
             }
           })
         })
-      }
+      }*/
     },
     dataList() {
       var _data = JSON.parse(JSON.stringify(this.dataForm));
-      _data.type = 1
+      if (this.type == "anew") {
+        _data.type = 4
+      } else {
+        _data.type = 1
+      }
       return _data;
     },
     dataInfo(dataAll) {
       let _dataAll = dataAll
       this.dataForm = _dataAll
     },
-    closeDialog(){
+    closeDialog() {
       this.$emit("onChange", this.dataForm);
     },
   }
