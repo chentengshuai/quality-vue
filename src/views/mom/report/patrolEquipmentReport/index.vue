@@ -139,7 +139,16 @@
                     pageSize: 10,
                 }
                 this.initData()
-            },
+            }, reset() {
+                for (let key in this.query) {
+                    this.query[key] = undefined
+                }
+                this.listQuery = {
+                    currentPage: 1,
+                    pageSize: 10,
+                }
+                this.initData()
+            }
         }
     }
 </script>
