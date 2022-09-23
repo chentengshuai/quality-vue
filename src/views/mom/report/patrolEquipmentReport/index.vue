@@ -6,7 +6,6 @@
                 <el-form @submit.native.prevent>
                             <el-col :span="6">
                                 <el-form-item label="检验时间">
-
                                     <el-date-picker
                                         v-model="query.timelist"
                                         type="daterange"
@@ -35,7 +34,7 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-col :span="12">
                     <div class="border-box" style="height:39.5vh;">
-                        <h4>设备不合格占比</h4>
+                        <h4>设备不合格数占比</h4>
                         <div class="box-chart" style="height:94%">
                             <LeftChar  :chartData="equipmentFaultNumberData" :style="{'height':'100%'}"></LeftChar>
                         </div>

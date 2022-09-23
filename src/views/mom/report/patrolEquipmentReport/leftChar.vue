@@ -82,7 +82,7 @@ watch: {
           {
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: [15, 95],
+            radius: [5, '70%'],
             center: ['50%', '50%'],
             roseType: 'area',
             itemStyle: {
