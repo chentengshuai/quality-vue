@@ -21,12 +21,12 @@
                         <el-form-item>
                             <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
                             <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
-                                <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true" v-if="!showAll">
+                                <!-- <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true" v-if="!showAll">
                                     展开
                                 </el-button>
                                 <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
                                     收起
-                                </el-button>
+                                </el-button> -->
                         </el-form-item>
                     </el-col>
                 </el-form>
@@ -60,10 +60,21 @@
                                     {{scope.row.equipmentFaultRate}}%
                                 </template>
                             </el-table-column>
+                            <el-table-column prop="equipmentUnPatrolNumber" label="设备未检查数" width="0" align="left">
+                                <template slot-scope="scope" >
+                                    <el-link type="primary" @click.native="equipmentUnPatrolView(scope.row)"> {{scope.row.equipmentUnPatrolNumber}}</el-link>
+                                </template>
+                            </el-table-column>
                     </JNPF-table>
                     <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" :pageSizes="customPageSizes"/>
             </div>
         </div>
+        <el-dialog title="查看设备未检测列表"
+                     :close-on-click-modal="false" append-to-body
+                     :visible.sync="equipmentUnPatrolListShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
+                     width="1200px">
+            <equipment-un-patrol-list ref="EquipmentUnPatrolList"></equipment-un-patrol-list>
+        </el-dialog> 
     </div>
 </template>
 
@@ -71,11 +82,13 @@
     import request from '@/utils/request'
     import RightChar from './rightChar.vue'
     import LeftChar from './leftChar.vue'
+    import EquipmentUnPatrolList from './equipmentUnPatrolList'
 
     export default {
-        components: {RightChar,LeftChar},
+        components: {RightChar,LeftChar,EquipmentUnPatrolList},
         data() {
             return {
+                equipmentUnPatrolListShow:false,
                 showAll: false,
                 customPageSizes:[10, 20, 50, 100],
                 query: {
@@ -147,7 +160,13 @@
                     pageSize: 10,
                 }
                 this.initData()
-            }
+            }, equipmentUnPatrolView(row) {  //选择设备弹框
+                let bdEquipmentId=row.bdEquipmentId;
+                this.equipmentUnPatrolListShow = true;
+                this.$nextTick(() => {
+                    this.$refs.EquipmentUnPatrolList.initData(bdEquipmentId);
+                })
+            },
         }
     }
 </script>

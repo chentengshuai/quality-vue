@@ -65,8 +65,8 @@
                                         </el-button>
                                         <el-button type="text"  v-if="scope.row.patrolRulesStatus=='0'"  @click="updateStatus(scope.row)">启用
                                         </el-button>
-                                        <el-button type="text"   v-if="scope.row.patrolRulesStatus=='0'" class="JNPF-table-delBtn"  @click="handleDel(scope.row.id)">删除
-                                        </el-button>
+                                        <!-- <el-button type="text"   v-if="scope.row.patrolRulesStatus=='0'" class="JNPF-table-delBtn"  @click="handleDel(scope.row.id)">删除
+                                        </el-button> -->
                             </template>
                         </el-table-column>
                 </JNPF-table>

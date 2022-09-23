@@ -21,12 +21,12 @@
                         <el-form-item>
                             <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
                             <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
-                                <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true" v-if="!showAll">
+                                <!-- <el-button type="text" icon="el-icon-arrow-down" @click="showAll=true" v-if="!showAll">
                                     展开
                                 </el-button>
                                 <el-button type="text" icon="el-icon-arrow-up" @click="showAll=false" v-else>
                                     收起
-                                </el-button>
+                                </el-button> -->
                         </el-form-item>
                     </el-col>
                 </el-form>
