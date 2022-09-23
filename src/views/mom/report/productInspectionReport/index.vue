@@ -5,12 +5,12 @@
       <el-row class="JNPF-common-search-box" :gutter="16">
         <el-form @submit.native.prevent>
           <el-col :span="6">
-            <el-form-item label="物料名称">
+            <el-form-item label="产品名称">
               <el-input v-model="query.materialName" placeholder="请输入" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="物料编码">
+            <el-form-item label="产品编码">
               <el-input v-model="query.materialCode" placeholder="请输入" clearable></el-input>
             </el-form-item>
           </el-col>
@@ -40,9 +40,9 @@
           
         </div>
         <JNPF-table v-loading="listLoading" :data="list" >
-          <el-table-column prop="materialName" label="物料名称" width="0" align="left"/>
-          <el-table-column prop="materialCode" label="物料编码" width="0" align="left"/>
-          <el-table-column prop="materialNumber" label="货品数量" width="0" align="left"/>
+          <el-table-column prop="materialName" label="产品名称" width="0" align="left"/>
+          <el-table-column prop="materialCode" label="产品编码" width="0" align="left"/>
+          <el-table-column prop="materialNumber" label="产品数量" width="0" align="left"/>
           <el-table-column prop="sampleNumber" label="抽样数" width="0" align="left"/>
           <el-table-column prop="goodNumber" label="抽样合格品数" width="0" align="left"/>
           <el-table-column prop="badNumber" label="抽样不合格品数" width="0" align="left"/>
@@ -93,7 +93,7 @@ export default {
       chart: null,
       option: {
         title: {
-          text: '原料抽样合格率',
+          text: '产品抽样合格率',
         },
         tooltip: {
           trigger: 'axis',
@@ -115,14 +115,14 @@ export default {
           {x:'7%',y:'15%',width:'50%',height:'70%'}
         ],
         legend: {
-          // data: ['原料总数', '抽样合格数', '抽样不合格数', '抽样合格率'],
+          // data: ['产品总数', '抽样合格数', '抽样不合格数', '抽样合格率'],
           // orient: 'vertical',
           // x: 'left',
           // top: '10%',
           // data: ['直达', '营销广告', '搜索引擎']
           data: [
               {
-                name: '原料总数',
+                name: '产品总数',
                 icon: 'rect',//图形样式 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
                 // textStyle: {
                 //   color: '#5470C6'
@@ -184,7 +184,7 @@ export default {
         ],
         series: [
           {
-            name: '原料总数',
+            name: '产品总数',
             type: 'bar',
             data: []
           },
@@ -251,7 +251,7 @@ export default {
       let _query = {
           ...this.query,
           ...this.listQuery,
-          inspectionType: 1
+          inspectionType: 2
       };
       request({
           url: `/api/project/InspectionReport/findMaterialInspectionReport`,
