@@ -34,7 +34,7 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                 <el-col :span="12">
                     <div class="border-box" style="height:39.5vh;">
-                        <h4>检验规则达成率(%)</h4>
+                        <h4>检验规则计划完成率(%)</h4>
                         <div class="box-chart" style="height:94%">
                             <LeftChar  :chartData="patrolPlanFinishRateData" :style="{'height':'100%'}"></LeftChar>
                         </div>
@@ -54,14 +54,14 @@
                     <JNPF-table  v-loading="listLoading" :data="list" >
                             <el-table-column prop="patrolRulesCode" label="检验规则编码" width="0" align="left"/>
                             <el-table-column prop="patrolRulesName" label="检验规则名称" width="0" align="left"/>
-                            <el-table-column prop="patrolPlanSumNumber" label="检验计划总数" width="0" align="left"/>
-                            <el-table-column prop="patrolPlanFinishNumber" label="已检验计划数量" width="0" align="left"/>
-                            <el-table-column prop="patrolPlanNotFinishNumber" label="未检验计划数量" width="0" align="left">
+                            <el-table-column prop="patrolPlanSumNumber" label="检验规则计划总数" width="0" align="left"/>
+                            <el-table-column prop="patrolPlanFinishNumber" label="检验规则计划完成数量" width="0" align="left"/>
+                            <el-table-column prop="patrolPlanNotFinishNumber" label="检验规则计划未完成数量" width="0" align="left">
                                 <template slot-scope="scope" >
                                     <el-link type="primary" @click.native="rulesUnPatrolView(scope.row)"> {{scope.row.patrolPlanNotFinishNumber}}</el-link>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="patrolPlanFinishRate" label="检验达成率" width="0" align="left">
+                            <el-table-column prop="patrolPlanFinishRate" label="检验规则计划完成率" width="0" align="left">
                                 <template slot-scope="scope">
                                     {{scope.row.patrolPlanFinishRate}}%
                                 </template>
@@ -70,7 +70,7 @@
                     <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize" @pagination="initData" :pageSizes="customPageSizes"/>
             </div>
         </div>
-        <el-dialog title="查看未检测计划列表"
+        <el-dialog title="查看检验规则计划未完成详情"
                      :close-on-click-modal="false" append-to-body
                      :visible.sync="rulesUnPatrolLisShow" class="JNPF-dialog JNPF-dialog_center" lock-scroll
                      width="1200px">
