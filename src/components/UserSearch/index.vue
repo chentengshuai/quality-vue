@@ -8,6 +8,7 @@
     placeholder="请输入关键词"
     :remote-method="remoteMethod"
     :loading="loading"
+    :disabled="defaultDisabled"
     @change="modelChange"
     @clear="clearSelect">
     <el-option
@@ -32,6 +33,8 @@ export default {
       default: ''
     },
     defaultLogin: {
+      default: false
+    }, defaultDisabled: {
       default: false
     }
   },

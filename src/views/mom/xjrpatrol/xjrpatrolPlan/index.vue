@@ -99,7 +99,7 @@
                                         <el-button type="text" v-if="scope.row.patrolPlanStatus=='1'" @click="receivePatrolPlan(scope.row)" >
                                             领取
                                         </el-button> 
-                                        <el-button type="text"  circle=""@click="addOrUpdateHandle(scope.row.id,true)" >查看
+                                        <el-button type="text"  circle="" @click="addOrUpdateHandle(scope.row.id,true)" >查看
                                         </el-button> 
                             </template>
                         </el-table-column>

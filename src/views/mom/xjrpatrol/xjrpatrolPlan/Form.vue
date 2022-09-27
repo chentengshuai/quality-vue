@@ -31,6 +31,19 @@
                     </el-select>
                 </el-form-item>
             </el-col>
+            <el-col :span="12">
+                <el-form-item label="检验负责人" prop="patrolResponsPerson">
+                  <user-search
+                    v-model="dataForm.patrolResponsPerson"
+                    :name="dataForm.patrolResponsPersonName"
+                    :defaultDisabled="true"
+                    @name="(value) => {
+                        dataForm.patrolResponsPersonName = value;
+                      }
+                    "
+                  ></user-search>
+                </el-form-item>
+            </el-col>
             <el-col :span="12" >
                 <el-form-item  label="计划开始时间"   prop="patrolPlanStarttime" >
                     <el-input    v-model="dataForm.patrolPlanStarttime" :disabled="true"  :style='{"width":"100%"}'>
@@ -156,6 +169,8 @@
                 patrolRulesCode : '',
                 patrolRulesName : '',
                 patrolUnit : "",
+                patrolResponsPerson:"",
+                patrolResponsPersonName:"",
                 patrolPlanStarttime : '',
                 patrolPlanEndtime : '',
                 patrolPlanHandleusername : '',
@@ -209,6 +224,7 @@
                             method: 'get'
                         }).then(res => {
                             this.dataInfo(res.data)
+                            console.log(res.data);
                             this.loading = false
                         })
                     }

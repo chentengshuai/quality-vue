@@ -107,6 +107,9 @@ export default {
         } else if (item.type == 3) {
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
           this.$router.push(`/abarbeitungShow?id=${body.id}`)
+        } else if (item.type == 10) {
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/xjrPartolMessageView?id=${body.id}`)
         } else {
           let body = this.info.bodyText ? JSON.parse(this.info.bodyText) : {}
           let url = 'flowLaunch'
