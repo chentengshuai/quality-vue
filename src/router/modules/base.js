@@ -64,6 +64,16 @@ const baseRouter = [{
       zhTitle: '质量整改',
       icon: 'icon-ym icon-ym-btn-preview',
     }
+  },  {
+    path: '/xjrPartolMessageView',
+    component: (resolve) => require(['@/views/mom/xjrpatrol/xjrPartolMessageView'], resolve),
+    name: 'xjrPartolMessageView',
+    meta: {
+      title: 'xjrPartolMessageView',
+      affix: false,
+      zhTitle: '设备量具检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
   },
 ]
 export default baseRouter

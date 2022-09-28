@@ -27,6 +27,18 @@
                 </el-select>
                 </el-form-item>
             </el-col>
+            <el-col :span="24">
+                <el-form-item label="检验负责人" prop="patrolResponsPerson">
+                  <user-search
+                    v-model="dataForm.patrolResponsPerson"
+                    :name="dataForm.patrolResponsPersonName"
+                    @name="(value) => {
+                        dataForm.patrolResponsPersonName = value;
+                      }
+                    "
+                  ></user-search>
+                </el-form-item>
+            </el-col>
             <el-col :span="24" >
                 <el-form-item  label="备注"   prop="memo" >
                     <el-input    v-model="dataForm.memo" placeholder="请输入"  :maxlength="300"  :style='{"width":"100%"}' true  type="textarea"  :autosize='{"minRows":4,"maxRows":4}' >
@@ -167,6 +179,8 @@
                             patrolRulesCode : '',
                             patrolRulesName : '',
                             patrolUnit : "",
+                            patrolResponsPerson:"",
+                            patrolResponsPersonName:"",
                             memo : '',
                         xjrpatrolrulestimeList:[],
                         xjrpatrolrulescontentList:[],
@@ -187,6 +201,13 @@
                                     trigger: 'change'
                                 },
                         ],
+                        patrolResponsPerson:[
+                            {
+                                required: true,
+                                message: '请输入',
+                                trigger: 'blur'
+                            }
+                        ]
             },
             patrolUnitOptions:[],
           

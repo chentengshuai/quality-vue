@@ -19,7 +19,7 @@ export default {
       return this.$store.state.settings.useCache
     },
     key() {
-      return this.$route.path
+      return this.$route.fullPath
     }
   }
 }
