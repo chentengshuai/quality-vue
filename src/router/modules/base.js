@@ -74,6 +74,56 @@ const baseRouter = [{
       zhTitle: '设备量具检验详情',
       icon: 'icon-ym icon-ym-btn-preview',
     }
+  },{
+    path: '/materialinspectionView',
+    component: (resolve) => require(['@/views/mom/quality/materialinspection/materialinspectionView'], resolve),
+    name: 'materialinspectionView',
+    meta: {
+      title: 'materialinspectionView',
+      affix: false,
+      zhTitle: '来料检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
+  },{
+    path: '/productinspectionView',
+    component: (resolve) => require(['@/views/mom/quality/productinspection/productinspectionView'], resolve),
+    name: 'productinspectionView',
+    meta: {
+      title: 'productinspectionView',
+      affix: false,
+      zhTitle: '成品检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
+  },{
+    path: '/semiproductinspectionView',
+    component: (resolve) => require(['@/views/mom/quality/semiproductinspection/semiproductinspectionView'], resolve),
+    name: 'semiproductinspectionView',
+    meta: {
+      title: 'semiproductinspectionView',
+      affix: false,
+      zhTitle: '成品检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
+  },{
+    path: '/stockinspectionView',
+    component: (resolve) => require(['@/views/mom/quality/stockinspection/stockinspectionView'], resolve),
+    name: 'stockinspectionView',
+    meta: {
+      title: 'stockinspectionView',
+      affix: false,
+      zhTitle: '库存检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
+  },{
+    path: '/deliveryinspectionView',
+    component: (resolve) => require(['@/views/mom/quality/deliveryinspection/deliveryinspectionView'], resolve),
+    name: 'deliveryinspectionView',
+    meta: {
+      title: 'deliveryinspectionView',
+      affix: false,
+      zhTitle: '库存检验详情',
+      icon: 'icon-ym icon-ym-btn-preview',
+    }
   },
 ]
 export default baseRouter

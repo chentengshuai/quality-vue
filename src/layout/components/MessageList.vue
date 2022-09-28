@@ -107,10 +107,25 @@ export default {
         } else if (item.type == 3) {
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
           this.$router.push(`/abarbeitungShow?id=${body.id}`)
-        } else if (item.type == 10) {
+        } else if (item.type == 10) { //设备检验
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
           this.$router.push(`/xjrPartolMessageView?id=${body.id}`)
-        } else {
+        } else if (item.type == 20) {  //来料检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/materialinspectionView?id=${body.id}`)
+        }else if (item.type == 30) {  //成品检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/productinspectionView?id=${body.id}`)
+        }else if (item.type == 40) {  //半成品检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/semiproductinspectionView?id=${body.id}`)
+        }else if (item.type == 50) {  //库存检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/stockinspectionView?id=${body.id}`)
+        }else if (item.type == 60) {  //发货检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/deliveryinspectionView?id=${body.id}`)
+        }else {
           let body = this.info.bodyText ? JSON.parse(this.info.bodyText) : {}
           let url = 'flowLaunch'
           if (body.type == 2) url = 'flowTodo'

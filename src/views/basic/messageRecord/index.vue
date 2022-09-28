@@ -177,7 +177,22 @@ export default {
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
           this.$router.push(`/xjrPartolMessageView?id=${body.id}`)
         })
-      } else {
+      } else if (item.type == 20) {  //来料检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/materialinspectionView?id=${body.id}`)
+        }else if (item.type == 30) {  //成品检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/productinspectionView?id=${body.id}`)
+        }else if (item.type == 40) {  //半成品检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/semiproductinspectionView?id=${body.id}`)
+        }else if (item.type == 50) {  //库存检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/stockinspectionView?id=${body.id}`)
+        }else if (item.type == 60) {  //发货检验
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/deliveryinspectionView?id=${body.id}`)
+        }else {
         ReadInfo(item.id).then(res => {
           item.isRead = '1'
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
