@@ -158,6 +158,7 @@ export default {
       this.multipleSelection = val.map(item => item.id)
     },
     readInfo(item) {
+      alert("12");
       if (item.type == 1) {
         this.formVisible = true
         item.isRead = '1'
@@ -169,6 +170,12 @@ export default {
           item.isRead = '1'
           let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
           this.$router.push(`/abarbeitungShow?id=${body.id}`)
+        })
+      } else if (item.type == 10) {
+        ReadInfo(item.id).then(res => {
+          item.isRead = '1'
+          let body = res.data.bodyText ? JSON.parse(res.data.bodyText) : {}
+          this.$router.push(`/xjrPartolMessageView?id=${body.id}`)
         })
       } else {
         ReadInfo(item.id).then(res => {

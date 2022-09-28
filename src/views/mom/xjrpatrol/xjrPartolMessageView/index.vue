@@ -212,7 +212,6 @@
                             method: 'get'
                         }).then(res => {
                             this.dataInfo(res.data)
-                            console.log(res.data);
                             this.loading = false
                         })
                     }
