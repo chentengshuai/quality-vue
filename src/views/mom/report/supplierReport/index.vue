@@ -35,7 +35,7 @@
             <el-row class="JNPF-common-search-box" :gutter="16">
                     <el-col :span="24">
                         <div  style="height:29.5vh;">
-                            <h4>供应商来料报表</h4>
+                            <h4>供应商来料报表(%)</h4>
                             <div class="box-chart" style="height:96%">
                                 <SupplierMaterial :chartData="supplierMaterialData" ></SupplierMaterial>
                             </div>
@@ -46,11 +46,17 @@
             <div class="JNPF-common-layout-main JNPF-flex-main">
                     <JNPF-table  v-loading="listLoading" :data="list" >
                             <el-table-column prop="bdPartnerName" label="供应商名称" width="0" align="left"/>
-                            <el-table-column prop="badNumber" label="不良总数" width="0" align="left"/>
-                            <el-table-column prop="badRateNumber" label="不良率" width="0" align="left"/>
+                            <el-table-column prop="badNumber" label="不良总数" width="0" align="left">
+                               
+                            </el-table-column>
+                            <el-table-column prop="badRateNumber" label="不良率" width="0" align="left">
+                                 <template slot-scope="scope">
+                                    {{scope.row.badRateNumber}}%
+                                </template>
+                            </el-table-column>
                             <el-table-column prop="qualifiedRateNumber" label="合格率" width="0" align="left">
                                 <template slot-scope="scope">
-                                    {{scope.row.qualifiedRateNumber}}
+                                    {{scope.row.qualifiedRateNumber}}%
                                 </template>
                             </el-table-column>
                     </JNPF-table>
