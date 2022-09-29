@@ -6,8 +6,8 @@
           <img src="@/assets/images/home/sold.png" alt="">
         </div>
         <div class="card-panel-description">
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
-          <div class="card-panel-text">总销售额</div>
+          <count-to :start-val="0" :end-val="dataForm.saleNum" :duration="2600" class="card-panel-num" />
+          <div class="card-panel-text">今日售后数量</div>
         </div>
       </div>
     </el-col>
@@ -17,8 +17,8 @@
           <img src="@/assets/images/home/ask.png" alt="">
         </div>
         <div class="card-panel-description">
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
-          <div class="card-panel-text">访问量</div>
+          <count-to :start-val="0" :end-val="dataForm.untreatedNum" :duration="3000" class="card-panel-num" />
+          <div class="card-panel-text">未处理数量</div>
         </div>
       </div>
     </el-col>
@@ -28,8 +28,8 @@
           <img src="@/assets/images/home/pay.png" alt="">
         </div>
         <div class="card-panel-description">
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
-          <div class="card-panel-text">支付笔数</div>
+          <count-to :start-val="0" :end-val="dataForm.closeNum" :duration="3200" class="card-panel-num" />
+          <div class="card-panel-text">关闭数量</div>
         </div>
       </div>
     </el-col>
@@ -39,8 +39,8 @@
           <img src="@/assets/images/home/return.png" alt="">
         </div>
         <div class="card-panel-description">
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
-          <div class="card-panel-text">线上购物转化率</div>
+          <count-to :start-val="0" :end-val="dataForm.changeNum" :duration="3600" class="card-panel-num" />
+          <div class="card-panel-text">整改数量</div>
         </div>
       </div>
     </el-col>
@@ -49,8 +49,32 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import request from "@/utils/request";
 export default {
-  components: { CountTo }
+  components: { CountTo },
+  data() {
+    return {
+      dataForm: {
+        saleNum: undefined,
+        untreatedNum: undefined,
+        changeNum: undefined,
+        closeNum: undefined,
+      },
+    }
+  },
+  created() {
+    this.initData()
+  },
+  methods: {
+    initData() {
+      request({
+        url: `/api/project/index/getSaleData`,
+        method: 'post'
+      }).then(res => {
+        this.dataForm = res.data
+      })
+    }
+  }
 }
 </script>
 

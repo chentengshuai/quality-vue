@@ -5,6 +5,8 @@
 <script>
 import echarts from 'echarts'
 import resize from './mixins/resize'
+import request from "@/utils/request";
+
 export default {
   name: 'chart',
   mixins: [resize],
@@ -32,7 +34,7 @@ export default {
         //   top : '55%',
         //   orient: 'vertical',
         //   textStyle:{//图例文字的样式
-        //     color:'#dbdbdb' 
+        //     color:'#dbdbdb'
         //   }
         // },
         tooltip: {
@@ -113,6 +115,7 @@ export default {
   },
   mounted() {
     this.initChart()
+    this.initData()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -124,8 +127,18 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(document.getElementById('chart'))
-      this.chart.setOption(this.option);
+      // this.chart.setOption(this.option);
       window.onresize = this.chart.resize()
+    },
+    initData() {
+      request({
+        url: `/api/project/index/getSaleNum`,
+        method: 'post'
+      }).then(res => {
+        this.option.xAxis.data = res.data.latestMonths
+        this.option.series[0].data = res.data.smsips
+        this.chart.setOption(this.option);
+      })
     }
   }
 }
