@@ -15,7 +15,7 @@ export default {
       chart: null,
       option: {
         title: {
-          text: '实时数据',
+          text: '月售后数量',
           textStyle: {
             fontSize: 16,
             fontWeight: 900,
