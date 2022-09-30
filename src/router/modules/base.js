@@ -10,7 +10,7 @@ const baseRouter = [{
       zhTitle: '首页'
     }
   },
-  {
+  /*{
     path: '/dashboard',
     component: (resolve) => require(['@/views/basic/dashboard'], resolve),
     name: 'dashboard',
@@ -20,7 +20,7 @@ const baseRouter = [{
       affix: true,
       zhTitle: '门户展示'
     }
-  },
+  },*/
   {
     path: '/messageRecord',
     component: (resolve) => require(['@/views/basic/messageRecord'], resolve),

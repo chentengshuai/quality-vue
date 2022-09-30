@@ -4,9 +4,9 @@
       <p class="login-version-text">V {{define.version}}</p>
     </div>
     <div class="login-left">
-      <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
+<!--      <a class="login-company-logo" target="_blank" href="https://www.jnpfsoft.com">
         <img class="login-company-logo-img" src="../../assets/images/login-company-logo.png" alt="">
-      </a>
+      </a>-->
       <img class="login-banner" src="../../assets/images/login-banner.png" alt="">
 <!--      <div class="login-left-txt">-->
 <!--        <p class="title1">在线自动化，可视化系统开发，零代码实现80%的基础功能</p>-->
